@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-06 21:34:31
+ * @LastEditTime: 2022-02-06 21:41:29
  * @Description: 加载数据屏 获取数据后进入页面
  */
-import { FC, memo, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { flexCenter } from "../../styled";
@@ -40,7 +40,9 @@ const LoadingScreen: FC<IProps> = ({
     console.log("progress:", progress);
     if (progress === 100) {
       //通知上级 已经ok了 可以下一步了
-      handleLoad();
+      setTimeout(() => {
+        handleLoad();
+      }, 200);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
@@ -68,8 +70,9 @@ const LoadingScreen: FC<IProps> = ({
       addTexture(index, texture);
     }
   };
-  let prevModel = 0;
+
   const dracoLoader = () => {
+    let prevModel = 0;
     const manager = new THREE.LoadingManager();
     manager.onLoad = () => {
       console.log("地图模型加载完毕!");
@@ -116,7 +119,7 @@ const LoadingScreen: FC<IProps> = ({
   );
 };
 
-export default memo(LoadingScreen);
+export default LoadingScreen;
 
 const Container = styled.div`
   width: 100vw;

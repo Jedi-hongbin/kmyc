@@ -15,9 +15,9 @@ function App() {
   //准备数据请求完毕
   function handleLoad() {
     setIsLoad(true);
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 2000);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }
 
   return (
