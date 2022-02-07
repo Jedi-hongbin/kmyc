@@ -9,19 +9,15 @@ function App() {
   const textures = useRef<{ [key: string]: any }>({});
   const map = useRef<GLTF>(null);
   const [animateIndex, setAnimateIndex] = useState(0);
-  const [loadType, setLoadType] = useState<"loading" | "load" | "end">(
-    "loading"
-  );
+  const [loading, setLoading] = useState(true);
 
   const addTexture = useCallback((name: string, texture: any) => {
     textures.current[name] = texture;
   }, []);
+
   //准备数据请求完毕
   const handleLoad = useCallback(() => {
-    setLoadType("load");
-    setTimeout(() => {
-      setLoadType("end");
-    }, 400);
+    setLoading(false);
   }, []);
 
   const setMap = useCallback((gltf: GLTF) => {
@@ -31,7 +27,7 @@ function App() {
 
   return (
     <div>
-      {loadType !== "end" ? (
+      {loading ? (
         <LoadingScreen
           setMap={setMap}
           addTexture={addTexture}

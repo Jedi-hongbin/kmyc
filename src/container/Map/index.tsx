@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 20:23:30
+ * @LastEditTime: 2022-02-07 20:51:53
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -166,6 +166,12 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
       };
 
       tick();
+
+      // controls.addEventListener("change", () => {
+      //   // tick();
+      //   renderer.render(scene2, camera2);
+      //   renderer.render(scene, camera);
+      // });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);

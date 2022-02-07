@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 16:02:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 10:13:11
+ * @LastEditTime: 2022-02-07 20:55:05
  * @Description:进度条组件
  */
 import { FC, ReactElement } from "react";
@@ -18,7 +18,7 @@ const ProgressBar: FC<IProps> = ({ progress }): ReactElement => {
 
 export default ProgressBar;
 
-const Bar = styled.div<{ width: number }>`
+export const Bar = styled.div<{ width: number }>`
   width: 100vw;
   background: #fff;
   position: relative;

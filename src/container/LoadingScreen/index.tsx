@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 14:12:46
+ * @LastEditTime: 2022-02-07 20:58:04
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -39,7 +39,9 @@ const LoadingScreen: FC<IProps> = ({
   useEffect(() => {
     if (progress >= 100) {
       //通知上级 已经ok了 可以下一步了
-      handleLoad();
+      setTimeout(() => {
+        handleLoad();
+      }, 200);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
