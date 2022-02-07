@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import LoadingScreen from "./container/LoadingScreen";
 import Map from "./container/Map";
@@ -7,23 +7,18 @@ import { ActiveLateY, flexCenter } from "./styled";
 
 function App() {
   const textures = useRef<{ [key: string]: any }>({});
-  const map = useRef<GLTF>(null);
+  const [map, setMap] = useState<GLTF>();
   const [animateIndex, setAnimateIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const addTexture = useCallback((name: string, texture: any) => {
+  const addTexture = (name: string, texture: any) => {
     textures.current[name] = texture;
-  }, []);
+  };
 
   //准备数据请求完毕
-  const handleLoad = useCallback(() => {
+  const handleLoad = () => {
     setLoading(false);
-  }, []);
-
-  const setMap = useCallback((gltf: GLTF) => {
-    // @ts-ignore
-    map.current = gltf;
-  }, []);
+  };
 
   return (
     <div>
@@ -35,11 +30,9 @@ function App() {
         />
       ) : null}
 
-      <Map
-        animateIndex={animateIndex}
-        gltf={map.current!}
-        textures={textures.current}
-      />
+      {/* {map ? ( */}
+      <Map animateIndex={animateIndex} gltf={map} textures={textures.current} />
+      {/* ) : null} */}
       <Panel>
         {[1, 2, 3, 4, 5].map(v => (
           <button key={v} onClick={() => setAnimateIndex(v)}>

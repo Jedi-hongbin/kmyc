@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 20:58:04
+ * @LastEditTime: 2022-02-07 21:30:25
  * @Description: 加载数据屏 获取数据后进入页面
  */
-import { FC, memo, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { flexCenter } from "../../styled";
@@ -18,7 +18,8 @@ import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
 
 interface IProps {
-  setMap: (gltf: GLTF) => void;
+  // setMap: (gltf: GLTF) => void;
+  setMap: React.Dispatch<React.SetStateAction<GLTF | undefined>>;
   addTexture: (name: string, texture: any) => void;
   handleLoad: () => void;
 }
@@ -38,10 +39,10 @@ const LoadingScreen: FC<IProps> = ({
 
   useEffect(() => {
     if (progress >= 100) {
-      //通知上级 已经ok了 可以下一步了
+      //留一小点时间执行动画，再通知上级 已经ok了 可以下一步了
       setTimeout(() => {
         handleLoad();
-      }, 200);
+      }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
@@ -110,7 +111,7 @@ const LoadingScreen: FC<IProps> = ({
   );
 };
 
-export default memo(LoadingScreen);
+export default LoadingScreen;
 
 const Container = styled.div`
   width: 100vw;

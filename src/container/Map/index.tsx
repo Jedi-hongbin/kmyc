@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 20:51:53
+ * @LastEditTime: 2022-02-07 21:29:31
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -17,7 +17,7 @@ const stats = new Stats();
 
 interface IProps {
   animateIndex: number;
-  gltf: GLTF;
+  gltf: GLTF | undefined;
   textures: { [key: string]: THREE.Texture };
 }
 // cancelAnimationFrame  requestAnimationFrame
@@ -114,13 +114,12 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
   }, [animateIndex]);
 
   useEffect(() => {
-    const container = document.querySelector("#kmyc_canvas");
-    console.log(container?.children);
-    if (container?.children.length) return;
+    const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
+    container.appendChild(renderer.domElement);
     if (gltf) {
-      console.log("gltf:", gltf);
-      container?.appendChild(renderer.domElement);
+      scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
+      //由小入大
       move([0, 93, -5], [0, 10, -5], 50);
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
@@ -138,7 +137,6 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
           mash.material = new THREE.MeshBasicMaterial({ map: texture });
         }
       }
-      scene.add(gltf.scene);
 
       window.addEventListener("resize", () => {
         // Update sizes
@@ -166,13 +164,12 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
       };
 
       tick();
-
-      // controls.addEventListener("change", () => {
-      //   // tick();
-      //   renderer.render(scene2, camera2);
-      //   renderer.render(scene, camera);
-      // });
     }
+
+    // return () => {
+    //   container.removeChild(renderer.domElement);
+    // };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);
 
