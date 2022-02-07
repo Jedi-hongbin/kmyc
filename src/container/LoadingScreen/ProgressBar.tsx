@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 16:02:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 20:55:05
+ * @LastEditTime: 2022-02-07 21:35:16
  * @Description:进度条组件
  */
 import { FC, ReactElement } from "react";
@@ -20,7 +20,8 @@ export default ProgressBar;
 
 export const Bar = styled.div<{ width: number }>`
   width: 100vw;
-  background: #fff;
+  /* background: #fff; */
+  background: transparent;
   position: relative;
   transition: height 0.2s linear, opacity 0.5s linear;
   transform-origin: center;

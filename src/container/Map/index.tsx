@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 21:29:31
+ * @LastEditTime: 2022-02-07 21:59:00
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -12,6 +12,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import Stats from "three/examples/jsm/libs/stats.module";
+import { render } from "@testing-library/react";
 //@ts-ignore
 const stats = new Stats();
 
@@ -39,14 +40,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 // renderer.shadowMap.enabled = true;
 // gbl格式 不加颜色变暗
 renderer.outputEncoding = THREE.sRGBEncoding;
-
 // Scene
 const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
+//@ts-ignore
+scene.background = 0x112134;
 scene.fog = new THREE.FogExp2(0x112134, 0.01);
-
-scene.add(new THREE.AxesHelper(50));
-scene2.add(new THREE.AxesHelper(20));
+//@ts-ignore
+// scene.add(new THREE.AxesHelper(50));
+// scene2.add(new THREE.AxesHelper(20));
 
 const textureLoader = new THREE.TextureLoader();
 // scene2.background = textureLoader.load(
@@ -115,7 +117,7 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
 
   useEffect(() => {
     const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
-    container.appendChild(renderer.domElement);
+    !container.children.length && container.appendChild(renderer.domElement);
     if (gltf) {
       scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
@@ -191,9 +193,16 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
     );
   };
 
-  return <div id='kmyc_canvas'></div>;
+  return (
+    <div
+      style={{
+        background: "linear-gradient(137deg, #ffffff, #c5a91f73,#000000d1)",
+      }}
+      id='kmyc_canvas'
+    ></div>
+  );
 };
-
+// #1e2925
 export default memo(Map);
 
 //=> end中的axis相机的轨道 y值必须小不能大于5 否则自由移动时相机下不去，无法获得更小的视野
