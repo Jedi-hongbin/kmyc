@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 17:45:53
+ * @LastEditTime: 2022-02-07 20:23:30
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -11,12 +11,19 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import Stats from "three/examples/jsm/libs/stats.module";
+//@ts-ignore
+const stats = new Stats();
 
 interface IProps {
   animateIndex: number;
   gltf: GLTF;
   textures: { [key: string]: THREE.Texture };
 }
+// cancelAnimationFrame  requestAnimationFrame
+let t: number;
+//动画计时器数组 用于清除未执行的动画和定时任务
+let timers: NodeJS.Timeout[] = [];
 
 const sizes = {
   width: window.innerWidth,
@@ -84,7 +91,8 @@ controls.minDistance = -Infinity;
 controls.maxDistance = 400;
 //可旋转角度
 controls.maxPolarAngle = Math.PI / 2.2;
-camera.position.set(0, 300, 0);
+camera.position.set(0, 400, 0);
+controls.target.set(0, 0, 0);
 
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
@@ -101,6 +109,7 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
       const gltf = cacheModel.current;
       //清除当前的战役模型
       gltf && scene.remove(gltf.scene);
+      clearAnimateTimer();
     };
   }, [animateIndex]);
 
@@ -111,6 +120,8 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
     if (gltf) {
       console.log("gltf:", gltf);
       container?.appendChild(renderer.domElement);
+      document.documentElement.appendChild(stats.dom);
+      move([0, 93, -5], [0, 10, -5], 50);
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
         const url = `${process.env.REACT_APP_URL}${i}.jpg`;
@@ -151,6 +162,7 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
         window.requestAnimationFrame(tick);
         // camera.rotateZ(elapsed * 0.001)
         controls.update();
+        stats && stats.update();
       };
 
       tick();
@@ -189,23 +201,23 @@ const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 6000,
+        time: 4000,
         camera: [6, 17, -5],
         axis: [3, 12, -8],
-        speed: 20,
+        speed: 30,
       },
       {
-        time: 8000,
+        time: 6000,
         camera: [-15, 20, -3],
         axis: [-14, 15, -8],
-        speed: 20,
+        speed: 30,
       },
     ],
     end: {
-      duration: 10000,
+      duration: 9000,
       camera: [-15, 14, -15],
       axis: [-12, 4, -35],
-      speed: 25,
+      speed: 35,
     },
   },
   {
@@ -214,20 +226,20 @@ const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 5500,
+        time: 4500,
         camera: [-8, 12, -25],
         axis: [-7, 11, -28],
         speed: 20,
       },
       {
-        time: 7500,
+        time: 6500,
         camera: [-10, 20, 30],
         axis: [-9, 15, 0],
         speed: 30,
       },
     ],
     end: {
-      duration: 10000,
+      duration: 9000,
       camera: [-9, 15, -10],
       axis: [-10, 4, -25],
     },
@@ -238,20 +250,20 @@ const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 3000,
+        time: 2000,
         camera: [0, 18, 31.5],
         axis: [-1.5, 15, 26],
         speed: 40,
       },
       {
-        time: 7000,
+        time: 6000,
         camera: [8, 18, 30],
         axis: [6.6, 15, 24],
         speed: 50,
       },
     ],
     end: {
-      duration: 8000,
+      duration: 7000,
       camera: [1.5, 18, 39],
       axis: [0, 5, 14],
       speed: 50,
@@ -262,20 +274,20 @@ const animationConfigure: IAnimationConfigure[] = [
     axis: [-2.5, 15, 17],
     jump: [
       {
-        time: 2000,
+        time: 1000,
         camera: [2.5, 18, 37],
         axis: [1, 15, 31.5],
         speed: 40,
       },
       {
-        time: 3000,
+        time: 2000,
         camera: [0.8, 20, 31],
         axis: [-0.6, 15, 27],
         speed: 50,
       },
     ],
     end: {
-      duration: 7500,
+      duration: 6500,
       camera: [-8, 21, 7.5],
       axis: [-8.5, 5, 6.3],
       speed: 50,
@@ -286,20 +298,20 @@ const animationConfigure: IAnimationConfigure[] = [
     axis: [-2.5, 15, 17],
     jump: [
       {
-        time: 4000,
+        time: 3000,
         camera: [-1.4, 18, 23],
         axis: [-2, 15, 18.4],
         speed: 40,
       },
       {
-        time: 8000,
+        time: 7000,
         camera: [7, 18, 22],
         axis: [6, 15, 17],
         speed: 50,
       },
     ],
     end: {
-      duration: 12000,
+      duration: 11000,
       camera: [-4, 20, 14],
       axis: [-4.3, 5, 12],
       speed: 50,
@@ -376,9 +388,9 @@ function move(targetCamera: number[], targetAxis: number[], speed = 16) {
       controls.target.x += diffAxis[0] / speed;
       controls.target.y += diffAxis[1] / speed;
       controls.target.z += diffAxis[2] / speed;
-      requestAnimationFrame(r);
+      t = requestAnimationFrame(r);
       count++;
-      controls.update();
+      // controls.update();
     }
   };
   r();
@@ -411,17 +423,19 @@ function sightMove(animateIndex: number) {
   //战役动画
   if (configure.jump) {
     for (const { time, camera, axis, speed } of configure.jump) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         move(camera, axis, speed);
       }, time);
+      timers.push(timer);
     }
   }
   //结束动画 开启自动旋转
   if (configure.end) {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       move(configure.end.camera, configure.end.axis, configure.end.speed);
       controls.autoRotate = true;
     }, configure.end.duration);
+    timers.push(timer);
   }
 }
 /**
@@ -435,4 +449,12 @@ function start(model: GLTF, animateIndex: number) {
   scene.add(model.scene);
   sightMove(animateIndex);
   controls.autoRotate = false;
+}
+
+function clearAnimateTimer() {
+  cancelAnimationFrame(t);
+  for (const timer of timers) {
+    clearTimeout(timer);
+  }
+  timers = [];
 }
