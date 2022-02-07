@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-06 20:50:12
+ * @LastEditTime: 2022-02-07 17:45:53
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
-import { FC, ReactElement, useEffect } from "react";
+import { FC, memo, ReactElement, useEffect, useRef } from "react";
 import { AnimationClip, AnimationObjectGroup, Event, Object3D } from "three";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -13,207 +13,173 @@ import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 
 interface IProps {
+  animateIndex: number;
   gltf: GLTF;
   textures: { [key: string]: THREE.Texture };
 }
 
-const Map: FC<IProps> = ({ gltf, textures }): ReactElement => {
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+};
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+});
+renderer.autoClear = false;
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+// renderer.shadowMap.enabled = true;
+// gbl格式 不加颜色变暗
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+// Scene
+const scene = new THREE.Scene();
+const scene2 = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x112134, 0.01);
+
+scene.add(new THREE.AxesHelper(50));
+scene2.add(new THREE.AxesHelper(20));
+
+const textureLoader = new THREE.TextureLoader();
+// scene2.background = textureLoader.load(
+//   `${process.env.REACT_APP_URL}gridbg.jpg`
+// );
+
+const sun = new THREE.PointLight(0xffffff, 2, 100);
+sun.position.set(12, 5, 10);
+scene.add(sun);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
+
+// Base camera
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  1,
+  1000
+); //视野能看 多近 1 多远 设置1000
+const camera2 = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  1,
+  1000
+); //视野能看 多近 1 多远 设置1000
+scene.add(camera);
+scene2.add(camera2);
+//轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.screenSpacePanning = false;
+controls.enableKeys = true;
+controls.keyPanSpeed = 10;
+// 更改鼠标操作 拖拽 缩放 旋转
+controls.mouseButtons = {
+  LEFT: THREE.MOUSE.PAN,
+  MIDDLE: THREE.MOUSE.DOLLY,
+  RIGHT: THREE.MOUSE.ROTATE,
+};
+controls.minDistance = -Infinity;
+controls.maxDistance = 400;
+//可旋转角度
+controls.maxPolarAngle = Math.PI / 2.2;
+camera.position.set(0, 300, 0);
+
+/**
+ * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
+ */
+
+const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
+  const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
+
   useEffect(() => {
-    const sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+    if (animateIndex) {
+      loadCampaignModel(animateIndex);
+    }
+    return () => {
+      const gltf = cacheModel.current;
+      //清除当前的战役模型
+      gltf && scene.remove(gltf.scene);
     };
+  }, [animateIndex]);
+
+  useEffect(() => {
     const container = document.querySelector("#kmyc_canvas");
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-    });
-    renderer.autoClear = false;
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    // renderer.shadowMap.enabled = true;
-    // gbl格式 不加颜色变暗
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    container?.appendChild(renderer.domElement);
-    // Scene
-    const scene = new THREE.Scene();
-    const scene2 = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x112134, 0.01);
-
-    scene.add(new THREE.AxesHelper(50));
-    scene2.add(new THREE.AxesHelper(20));
-
-    // const textureLoader = new THREE.TextureLoader();
-    // scene2.background = textureLoader.load('https://api.hongbin.xyz:3002/kmyc/gridbg.jpg');
-
-    // const textures: { [key: string]: Texture } = {};
-    // for (let i = 0; i < 33; i++) {
-    //   const index = i.toString().padStart(2, "0");
-    //   const url = `https://api.hongbin.xyz:3002/kmyc/${index}.jpg`;
-    //   const texture = textureLoader.load(url);
-    //   texture.flipY = false;
-    //   texture.encoding = THREE.sRGBEncoding;
-    //   textures[`${index}`] = texture;
-    // }
-
-    const sun = new THREE.PointLight(0xffffff, 2, 100);
-    sun.position.set(12, 5, 10);
-    scene.add(sun);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambientLight);
-
-    const animationNum = 5;
-
-    for (const mash of gltf.scene.children) {
-      const texture = textures[mash.name];
-      console.log("texture:", texture);
-
-      if (texture) {
-        // @ts-ignore
-        mash.material = new THREE.MeshBasicMaterial({ map: texture });
-      }
-    }
-    scene.add(gltf.scene);
-
-    //  加载完地图模型  加载 作战箭头动画
-    //   gltfLoader.load(
-    //       `map/${animationNum}-animate.glb`,
-    //       (gltf:any) => {
-    //           console.log(gltf);
-    //           gltf.animations.forEach((animate:any) => {
-    //               const { name } = animate;//不算后面的 Action
-    //               const mash = gltf.scene.getObjectByProperty('name', name.substring(0, name.length - 6));
-    //               if (mash) {
-    //                   onesAnimate(mash, animate)
-    //               }
-    //           });
-    //           scene.add(gltf.scene)
-    //       }, undefined, (e) => {
-    //           console.error('错了', e);
-    //       })
-
-    window.addEventListener("resize", () => {
-      // Update sizes
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-
-      // Update camera
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      // Update renderer
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
-    // Base camera
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      sizes.width / sizes.height,
-      1,
-      1000
-    ); //视野能看 多近 1 多远 设置1000
-    const camera2 = new THREE.PerspectiveCamera(
-      75,
-      sizes.width / sizes.height,
-      1,
-      1000
-    ); //视野能看 多近 1 多远 设置1000
-    scene.add(camera);
-    scene2.add(camera2);
-
-    const configure = animationConfigure[animationNum - 1];
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.screenSpacePanning = false;
-    controls.enableKeys = true;
-    controls.keyPanSpeed = 10;
-    // 更改鼠标操作 拖拽 缩放 旋转
-    controls.mouseButtons = {
-      LEFT: THREE.MOUSE.PAN,
-      MIDDLE: THREE.MOUSE.DOLLY,
-      RIGHT: THREE.MOUSE.ROTATE,
-    };
-    controls.minDistance = -Infinity;
-    controls.maxDistance = 400;
-    //可旋转角度
-    controls.maxPolarAngle = Math.PI / 2.2;
-
-    //摄像机位置
-    camera.position.set(...configure.camera);
-    controls.target.set(...configure.axis);
-    //坐标轴位置
-
-    if (configure.jump) {
-      for (const { time, camera, axis, speed } of configure.jump) {
-        setTimeout(() => {
-          move(camera, axis, speed);
-        }, time);
-      }
-    }
-    //结束动画 开启自动旋转
-    if (configure.end) {
-      setTimeout(() => {
-        move(configure.end.camera, configure.end.axis, configure.end.speed);
-        controls.autoRotate = true;
-      }, configure.end.duration);
-    }
-
-    const tick = () => {
-      // const elapsed = clock.getElapsedTime()
-      renderer.render(scene2, camera2);
-      renderer.render(scene, camera);
-      // sun.position.x = Math.cos(elapsedTime)
-      window.requestAnimationFrame(tick);
-      // camera.rotateZ(elapsed * 0.001)
-      controls.update();
-    };
-
-    tick();
-
-    /**
-     * @description: 视野切换动画
-     * @param {number[]} targetCamera 目标位置的相机位置
-     * @param {number[]} targetAxis 目标位置的坐标轴位置
-     * @param {number} speed 速度
-     * @return {void}
-     */
-    function move(targetCamera: number[], targetAxis: number[], speed = 16) {
-      // const targetCamera = [-10, 20, 26];
-      // const targetAxis = [-9, 17, 0];
-
-      const diffCamera: typeof targetCamera = [];
-      const diffAxis: typeof targetAxis = [];
-
-      for (let i = 0; i < 3; i++) {
-        const key = String.fromCharCode(120 + i) as "x" | "y" | "z";
-        diffCamera.push(distance(camera.position[key], targetCamera[i]));
-        diffAxis.push(distance(controls.target[key], targetAxis[i]));
+    console.log(container?.children);
+    if (container?.children.length) return;
+    if (gltf) {
+      console.log("gltf:", gltf);
+      container?.appendChild(renderer.domElement);
+      //加载其他地图纹理
+      for (let i = 10; i < 33; i++) {
+        const url = `${process.env.REACT_APP_URL}${i}.jpg`;
+        const texture = textureLoader.load(url);
+        texture.flipY = false;
+        texture.encoding = THREE.sRGBEncoding;
+        textures[i] = texture;
       }
 
-      let count = 0;
-      const r = () => {
-        if (count < speed) {
-          camera.position.x += diffCamera[0] / speed;
-          camera.position.y += diffCamera[1] / speed;
-          camera.position.z += diffCamera[2] / speed;
-
-          controls.target.x += diffAxis[0] / speed;
-          controls.target.y += diffAxis[1] / speed;
-          controls.target.z += diffAxis[2] / speed;
-          requestAnimationFrame(r);
-          count++;
-          controls.update();
+      for (const mash of gltf.scene.children) {
+        const texture = textures[mash.name];
+        if (texture) {
+          // @ts-ignore
+          mash.material = new THREE.MeshBasicMaterial({ map: texture });
         }
+      }
+      scene.add(gltf.scene);
+
+      window.addEventListener("resize", () => {
+        // Update sizes
+        sizes.width = window.innerWidth;
+        sizes.height = window.innerHeight;
+
+        // Update camera
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix();
+
+        // Update renderer
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      });
+
+      const tick = () => {
+        // const elapsed = clock.getElapsedTime()
+        renderer.render(scene2, camera2);
+        renderer.render(scene, camera);
+        // sun.position.x = Math.cos(elapsedTime)
+        window.requestAnimationFrame(tick);
+        // camera.rotateZ(elapsed * 0.001)
+        controls.update();
       };
-      r();
+
+      tick();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gltf]);
+
+  /**加载战役模型*/
+  const loadCampaignModel = (animateIndex: number) => {
+    window.gltfLoader.load(
+      `${process.env.REACT_APP_URL}map/${animateIndex}-animate.glb`,
+      (gltf: any) => {
+        console.log("战役模型:", gltf);
+        start(gltf, animateIndex);
+        //@ts-ignore
+        cacheModel.current = gltf;
+      },
+      undefined,
+      e => {
+        alert("战役模型加载出错");
+        console.error("战役模型加载出错", e);
+      }
+    );
+  };
 
   return <div id='kmyc_canvas'></div>;
 };
 
-export default Map;
+export default memo(Map);
 
 //=> end中的axis相机的轨道 y值必须小不能大于5 否则自由移动时相机下不去，无法获得更小的视野
 const animationConfigure: IAnimationConfigure[] = [
@@ -341,10 +307,7 @@ const animationConfigure: IAnimationConfigure[] = [
   },
 ];
 
-function init() {}
-
 //  不再 tick 每一帧调用  大部分动画只调用一遍
-
 function onesAnimate(
   mash: Object3D<Event> | AnimationObjectGroup,
   animate: AnimationClip
@@ -381,4 +344,95 @@ function distance(x1: number, x2: number) {
     return (x2 * -1 - x1 * -1) * -1;
   }
   return x2 - x1;
+}
+
+/**
+ * @description: 视野切换动画
+ * @param {number[]} targetCamera 目标位置的相机位置
+ * @param {number[]} targetAxis 目标位置的坐标轴位置
+ * @param {number} speed 速度
+ * @return {void}
+ */
+function move(targetCamera: number[], targetAxis: number[], speed = 16) {
+  // const targetCamera = [-10, 20, 26];
+  // const targetAxis = [-9, 17, 0];
+
+  const diffCamera: typeof targetCamera = [];
+  const diffAxis: typeof targetAxis = [];
+
+  for (let i = 0; i < 3; i++) {
+    const key = String.fromCharCode(120 + i) as "x" | "y" | "z";
+    diffCamera.push(distance(camera.position[key], targetCamera[i]));
+    diffAxis.push(distance(controls.target[key], targetAxis[i]));
+  }
+
+  let count = 0;
+  const r = () => {
+    if (count < speed) {
+      camera.position.x += diffCamera[0] / speed;
+      camera.position.y += diffCamera[1] / speed;
+      camera.position.z += diffCamera[2] / speed;
+
+      controls.target.x += diffAxis[0] / speed;
+      controls.target.y += diffAxis[1] / speed;
+      controls.target.z += diffAxis[2] / speed;
+      requestAnimationFrame(r);
+      count++;
+      controls.update();
+    }
+  };
+  r();
+}
+
+/**
+ * @description 添加模型的动画
+ * @param {GLTF} gltf 带动画的glb模型
+ * */
+function play(gltf: GLTF) {
+  gltf.animations.forEach((animate: any) => {
+    const { name } = animate; //不算后面的 Action
+    const mash = gltf.scene.getObjectByProperty(
+      "name",
+      name.substring(0, name.length - 6)
+    );
+    if (mash) {
+      onesAnimate(mash, animate);
+    }
+  });
+}
+
+/**视线移动*/
+function sightMove(animateIndex: number) {
+  const configure = animationConfigure[animateIndex - 1];
+
+  //移动到摄像机位置
+  move(configure.camera, configure.axis, 40);
+
+  //战役动画
+  if (configure.jump) {
+    for (const { time, camera, axis, speed } of configure.jump) {
+      setTimeout(() => {
+        move(camera, axis, speed);
+      }, time);
+    }
+  }
+  //结束动画 开启自动旋转
+  if (configure.end) {
+    setTimeout(() => {
+      move(configure.end.camera, configure.end.axis, configure.end.speed);
+      controls.autoRotate = true;
+    }, configure.end.duration);
+  }
+}
+/**
+ * @description: 设置战役模型动画和实现动画
+ * @param {GLTF} model
+ * @param {number} animateIndex
+ * @return {*}
+ */
+function start(model: GLTF, animateIndex: number) {
+  play(model);
+  scene.add(model.scene);
+  sightMove(animateIndex);
+  controls.autoRotate = false;
 }

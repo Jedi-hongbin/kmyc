@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-06 21:41:29
+ * @LastEditTime: 2022-02-07 14:12:46
  * @Description: 加载数据屏 获取数据后进入页面
  */
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, memo, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { flexCenter } from "../../styled";
@@ -18,7 +18,7 @@ import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
 
 interface IProps {
-  setMap: React.Dispatch<React.SetStateAction<GLTF | null>>;
+  setMap: (gltf: GLTF) => void;
   addTexture: (name: string, texture: any) => void;
   handleLoad: () => void;
 }
@@ -37,12 +37,9 @@ const LoadingScreen: FC<IProps> = ({
   });
 
   useEffect(() => {
-    console.log("progress:", progress);
-    if (progress === 100) {
+    if (progress >= 100) {
       //通知上级 已经ok了 可以下一步了
-      setTimeout(() => {
-        handleLoad();
-      }, 200);
+      handleLoad();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
@@ -70,56 +67,48 @@ const LoadingScreen: FC<IProps> = ({
       addTexture(index, texture);
     }
   };
-
+  //模型加载占50% 当前大小会返回 33 66 100 三次进度加载回调，如果文件变大需要更改完善此段代码
   const dracoLoader = () => {
     let prevModel = 0;
     const manager = new THREE.LoadingManager();
-    manager.onLoad = () => {
-      console.log("地图模型加载完毕!");
-    };
-    manager.onProgress = async (_, loaded, total) => {
+    manager.onProgress = (_, loaded, total) => {
       const progress = Math.floor((loaded / total) * 100);
-      if (progress === 100) {
-        setProgress(prev => prev + 50 - prevModel);
-      } else {
-        prevModel += progress / 4;
-        setProgress(prev => prev + progress / 4);
-      }
+      if (progress === 100) return setProgress(prev => prev + 50 - prevModel);
+      prevModel += progress / 4;
+      setProgress(prev => prev + progress / 4);
     };
-    manager.onError = str => {
-      console.error("load err:", str);
-      setIsLoadFail(str);
-    };
-
+    //设置错误信息
+    manager.onError = setIsLoadFail;
+    //创建draco解析器
     const dracoLoader = new DRACOLoader(manager);
     dracoLoader.setDecoderConfig({ type: "js" });
     dracoLoader.setDecoderPath(process.env.REACT_APP_URL as string);
+    // gltf 加载器
     const gltfLoader = new GLTFLoader(manager);
     gltfLoader.setDRACOLoader(dracoLoader);
-
-    gltfLoader.load(mapModel, gltf => {
-      setMap(gltf);
-    });
-
-    window.gltfLoader = gltfLoader;
+    gltfLoader.load(mapModel, setMap);
+    //不带LoadingManager的加载器 如果使用gltfLoader会触发事件改变progress状态造成内存泄漏
+    const normalGltfLoader = new GLTFLoader();
+    normalGltfLoader.setDRACOLoader(dracoLoader);
+    window.gltfLoader = normalGltfLoader;
   };
 
   if (isLoadFail) return <LoadFail errMsg={isLoadFail} />;
 
   return (
     <Container>
-      <Back leave={progress === 100} dir='up'>
+      <Back leave={progress >= 100} dir='up'>
         <h6>抗美援朝</h6>
       </Back>
       <ProgressBar progress={progress} />
-      <Back leave={progress === 100} dir='down'>
+      <Back leave={progress >= 100} dir='down'>
         <h6>保家卫国</h6>
       </Back>
     </Container>
   );
 };
 
-export default LoadingScreen;
+export default memo(LoadingScreen);
 
 const Container = styled.div`
   width: 100vw;
@@ -129,7 +118,7 @@ const Container = styled.div`
   left: 0;
   display: flex;
   flex-direction: column;
-
+  z-index: 9;
   & > div {
     :first-child {
       background-color: #0af;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 16:02:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-06 21:32:27
+ * @LastEditTime: 2022-02-07 10:13:11
  * @Description:进度条组件
  */
 import { FC, ReactElement } from "react";
@@ -39,7 +39,7 @@ const Bar = styled.div<{ width: number }>`
   }
 
   ${({ width }) =>
-    width === 100
+    width >= 100
       ? css`
           opacity: 0;
           height: 0;
