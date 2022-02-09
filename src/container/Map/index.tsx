@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 21:34:18
+ * @LastEditTime: 2022-02-09 22:00:36
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -113,6 +113,7 @@ const Map: FC<IProps> = ({
   selectAnimation,
 }): ReactElement => {
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
+  const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
 
   useEffect(() => {
     if (animateIndex) {
@@ -156,10 +157,12 @@ const Map: FC<IProps> = ({
       const qiangTexture = textureLoader.load(qiangImg);
       qiangTexture.flipY = false;
       qiangTexture.encoding = THREE.sRGBEncoding;
+
       loadMXNGModel(
         new THREE.MeshBasicMaterial({ map: qiangTexture }),
         animationConfigure,
-        scene
+        scene,
+        MXNGArr.current
       );
 
       //  hover后小幅度缩放动画 & 战役图标hover动画
@@ -237,6 +240,7 @@ const Map: FC<IProps> = ({
 
             if (!model!.userData.click) {
               clickQiangAnimation(model!, () => {
+                console.log(MXNGArr.current);
                 const { index } = model?.userData as { index: number };
                 if (index) selectAnimation(index);
                 else alert("未获取到战役索引");
