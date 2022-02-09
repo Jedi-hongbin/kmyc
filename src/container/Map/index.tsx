@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 18:30:58
+ * @LastEditTime: 2022-02-09 21:21:07
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -12,7 +12,11 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { loadMXNGModel, smallScaleAnimation } from "./function";
+import {
+  clickQiangAnimation,
+  loadMXNGModel,
+  smallScaleAnimation,
+} from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
 //@ts-ignore
 const stats = new Stats();
@@ -207,6 +211,26 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
         //返回选中的对象
         return intersects;
       };
+
+      renderer.domElement.addEventListener("click", event => {
+        event.preventDefault();
+        const intersects = getIntersects(event);
+        // 获取选中最近的 Mesh 对象
+        if (intersects.length) {
+          const selectObject = intersects[0].object;
+          //莫辛纳甘枪图标
+          if (selectObject.userData.type === 1) {
+            // 默认点击的是枪 mode指向两把枪的容器scene
+            let { parent: model } = selectObject;
+            //如果点击的是文字 则指到枪scene
+            model!.userData.text && (model = model!.parent!.children[0]);
+
+            if (!model!.userData.click) {
+              clickQiangAnimation(model!);
+            }
+          }
+        }
+      });
 
       window.addEventListener("resize", () => {
         // Update sizes

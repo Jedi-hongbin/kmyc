@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 18:26:26
+ * @LastEditTime: 2022-02-09 21:21:02
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -30,11 +30,15 @@ export function loadMXNGModel(
     left.material = material;
 
     const right = left.clone();
-    left.rotateZ(Math.PI / 6);
+    left.rotateZ(Math.PI / 5);
     left.rotateX(Math.PI / 9);
-    right.rotateZ(-Math.PI / 6);
+    right.rotateZ(-Math.PI / 5);
     right.rotateX(-Math.PI / 9);
     right.rotateY(Math.PI);
+    right.position.x = 2.5;
+    left.position.x += 0.5;
+    icon.add(right);
+    icon.position.y -= 1;
 
     icon.add(right);
 
@@ -90,6 +94,44 @@ export function smallScaleAnimation(mash: THREE.Object3D) {
       requestAnimationFrame(animate);
     } else {
       mash.userData.animation = false;
+    }
+  };
+  animate();
+}
+
+export function clickQiangAnimation(
+  mash: THREE.Object3D,
+  onComplete?: () => void
+) {
+  mash.userData.click = true;
+  const [l, r] = mash.children;
+
+  const angle = 0.03;
+  const dis = 0.06;
+  let count = 0;
+  const speed = 20;
+  const half = speed / 2;
+  const max = speed - 1;
+
+  const animate = () => {
+    if (count < half) {
+      l.rotateZ(angle);
+      l.position.x -= dis;
+      r.rotateZ(angle);
+      r.position.x += dis;
+    } else {
+      l.rotateZ(-angle);
+      l.position.x += dis;
+      r.rotateZ(-angle);
+      r.position.x -= dis;
+    }
+    if (count < max) {
+      count++;
+      requestAnimationFrame(animate);
+    } else {
+      console.log("complete");
+      mash.userData.click = false;
+      onComplete && onComplete();
     }
   };
   animate();

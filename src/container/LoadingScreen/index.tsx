@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-08 08:04:11
+ * @LastEditTime: 2022-02-09 19:18:17
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -53,7 +53,7 @@ const LoadingScreen: FC<IProps> = ({
 
     for (let i = 0; i < 10; i++) {
       const index = i.toString().padStart(2, "0");
-      const url = `${process.env.REACT_APP_URL}${index}.jpg`;
+      const url = `${process.env.REACT_APP_URL}q/${i}.jpg`;
       const texture = textureLoader.load(
         url,
         _ => {
