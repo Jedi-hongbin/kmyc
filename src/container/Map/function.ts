@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 21:21:02
+ * @LastEditTime: 2022-02-09 21:28:21
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -50,6 +50,7 @@ export function loadMXNGModel(
         for (let index = 0; index < 5; index++) {
           const Qiang = new Scene();
           const iconItem = icon.clone();
+          iconItem.userData.index = index + 1;
           const nameItem = nameModel.clone();
           const char = text.scene.children.find(
             mash => mash.name === String(index + 1)

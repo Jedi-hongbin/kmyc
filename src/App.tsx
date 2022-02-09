@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import LoadingScreen from "./container/LoadingScreen";
 import Map from "./container/Map";
@@ -20,6 +20,10 @@ function App() {
     setLoading(false);
   };
 
+  //map 内部更新战役动画
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const selectAnimation = useCallback(setAnimateIndex, []);
+
   return (
     <div>
       {loading ? (
@@ -31,7 +35,12 @@ function App() {
       ) : null}
 
       {/* {map ? ( */}
-      <Map animateIndex={animateIndex} gltf={map} textures={textures.current} />
+      <Map
+        animateIndex={animateIndex}
+        gltf={map}
+        textures={textures.current}
+        selectAnimation={selectAnimation}
+      />
       {/* ) : null} */}
       <Panel>
         {[1, 2, 3, 4, 5].map(v => (

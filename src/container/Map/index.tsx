@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 21:21:07
+ * @LastEditTime: 2022-02-09 21:34:18
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -25,6 +25,7 @@ interface IProps {
   animateIndex: number;
   gltf: GLTF | undefined;
   textures: { [key: string]: THREE.Texture };
+  selectAnimation: (index: number) => void;
 }
 // cancelAnimationFrame  requestAnimationFrame
 let t: number;
@@ -105,7 +106,12 @@ controls.target.set(0, 0, 0);
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
  */
 
-const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
+const Map: FC<IProps> = ({
+  gltf,
+  textures,
+  animateIndex,
+  selectAnimation,
+}): ReactElement => {
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
 
   useEffect(() => {
@@ -172,23 +178,7 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
           if (selectObject.userData.type === 0) return;
           //莫辛纳甘枪模型
           if (selectObject.userData.type === 1) {
-            const { parent } = selectObject;
-            const parentData = parent!.userData;
-            //文本scene && 枪scene没在动
-            if (
-              parentData.text &&
-              !parent!.parent!.children[0].userData.animation
-            ) {
-              smallScaleAnimation(parent!.parent!.children[0]);
-            }
-            //枪scene没在动 && 不是文本scene
-            else if (!parentData.animation && !parentData.text) {
-              smallScaleAnimation(parent!);
-            }
-            //单独一把枪
-            else if (!parentData.text && !selectObject.userData.animation) {
-              smallScaleAnimation(selectObject);
-            }
+            hoverIcon(selectObject);
           }
           //其他模型
           else if (!selectObject.userData.animation) {
@@ -196,6 +186,26 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
           }
         }
       });
+      //战役图标hover事件
+      const hoverIcon = (selectObject: Object3D) => {
+        const { parent } = selectObject;
+        const parentData = parent!.userData;
+        //文本scene && 枪scene没在动
+        if (
+          parentData.text &&
+          !parent!.parent!.children[0].userData.animation
+        ) {
+          smallScaleAnimation(parent!.parent!.children[0]);
+        }
+        //枪scene没在动 && 不是文本scene
+        else if (!parentData.animation && !parentData.text) {
+          smallScaleAnimation(parent!);
+        }
+        //单独一把枪
+        else if (!parentData.text && !selectObject.userData.animation) {
+          smallScaleAnimation(selectObject);
+        }
+      };
 
       const getIntersects = (event: { clientX: number; clientY: number }) => {
         // 通过鼠标点击位置,计算出 raycaster 所需点的位置,以屏幕为中心点,范围 -1 到 1
@@ -226,7 +236,11 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
             model!.userData.text && (model = model!.parent!.children[0]);
 
             if (!model!.userData.click) {
-              clickQiangAnimation(model!);
+              clickQiangAnimation(model!, () => {
+                const { index } = model?.userData as { index: number };
+                if (index) selectAnimation(index);
+                else alert("未获取到战役索引");
+              });
             }
           }
         }
