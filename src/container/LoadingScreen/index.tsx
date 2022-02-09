@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 21:30:25
+ * @LastEditTime: 2022-02-08 08:04:11
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -42,7 +42,7 @@ const LoadingScreen: FC<IProps> = ({
       //留一小点时间执行动画，再通知上级 已经ok了 可以下一步了
       setTimeout(() => {
         handleLoad();
-      }, 300);
+      }, 400);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);

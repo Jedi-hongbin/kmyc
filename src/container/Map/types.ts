@@ -14,4 +14,5 @@ interface IJump extends IPosition {
 export interface IAnimationConfigure extends IPosition {
   jump: IJump[];
   end: Omit<IJump, "time"> & { duration: number };
+  icon: IPosition["camera"];
 }

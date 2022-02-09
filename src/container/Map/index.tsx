@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 21:59:00
+ * @LastEditTime: 2022-02-09 18:30:58
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -12,7 +12,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { render } from "@testing-library/react";
+import { loadMXNGModel, smallScaleAnimation } from "./function";
+import qiangImg from "../../assets/map/moxinnaganky.png";
 //@ts-ignore
 const stats = new Stats();
 
@@ -131,14 +132,81 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
         texture.encoding = THREE.sRGBEncoding;
         textures[i] = texture;
       }
-
+      //设置地图板块的纹理
       for (const mash of gltf.scene.children) {
         const texture = textures[mash.name];
         if (texture) {
           // @ts-ignore
           mash.material = new THREE.MeshBasicMaterial({ map: texture });
+          mash.userData.type = 0; // 标记地图模块类型
         }
       }
+
+      //加载战役图标 -- 莫辛纳甘卡宾枪
+      const qiangTexture = textureLoader.load(qiangImg);
+      qiangTexture.flipY = false;
+      qiangTexture.encoding = THREE.sRGBEncoding;
+      loadMXNGModel(
+        new THREE.MeshBasicMaterial({ map: qiangTexture }),
+        animationConfigure,
+        scene
+      );
+
+      //  hover后小幅度缩放动画 & 战役图标hover动画
+
+      // 声明 raycaster 和 mouse 变量
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      //点击监听
+      renderer.domElement.addEventListener("mousemove", event => {
+        event.preventDefault();
+        const intersects = getIntersects(event);
+        // 获取选中最近的 Mesh 对象
+        if (intersects.length) {
+          const selectObject = intersects[0].object;
+          //地图模块不处理
+          if (selectObject.userData.type === 0) return;
+          //莫辛纳甘枪模型
+          if (selectObject.userData.type === 1) {
+            const { parent } = selectObject;
+            const parentData = parent!.userData;
+            //文本scene && 枪scene没在动
+            if (
+              parentData.text &&
+              !parent!.parent!.children[0].userData.animation
+            ) {
+              smallScaleAnimation(parent!.parent!.children[0]);
+            }
+            //枪scene没在动 && 不是文本scene
+            else if (!parentData.animation && !parentData.text) {
+              smallScaleAnimation(parent!);
+            }
+            //单独一把枪
+            else if (!parentData.text && !selectObject.userData.animation) {
+              smallScaleAnimation(selectObject);
+            }
+          }
+          //其他模型
+          else if (!selectObject.userData.animation) {
+            smallScaleAnimation(selectObject);
+          }
+        }
+      });
+
+      const getIntersects = (event: { clientX: number; clientY: number }) => {
+        // 通过鼠标点击位置,计算出 raycaster 所需点的位置,以屏幕为中心点,范围 -1 到 1
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        //通过鼠标点击的位置(二维坐标)和当前相机的矩阵计算出射线位置
+        raycaster.setFromCamera(mouse, camera);
+
+        // 获取与射线相交的对象数组，其中的元素按照距离排序，越近的越靠前
+        var intersects = raycaster.intersectObjects(scene.children);
+
+        //返回选中的对象
+        return intersects;
+      };
 
       window.addEventListener("resize", () => {
         // Update sizes
@@ -167,11 +235,6 @@ const Map: FC<IProps> = ({ gltf, textures, animateIndex }): ReactElement => {
 
       tick();
     }
-
-    // return () => {
-    //   container.removeChild(renderer.domElement);
-    // };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);
 
@@ -231,6 +294,7 @@ const animationConfigure: IAnimationConfigure[] = [
       axis: [-12, 4, -35],
       speed: 35,
     },
+    icon: [-21, 7, -22],
   },
   {
     camera: [-24, 15, -2],
@@ -255,6 +319,7 @@ const animationConfigure: IAnimationConfigure[] = [
       camera: [-9, 15, -10],
       axis: [-10, 4, -25],
     },
+    icon: [-22, 7, -16],
   },
   {
     camera: [-2, 20, 19.5],
@@ -280,6 +345,7 @@ const animationConfigure: IAnimationConfigure[] = [
       axis: [0, 5, 14],
       speed: 50,
     },
+    icon: [-5, 7, 2],
   },
   {
     camera: [-2, 20, 19.5],
@@ -304,6 +370,7 @@ const animationConfigure: IAnimationConfigure[] = [
       axis: [-8.5, 5, 6.3],
       speed: 50,
     },
+    icon: [7, 7, 18],
   },
   {
     camera: [-2, 20, 19.5],
@@ -328,6 +395,7 @@ const animationConfigure: IAnimationConfigure[] = [
       axis: [-4.3, 5, 12],
       speed: 50,
     },
+    icon: [4.5, 7, 12],
   },
 ];
 
