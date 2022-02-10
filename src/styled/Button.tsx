@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 18:36:42
+ * @LastEditTime: 2022-02-10 20:38:12
  * @Description:通用按钮
  */
 
@@ -22,9 +22,9 @@ export const Button = styled.button<{
   width: 8rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: ${props => props.primary + "55"};
+  background-color: ${props => props.primary + "65"};
   white-space: nowrap;
-  color: ${props => adjustColor(props.primary, -90)};
+  color: ${props => adjustColor(props.primary, -100)};
   margin: 0.3rem;
   font-weight: bold;
   cursor: pointer;
@@ -56,12 +56,12 @@ export const Button = styled.button<{
     box-shadow: 0 0 1rem 3px ${props => props.primary};
     color: ${props => adjustColor(props.primary, -120)};
     ::after {
-      transform: scale(2.2, 2);
-      top: 0rem;
+      transform: scale(2.1, 2);
+      top: -1rem;
     }
     ::before {
-      transform: scale(2.1);
-      top: -3rem;
+      transform: scale(2, 2);
+      top: 1rem;
     }
   }
 
