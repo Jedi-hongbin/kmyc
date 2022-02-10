@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 19:18:17
+ * @LastEditTime: 2022-02-10 14:54:31
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -137,7 +137,7 @@ const Back = styled.div<{ leave: boolean; dir: "up" | "down" }>`
   ${flexCenter};
   justify-content: ${props => (props.dir === "up" ? "flex-start" : "flex-end")};
   padding: 0 2rem;
-  font-size: 10rem;
+  font-size: 8rem;
   letter-spacing: 1rem;
   text-shadow: -2px 6px 0px #168269;
   transition-property: transform;

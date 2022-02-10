@@ -4,7 +4,6 @@ const GlobalStyle = createGlobalStyle`
   html,body {
     height: 100%;
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
-    font-size: 16px;
   }
  
   a {

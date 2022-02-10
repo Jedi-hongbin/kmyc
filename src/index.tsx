@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyle from "./styled/GlobalStyle";
+import "./assets/flexible.min";
 
 ReactDOM.render(
   <React.StrictMode>

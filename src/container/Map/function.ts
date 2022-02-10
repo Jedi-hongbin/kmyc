@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 10:13:35
+ * @LastEditTime: 2022-02-10 14:11:31
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -187,6 +187,25 @@ export function showMash(mash: THREE.Object3D) {
     mash.scale.x += x / range;
     mash.scale.y += y / range;
     mash.scale.z += z / range;
+    i++;
+  };
+
+  run();
+}
+
+export function smallPositionAnimation(mash: Object3D) {
+  mash.userData.animation = true;
+  const range = 0.01;
+  const count = 20;
+  const half = count / 2;
+  const max = count - 1;
+  let i = 0;
+
+  const run = () => {
+    if (i < max) requestAnimationFrame(run);
+    else mash.userData.animation = false;
+    if (i < half) mash.position.y += range;
+    else mash.position.y -= range;
     i++;
   };
 

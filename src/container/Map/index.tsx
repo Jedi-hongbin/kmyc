@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 10:15:35
+ * @LastEditTime: 2022-02-10 14:09:55
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -17,6 +17,7 @@ import {
   hideMash,
   loadMXNGModel,
   showMash,
+  smallPositionAnimation,
   smallScaleAnimation,
 } from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
@@ -126,6 +127,7 @@ const Map: FC<IProps> = ({
       //清除当前的战役模型
       gltf && scene.remove(gltf.scene);
       clearAnimateTimer();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       animateIndex && showMash(MXNGArr.current[animateIndex - 1]);
     };
   }, [animateIndex]);
@@ -173,7 +175,7 @@ const Map: FC<IProps> = ({
       // 声明 raycaster 和 mouse 变量
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
-      //点击监听
+      //hover监听
       renderer.domElement.addEventListener("mousemove", event => {
         event.preventDefault();
         const intersects = getIntersects(event);
@@ -182,8 +184,13 @@ const Map: FC<IProps> = ({
           const selectObject = intersects[0].object;
           //地图模块不处理
           if (selectObject.userData.type === 0) return;
+          //38线 两个mash hover效果怪异
+          if (selectObject!.parent!.name.match(/38line/)) {
+            if (!selectObject!.parent?.userData.animation)
+              smallPositionAnimation(selectObject!.parent!);
+          }
           //莫辛纳甘枪模型
-          if (selectObject.userData.type === 1) {
+          else if (selectObject.userData.type === 1) {
             hoverIcon(selectObject);
           }
           //其他模型
