@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 16:02:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-07 21:35:16
+ * @LastEditTime: 2022-02-10 20:26:23
  * @Description:进度条组件
  */
 import { FC, ReactElement } from "react";
@@ -34,9 +34,10 @@ export const Bar = styled.div<{ width: number }>`
     position: absolute;
     top: 0;
     left: 0;
-    box-shadow: 0px 2px 4px 2px #979595ba;
+    box-shadow: 0px 2px 4px 0px #979595ba;
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+    width: attr(--width);
   }
 
   ${({ width }) =>
@@ -51,7 +52,7 @@ export const Bar = styled.div<{ width: number }>`
           }
         `
       : css`
-          height: 0.5rem;
+          height: 0.3rem;
           ::after {
             width: ${width + "vw"};
           }

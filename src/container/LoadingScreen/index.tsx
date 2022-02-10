@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 14:54:31
+ * @LastEditTime: 2022-02-10 20:11:08
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import mapModel from "../../assets/map/map.glb";
 import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
+import { adjustColor } from "../../utils/color";
 
 interface IProps {
   // setMap: (gltf: GLTF) => void;
@@ -98,14 +99,26 @@ const LoadingScreen: FC<IProps> = ({
 
   if (isLoadFail) return <LoadFail errMsg={isLoadFail} />;
 
+  const renderText = (str: string, color: string) =>
+    str.split("").map((t, i) => (
+      <span
+        style={{
+          color: adjustColor(color, i * 15),
+        }}
+        key={t}
+      >
+        {t}
+      </span>
+    ));
+
   return (
     <Container>
       <Back leave={progress >= 100} dir='up'>
-        <h6>抗美援朝</h6>
+        {renderText("抗美援朝", "#00aaff")}
       </Back>
       <ProgressBar progress={progress} />
       <Back leave={progress >= 100} dir='down'>
-        <h6>保家卫国</h6>
+        {renderText("保家卫国", "#00ffaa")}
       </Back>
     </Container>
   );
@@ -124,10 +137,10 @@ const Container = styled.div`
   z-index: 9;
   & > div {
     :first-child {
-      background-color: #0af;
+      background: linear-gradient(60deg, #0af, #0fa 60%);
     }
     :last-child {
-      background-color: #0fa;
+      background: linear-gradient(60deg, #0af, #0fa 80%);
     }
   }
 `;
@@ -137,9 +150,10 @@ const Back = styled.div<{ leave: boolean; dir: "up" | "down" }>`
   ${flexCenter};
   justify-content: ${props => (props.dir === "up" ? "flex-start" : "flex-end")};
   padding: 0 2rem;
-  font-size: 8rem;
+  font-size: 6rem;
+  font-weight: bold;
   letter-spacing: 1rem;
-  text-shadow: -2px 6px 0px #168269;
+  text-shadow: 3px -1px 0px #168269;
   transition-property: transform;
   transition-duration: 0.7s;
   transition-timing-function: cubic-bezier(0.12, 0.04, 0.47, 1.4);

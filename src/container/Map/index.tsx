@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 14:09:55
+ * @LastEditTime: 2022-02-10 20:28:05
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -104,7 +104,6 @@ controls.maxDistance = 400;
 controls.maxPolarAngle = Math.PI / 2.2;
 camera.position.set(0, 400, 0);
 controls.target.set(0, 0, 0);
-
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
  */
@@ -135,6 +134,7 @@ const Map: FC<IProps> = ({
   useEffect(() => {
     const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
     !container.children.length && container.appendChild(renderer.domElement);
+
     if (gltf) {
       scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
@@ -148,6 +148,7 @@ const Map: FC<IProps> = ({
         texture.encoding = THREE.sRGBEncoding;
         textures[i] = texture;
       }
+
       //设置地图板块的纹理
       for (const mash of gltf.scene.children) {
         const texture = textures[mash.name];
@@ -272,11 +273,13 @@ const Map: FC<IProps> = ({
         renderer.setSize(sizes.width, sizes.height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       });
-
-      const tick = () => {
-        // const elapsed = clock.getElapsedTime()
+      const render = () => {
         renderer.render(scene2, camera2);
         renderer.render(scene, camera);
+      };
+      const tick = () => {
+        // const elapsed = clock.getElapsedTime()
+        render();
         // sun.position.x = Math.cos(elapsedTime)
         window.requestAnimationFrame(tick);
         // camera.rotateZ(elapsed * 0.001)

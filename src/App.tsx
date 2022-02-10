@@ -5,7 +5,7 @@ import Map from "./container/Map";
 import styled from "styled-components";
 import { flexCenter } from "./styled";
 import { Button } from "./styled/Button";
-import { adjustColor, randomColor } from "./utils/color";
+import { adjustColor } from "./utils/color";
 
 function App() {
   const textures = useRef<{ [key: string]: any }>({});
@@ -36,17 +36,17 @@ function App() {
         />
       ) : null}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
-      /> */}
+      />
       <Panel>
         {["一", "二", "三", "四", "五"].map((text, index) => (
           <Button
             // primary='#aaffaa'
-            primary={adjustColor("#aaffaa", index * -30)}
+            primary={adjustColor("#aafeaa", index * -25)}
             key={text}
             onClick={() => setAnimateIndex(index + 1)}
           >
