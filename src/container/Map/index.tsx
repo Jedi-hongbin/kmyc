@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 22:00:36
+ * @LastEditTime: 2022-02-10 10:15:35
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -14,7 +14,9 @@ import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {
   clickQiangAnimation,
+  hideMash,
   loadMXNGModel,
+  showMash,
   smallScaleAnimation,
 } from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
@@ -124,6 +126,7 @@ const Map: FC<IProps> = ({
       //清除当前的战役模型
       gltf && scene.remove(gltf.scene);
       clearAnimateTimer();
+      animateIndex && showMash(MXNGArr.current[animateIndex - 1]);
     };
   }, [animateIndex]);
 
@@ -240,7 +243,6 @@ const Map: FC<IProps> = ({
 
             if (!model!.userData.click) {
               clickQiangAnimation(model!, () => {
-                console.log(MXNGArr.current);
                 const { index } = model?.userData as { index: number };
                 if (index) selectAnimation(index);
                 else alert("未获取到战役索引");
@@ -289,6 +291,9 @@ const Map: FC<IProps> = ({
         start(gltf, animateIndex);
         //@ts-ignore
         cacheModel.current = gltf;
+        //战役图标隐藏
+        const icon = MXNGArr.current[animateIndex - 1];
+        hideMash(icon);
       },
       undefined,
       e => {
@@ -452,11 +457,8 @@ function onesAnimate(
   // @ts-ignore
   action.setLoop(THREE.LoopOnce);
   action.play();
-  // console.log(action.time)
   const clip = action.getClip();
-  // console.log("clip.time")
   const duration = clip.duration;
-  // console.log(clip.duration)
   const clock = new THREE.Clock();
   let sum = 0;
 
@@ -466,7 +468,6 @@ function onesAnimate(
     window.requestAnimationFrame(run);
     const t = clock.getDelta();
     sum += t;
-    // console.log(sum);
     mixer.update(t);
   };
   run();

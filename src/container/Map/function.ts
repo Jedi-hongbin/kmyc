@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-09 21:56:50
+ * @LastEditTime: 2022-02-10 10:13:35
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -103,11 +103,17 @@ export function smallScaleAnimation(mash: THREE.Object3D) {
   animate();
 }
 
+/**
+ * @description: 点击枪模型的动画
+ * @param {*} 枪的容器
+ * @return {void} void
+ */
 export function clickQiangAnimation(
   mash: THREE.Object3D,
   onComplete?: () => void
 ) {
   mash.userData.click = true;
+  onComplete && onComplete();
   const [l, r] = mash.children;
 
   const angle = 0.03;
@@ -133,10 +139,56 @@ export function clickQiangAnimation(
       count++;
       requestAnimationFrame(animate);
     } else {
-      console.log("complete");
       mash.userData.click = false;
-      onComplete && onComplete();
     }
   };
   animate();
+}
+
+/**
+ * @description: 按scale隐藏模型
+ * @param {THREE} mash
+ * @return {*}
+ */
+export function hideMash(mash: THREE.Object3D) {
+  const { x, y, z } = mash.scale;
+  //记录留show调用用
+  mash.userData.prevScale = { x, y, z };
+  const range = 10;
+  let i = 0;
+  const run = () => {
+    if (i < range - 1) requestAnimationFrame(run);
+    mash.scale.x -= x / range;
+    mash.scale.y -= y / range;
+    mash.scale.z -= z / range;
+    i++;
+  };
+
+  run();
+}
+/**
+ * @description: 按scale显示模型 在hideMash后调用
+ * @param {THREE} mash
+ * @return {*}
+ */
+export function showMash(mash: THREE.Object3D) {
+  const { prevScale } = mash.userData;
+  if (!prevScale)
+    return console.error(
+      "没有需要的prevScale字段 需要在调用过hideMash后调用此方法",
+      mash
+    );
+  const { x, y, z } = prevScale;
+
+  const range = 10;
+  let i = 0;
+  const run = () => {
+    if (i < range) requestAnimationFrame(run);
+    mash.scale.x += x / range;
+    mash.scale.y += y / range;
+    mash.scale.z += z / range;
+    i++;
+  };
+
+  run();
 }
