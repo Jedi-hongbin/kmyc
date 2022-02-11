@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 20:28:05
+ * @LastEditTime: 2022-02-11 12:36:20
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -29,6 +29,7 @@ interface IProps {
   gltf: GLTF | undefined;
   textures: { [key: string]: THREE.Texture };
   selectAnimation: (index: number) => void;
+  isLoading: boolean;
 }
 // cancelAnimationFrame  requestAnimationFrame
 let t: number;
@@ -52,9 +53,8 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
-//@ts-ignore
-scene.background = 0x112134;
-scene.fog = new THREE.FogExp2(0x112134, 0.01);
+scene.background = new THREE.Color(0xcccccc);
+scene.fog = new THREE.FogExp2(0xcccccc, 0.008);
 //@ts-ignore
 // scene.add(new THREE.AxesHelper(50));
 // scene2.add(new THREE.AxesHelper(20));
@@ -86,6 +86,12 @@ const camera2 = new THREE.PerspectiveCamera(
 ); //视野能看 多近 1 多远 设置1000
 scene.add(camera);
 scene2.add(camera2);
+
+const render = () => {
+  renderer.render(scene2, camera2);
+  renderer.render(scene, camera);
+};
+
 //轨道控制器
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -102,7 +108,7 @@ controls.minDistance = -Infinity;
 controls.maxDistance = 400;
 //可旋转角度
 controls.maxPolarAngle = Math.PI / 2.2;
-camera.position.set(0, 400, 0);
+camera.position.set(0, 300, 0);
 controls.target.set(0, 0, 0);
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
@@ -113,6 +119,7 @@ const Map: FC<IProps> = ({
   textures,
   animateIndex,
   selectAnimation,
+  isLoading,
 }): ReactElement => {
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
@@ -132,14 +139,40 @@ const Map: FC<IProps> = ({
   }, [animateIndex]);
 
   useEffect(() => {
-    const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
-    !container.children.length && container.appendChild(renderer.domElement);
+    console.log("isLoading:", isLoading);
+    if (!isLoading) {
+      console.log("begin", Date.now());
 
+      const tick = () => {
+        // const elapsed = clock.getElapsedTime()
+        render();
+        // sun.position.x = Math.cos(elapsedTime)
+        window.requestAnimationFrame(tick);
+        // camera.rotateZ(elapsed * 0.001)
+        controls.update();
+        stats && stats.update();
+      };
+
+      tick();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
+    if (!container.children.length) {
+      container.appendChild(renderer.domElement);
+      console.log("gggl");
+      drawLine();
+    }
     if (gltf) {
+      console.log(Date.now());
       scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
       //由小入大
-      move([0, 93, -5], [0, 10, -5], 50);
+      move([0, 93, -5], [0, 10, -5], 50, () => {
+        render();
+        stats && stats.update();
+      });
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
         const url = `${process.env.REACT_APP_URL}${i}.jpg`;
@@ -273,21 +306,6 @@ const Map: FC<IProps> = ({
         renderer.setSize(sizes.width, sizes.height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       });
-      const render = () => {
-        renderer.render(scene2, camera2);
-        renderer.render(scene, camera);
-      };
-      const tick = () => {
-        // const elapsed = clock.getElapsedTime()
-        render();
-        // sun.position.x = Math.cos(elapsedTime)
-        window.requestAnimationFrame(tick);
-        // camera.rotateZ(elapsed * 0.001)
-        controls.update();
-        stats && stats.update();
-      };
-
-      tick();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);
@@ -322,7 +340,7 @@ const Map: FC<IProps> = ({
     ></div>
   );
 };
-// #1e2925
+
 export default memo(Map);
 
 //=> end中的axis相机的轨道 y值必须小不能大于5 否则自由移动时相机下不去，无法获得更小的视野
@@ -498,7 +516,12 @@ function distance(x1: number, x2: number) {
  * @param {number} speed 速度
  * @return {void}
  */
-function move(targetCamera: number[], targetAxis: number[], speed = 16) {
+function move(
+  targetCamera: number[],
+  targetAxis: number[],
+  speed = 16,
+  every?: () => void
+) {
   // const targetCamera = [-10, 20, 26];
   // const targetAxis = [-9, 17, 0];
 
@@ -523,7 +546,8 @@ function move(targetCamera: number[], targetAxis: number[], speed = 16) {
       controls.target.z += diffAxis[2] / speed;
       t = requestAnimationFrame(r);
       count++;
-      // controls.update();
+      //  controls.update();
+      every && every();
     }
   };
   r();
@@ -591,3 +615,30 @@ function clearAnimateTimer() {
   }
   timers = [];
 }
+
+const drawLine = () => {
+  const material = new THREE.LineBasicMaterial({
+    color: 0xcccccc,
+  });
+
+  for (let i = 0; i <= 100; i++) {
+    const points = [];
+    points.push(new THREE.Vector3(-150, 0, (i - 50) * 3));
+    points.push(new THREE.Vector3(150, 0, (i - 50) * 3));
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    line.userData.type = 0;
+    scene.add(line);
+  }
+  for (let i = 0; i <= 100; i++) {
+    const points = [];
+    points.push(new THREE.Vector3((i - 50) * 3, 0, -150));
+    points.push(new THREE.Vector3((i - 50) * 3, 0, 150));
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    line.userData.type = 0;
+    scene.add(line);
+  }
+};

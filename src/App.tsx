@@ -36,21 +36,28 @@ function App() {
         />
       ) : null}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
-      /> */}
+        isLoading={loading}
+      />
       <Panel>
-        {["一", "二", "三", "四", "五"].map((text, index) => (
+        {[
+          "第一次战役",
+          "第二次战役",
+          "第三次战役",
+          "第四次战役",
+          "第五次战役",
+        ].map((text, index) => (
           <Button
             // primary='#aaffaa'
-            primary={adjustColor("#96fc96", index * -25)}
+            primary={adjustColor("#aaffaa", index * -20)}
             key={text}
             onClick={() => setAnimateIndex(index + 1)}
           >
-            第{text}次战役
+            {text}
           </Button>
         ))}
       </Panel>
