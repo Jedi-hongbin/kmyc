@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-11 12:32:37
+ * @LastEditTime: 2022-02-11 21:11:56
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import ProgressBar from "./ProgressBar";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 //@ts-ignore
-import mapModel from "../../assets/map/map.glb";
+import mapModel from "../../assets/map/tmap.glb";
 import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
 import { adjustColor } from "../../utils/color";

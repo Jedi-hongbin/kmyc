@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-11 12:36:20
+ * @LastEditTime: 2022-02-12 08:50:53
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -394,7 +394,7 @@ const animationConfigure: IAnimationConfigure[] = [
       camera: [-9, 15, -10],
       axis: [-10, 4, -25],
     },
-    icon: [-22, 7, -16],
+    icon: [-26, 7, -12],
   },
   {
     camera: [-2, 20, 19.5],
