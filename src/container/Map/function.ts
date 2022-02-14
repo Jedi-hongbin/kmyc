@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 14:11:31
+ * @LastEditTime: 2022-02-14 21:30:19
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -12,6 +12,8 @@ import QiangModel from "../../assets/map/qiang.glb";
 import nameModel from "../../assets/map/name.glb";
 //@ts-ignore
 import textModel from "../../assets/map/text.glb";
+//@ts-ignore
+import xcModel from "../../assets/map/xc.glb";
 
 import { IAnimationConfigure } from "./types";
 // import { Scene } from "three/src/scenes/Scene";
@@ -210,4 +212,97 @@ export function smallPositionAnimation(mash: Object3D) {
   };
 
   run();
+}
+
+export interface XCBack {
+  models: Object3D[];
+  show: () => void;
+  hide: () => void;
+  /**
+   * @description:  切换下一场战役的相册纹理
+   * @param {number} nextIndex
+   */
+  toggle: (nextIndex: number) => void;
+}
+
+/**
+ * @description: 加载相册模型 返回相关操作回调
+ * @param {number} animationIndex 战役索引
+ * @param {THREE.TextureLoader} textureLoader 纹理加载器
+ * @return {XCBack} XCBack
+ */
+export async function loadXCModel(
+  animationIndex: number,
+  textureLoader: THREE.TextureLoader
+): Promise<XCBack> {
+  const gltf = await window.gltfLoader.loadAsync(xcModel);
+  const [model] = gltf.scene.children;
+  const multiple = 5;
+  model.position.y = 1.8 * multiple;
+
+  const setZero = (mash: typeof model) => {
+    mash.scale.x = 0;
+    mash.scale.y = 0;
+    mash.scale.z = 0;
+  };
+  setZero(model);
+
+  const setMaterial = (mash: Object3D, url: string) => {
+    const texture = textureLoader.load(url);
+    texture.flipY = false;
+    texture.encoding = 3001;
+    //@ts-ignore
+    const mater = mash.material.clone(); //不能共用一个material 以为 instance.material 指向的都是同一个对象
+    mater.map = texture;
+    //@ts-ignore
+    mash.material = mater;
+  };
+
+  const pictures: XCBack["models"] = [];
+
+  for (let i = 0; i < 4; i++) {
+    const instance = model.clone();
+    setMaterial(
+      instance,
+      `${process.env.REACT_APP_URL}xc/${animationIndex}-${i}-y.jpg`
+    );
+    instance.position.x = -10 * multiple;
+    instance.position.z = (i - 2) * 5 * multiple;
+    pictures.push(instance);
+  }
+
+  let count = 0;
+  const range = 30;
+  const show = () => {
+    if (count < range) {
+      pictures.forEach(item => {
+        item.scale.y += multiple / range;
+        item.scale.z += (multiple / range) * 1.8;
+        item.scale.x += multiple / range / 10;
+      });
+      count++;
+      requestAnimationFrame(show);
+    }
+  };
+
+  const hide = () => {
+    pictures.forEach(setZero);
+    count = 0;
+  };
+
+  const toggle: XCBack["toggle"] = nextIndex => {
+    pictures.forEach((item, index) => {
+      setMaterial(
+        item,
+        `${process.env.REACT_APP_URL}xc/${nextIndex}-${index}-y.jpg`
+      );
+    });
+  };
+
+  return {
+    show,
+    hide,
+    models: pictures,
+    toggle,
+  };
 }

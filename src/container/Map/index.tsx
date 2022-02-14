@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-12 08:50:53
+ * @LastEditTime: 2022-02-14 21:31:34
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -16,9 +16,11 @@ import {
   clickQiangAnimation,
   hideMash,
   loadMXNGModel,
+  loadXCModel,
   showMash,
   smallPositionAnimation,
   smallScaleAnimation,
+  XCBack,
 } from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
 //@ts-ignore
@@ -123,6 +125,7 @@ const Map: FC<IProps> = ({
 }): ReactElement => {
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
+  const XCRef = useRef<XCBack>(null); //保存四个相册模型和调度方法 之后切换只需要切换纹理贴图
 
   useEffect(() => {
     if (animateIndex) {
@@ -133,16 +136,16 @@ const Map: FC<IProps> = ({
       //清除当前的战役模型
       gltf && scene.remove(gltf.scene);
       clearAnimateTimer();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      animateIndex && showMash(MXNGArr.current[animateIndex - 1]);
+      if (animateIndex) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        showMash(MXNGArr.current[animateIndex - 1]);
+        XCRef.current?.hide();
+      }
     };
   }, [animateIndex]);
 
   useEffect(() => {
-    console.log("isLoading:", isLoading);
     if (!isLoading) {
-      console.log("begin", Date.now());
-
       const tick = () => {
         // const elapsed = clock.getElapsedTime()
         render();
@@ -161,7 +164,6 @@ const Map: FC<IProps> = ({
     const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
     if (!container.children.length) {
       container.appendChild(renderer.domElement);
-      console.log("gggl");
       drawLine();
     }
     if (gltf) {
@@ -316,12 +318,25 @@ const Map: FC<IProps> = ({
       `${process.env.REACT_APP_URL}map/${animateIndex}-animate.glb`,
       (gltf: any) => {
         console.log("战役模型:", gltf);
-        start(gltf, animateIndex);
+        start(gltf, animateIndex, () => {
+          XCRef.current?.show();
+        });
         //@ts-ignore
         cacheModel.current = gltf;
         //战役图标隐藏
         const icon = MXNGArr.current[animateIndex - 1];
         hideMash(icon);
+
+        if (XCRef.current) {
+          //模型已经存在了 不必加载整个模型
+          XCRef.current.toggle(animateIndex);
+        } else {
+          loadXCModel(animateIndex, textureLoader).then(ref => {
+            //@ts-ignore
+            XCRef.current = ref;
+            scene.add(...ref.models);
+          });
+        }
       },
       undefined,
       e => {
@@ -331,14 +346,7 @@ const Map: FC<IProps> = ({
     );
   };
 
-  return (
-    <div
-      style={{
-        background: "linear-gradient(137deg, #ffffff, #c5a91f73,#000000d1)",
-      }}
-      id='kmyc_canvas'
-    ></div>
-  );
+  return <div id='kmyc_canvas'></div>;
 };
 
 export default memo(Map);
@@ -351,13 +359,13 @@ const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 4000,
+        time: 5000,
         camera: [6, 17, -5],
         axis: [3, 12, -8],
         speed: 30,
       },
       {
-        time: 6000,
+        time: 6500,
         camera: [-15, 20, -3],
         axis: [-14, 15, -8],
         speed: 30,
@@ -571,7 +579,7 @@ function play(gltf: GLTF) {
 }
 
 /**视线移动*/
-function sightMove(animateIndex: number) {
+function sightMove(animateIndex: number, onEnd?: () => void) {
   const configure = animationConfigure[animateIndex - 1];
 
   //移动到摄像机位置
@@ -586,11 +594,12 @@ function sightMove(animateIndex: number) {
       timers.push(timer);
     }
   }
-  //结束动画 开启自动旋转
+  //结束动画 开启自动旋转 执行回调
   if (configure.end) {
     const timer = setTimeout(() => {
       move(configure.end.camera, configure.end.axis, configure.end.speed);
       controls.autoRotate = true;
+      onEnd && onEnd();
     }, configure.end.duration);
     timers.push(timer);
   }
@@ -601,10 +610,10 @@ function sightMove(animateIndex: number) {
  * @param {number} animateIndex
  * @return {*}
  */
-function start(model: GLTF, animateIndex: number) {
+function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   play(model);
   scene.add(model.scene);
-  sightMove(animateIndex);
+  sightMove(animateIndex, onEnd);
   controls.autoRotate = false;
 }
 
@@ -616,6 +625,9 @@ function clearAnimateTimer() {
   timers = [];
 }
 
+/**
+ * @description: 画底部纵横相交的网格线
+ */
 const drawLine = () => {
   const material = new THREE.LineBasicMaterial({
     color: 0xcccccc,
