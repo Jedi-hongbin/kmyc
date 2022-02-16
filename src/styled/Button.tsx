@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 20:38:12
+ * @LastEditTime: 2022-02-16 21:54:57
  * @Description:通用按钮
  */
 
@@ -32,6 +32,7 @@ export const Button = styled.button<{
   font-size: 0.7rem;
   overflow: hidden;
   position: relative;
+  user-select: none;
 
   ::after,
   ::before {

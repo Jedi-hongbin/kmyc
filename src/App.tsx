@@ -6,12 +6,14 @@ import styled from "styled-components";
 import { flexCenter } from "./styled";
 import { Button } from "./styled/Button";
 import { adjustColor } from "./utils/color";
+import USDate from "./components/USDate";
 
 function App() {
   const textures = useRef<{ [key: string]: any }>({});
   const [map, setMap] = useState<GLTF>();
   const [animateIndex, setAnimateIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isShowUSDate, setIsShowUSDate] = useState(false); //美军受损表
 
   const addTexture = (name: string, texture: any) => {
     textures.current[name] = texture;
@@ -25,6 +27,10 @@ function App() {
   //map 内部更新战役动画
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectAnimation = useCallback(setAnimateIndex, []);
+
+  const hideUSDate = useCallback(() => {
+    setIsShowUSDate(false);
+  }, []);
 
   return (
     <div>
@@ -60,7 +66,14 @@ function App() {
             {text}
           </Button>
         ))}
+        <Button
+          primary={adjustColor("#aaffaa", 6 * -20)}
+          onClick={() => setIsShowUSDate(true)}
+        >
+          美军损失表
+        </Button>
       </Panel>
+      <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
     </div>
   );
 }

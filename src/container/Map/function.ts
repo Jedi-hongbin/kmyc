@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-14 21:30:19
+ * @LastEditTime: 2022-02-15 08:44:11
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -19,13 +19,16 @@ import { IAnimationConfigure } from "./types";
 // import { Scene } from "three/src/scenes/Scene";
 import { Scene } from "three/src/Three";
 
+/**
+ * @description: 加载枪械图标
+ */
 export function loadMXNGModel(
   material: THREE.Material,
   animationConfigure: IAnimationConfigure[],
   scene: THREE.Scene,
   cacheModel: Object3D[]
 ) {
-  return window.gltfLoader.load(QiangModel, gltf => {
+  window.gltfLoader.load(QiangModel, gltf => {
     const icon = gltf.scene;
     const left = icon.children[0];
     left.userData.type = 1;
@@ -45,11 +48,11 @@ export function loadMXNGModel(
 
     icon.add(right);
 
-    return window.gltfLoader.load(nameModel, name => {
+    window.gltfLoader.load(nameModel, name => {
       const nameModel = name.scene;
       nameModel.children[0].userData.type = 1;
       nameModel.userData.text = true;
-      return window.gltfLoader.load(textModel, text => {
+      window.gltfLoader.load(textModel, text => {
         for (let index = 0; index < 5; index++) {
           const Qiang = new Scene();
           const iconItem = icon.clone();
@@ -64,6 +67,11 @@ export function loadMXNGModel(
           Qiang.add(iconItem, nameItem);
           Qiang.position.set(...animationConfigure[index].icon);
           scene.add(Qiang);
+          //嫌图标太大了遮挡进军路线 手动缩小
+          Qiang.scale.x -= 0.41;
+          Qiang.scale.y -= 0.41;
+          Qiang.scale.z -= 0.41;
+          Qiang.position.y = 5;
           //暴露给外边 直接控制
           cacheModel.push(Qiang);
         }
