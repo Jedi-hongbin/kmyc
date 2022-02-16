@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-15 08:44:11
+ * @LastEditTime: 2022-02-16 22:42:04
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -248,6 +248,12 @@ export async function loadXCModel(
   const multiple = 5;
   model.position.y = 1.8 * multiple;
 
+  if (animationIndex === 1) {
+    model.rotateY(-Math.PI / 2);
+    model.rotateX(-Math.PI / 10);
+    model.rotateZ(Math.PI / 10);
+  }
+
   const setZero = (mash: typeof model) => {
     mash.scale.x = 0;
     mash.scale.y = 0;
@@ -274,8 +280,16 @@ export async function loadXCModel(
       instance,
       `${process.env.REACT_APP_URL}xc/${animationIndex}-${i}-y.jpg`
     );
-    instance.position.x = -10 * multiple;
-    instance.position.z = (i - 2) * 5 * multiple;
+    if (animationIndex === 1) {
+      instance.position.x = (i - 1) * -5 * multiple;
+      instance.position.z = -14 * multiple;
+    } else if (animationIndex === 2) {
+      instance.position.x = -10 * multiple;
+      instance.position.z = (i - 2) * 5 * multiple;
+    } else {
+      instance.position.x = -10 * multiple;
+      instance.position.z = (i - 1) * 5 * multiple;
+    }
     pictures.push(instance);
   }
 
