@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 19:44:07
+ * @LastEditTime: 2022-02-17 20:20:26
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -169,7 +169,8 @@ const Map: FC<IProps> = ({
       drawLine();
     }
     if (gltf) {
-      console.log(Date.now());
+      if (textures[20]) return;
+      console.log("map model load");
       scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
       //由小入大
