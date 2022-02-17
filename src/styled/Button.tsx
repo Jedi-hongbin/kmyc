@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 10:34:28
+ * @LastEditTime: 2022-02-17 19:51:19
  * @Description:通用按钮
  */
 
@@ -33,7 +33,18 @@ export const Button = styled.button<{
           --hover-before-top: 0.5rem;
         `
       : size === "medium"
-      ? css``
+      ? css`
+          --width: 5rem;
+          --padding: 0.2rem;
+          --font-size: 0.5rem;
+          --margin: 0.2rem;
+          --after-left: 1.25rem;
+          --after-top: 1.5rem;
+          --before-left: 1.25rem;
+          --before-top: -3rem;
+          --hover--after-top: -0.75rem;
+          --hover-before-top: 0.75rem;
+        `
       : css`
           --width: 8rem;
           --padding: 0.5rem;
@@ -53,7 +64,7 @@ export const Button = styled.button<{
   background-color: ${props => props.primary + "65"};
   white-space: nowrap;
   color: ${props => adjustColor(props.primary, -30)};
-  margin: 0.3rem;
+  margin: var(--margin, 0.3rem);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease-in;

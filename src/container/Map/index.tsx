@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 12:47:29
+ * @LastEditTime: 2022-02-17 19:44:07
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -23,6 +23,8 @@ import {
   XCBack,
 } from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
+import { panelRef } from "../../components/Panel";
+import { subtitleRef } from "../../components/Subtitles";
 //@ts-ignore
 const stats = new Stats();
 
@@ -320,15 +322,22 @@ const Map: FC<IProps> = ({
         console.log("战役模型:", gltf);
         start(gltf, animateIndex, () => {
           XCRef.current?.show();
+          panelRef.current?.show();
         });
         //@ts-ignore
         cacheModel.current = gltf;
         //战役图标隐藏
         const icon = MXNGArr.current[animateIndex - 1];
         hideMash(icon);
+        //控制面板退下
+        if (panelRef.current) {
+          panelRef.current.hide();
+        }
+        //字幕出来
+        subtitleRef.current?.start(animateIndex);
 
+        //如果相册模型已经存在了 不必加载整个模型 只需切换即可
         if (XCRef.current) {
-          //模型已经存在了 不必加载整个模型
           XCRef.current.toggle(animateIndex);
         } else {
           loadXCModel(animateIndex, textureLoader).then(ref => {
