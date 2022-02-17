@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 22:00:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-16 22:17:20
+ * @LastEditTime: 2022-02-17 20:05:17
  * @Description: chart 表
  */
 import * as echarts from "echarts";
@@ -181,7 +181,7 @@ const Table: FC<IProps> = (): ReactElement => {
     const myChart = echarts.init(chartDom!);
     option && myChart.setOption(option);
     window.addEventListener("charts_resize", (e: any) => {
-      if (e.detail.key === "us") {
+      if (e.detail.key.includes("us")) {
         myChart.resize();
       }
     });

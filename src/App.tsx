@@ -6,6 +6,15 @@ import USDate from "./components/USDate";
 import Panel from "./components/Panel";
 import Subtitles from "./components/Subtitles";
 
+const needUpdateCharts = ["us"];
+
+window.addEventListener("resize", _ => {
+  const resizeEvent = new CustomEvent("charts_resize", {
+    detail: { key: needUpdateCharts },
+  });
+  window.dispatchEvent(resizeEvent);
+});
+
 function App() {
   const textures = useRef<{ [key: string]: any }>({});
   const [map, setMap] = useState<GLTF>();

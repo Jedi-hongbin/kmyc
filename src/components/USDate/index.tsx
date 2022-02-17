@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 10:36:50
+ * @LastEditTime: 2022-02-17 20:03:45
  * @Description:美军损失表
  */
 
@@ -18,7 +18,7 @@ interface IProps {
 
 const resizeChart = () => {
   const resizeEvent = new CustomEvent("charts_resize", {
-    detail: { key: "us" },
+    detail: { key: ["us"] },
   });
   window.dispatchEvent(resizeEvent);
 };
