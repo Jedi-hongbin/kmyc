@@ -2,24 +2,52 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-16 21:54:57
+ * @LastEditTime: 2022-02-17 10:21:55
  * @Description:通用按钮
  */
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { adjustColor } from "../utils/color";
 
 /**
  * @description: 按钮
  * @param {string} primary 必须是六位十六进制颜色
- * @param {string} color 必须是六位十六进制颜色
- * @param {string} lightColor 必须是六位十六进制颜色
  */
 export const Button = styled.button<{
   primary: string;
+  width?: string;
+  padding?: string;
+  size?: "medium" | "small";
 }>`
-  padding: 0.5rem;
-  width: 8rem;
+  ${({ size }) =>
+    size === "small"
+      ? css`
+          --width: 3rem;
+          --padding: 0.2rem;
+          --font-size: 0.5rem;
+          --after-left: 0.75rem;
+          --after-top: 1rem;
+          --before-left: 0.75rem;
+          --before-top: -1.5rem;
+          --hover--after-top: -0.5rem;
+          --hover-before-top: 0.5rem;
+        `
+      : size === "medium"
+      ? css``
+      : css`
+          --width: 8rem;
+          --padding: 0.5rem;
+          --font-size: 0.7rem;
+          --after-left: 2rem;
+          --after-top: 2rem;
+          --before-left: 2rem;
+          --before-top: -4rem;
+          --hover--after-top: -1rem;
+          --hover-before-top: 1rem;
+        `};
+
+  padding: var(--padding);
+  width: var(--width);
   border: none;
   border-radius: 0.5rem;
   background-color: ${props => props.primary + "65"};
@@ -29,7 +57,7 @@ export const Button = styled.button<{
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease-in;
-  font-size: 0.7rem;
+  font-size: var(--font-size);
   overflow: hidden;
   position: relative;
   user-select: none;
@@ -37,20 +65,22 @@ export const Button = styled.button<{
   ::after,
   ::before {
     content: "";
-    width: 4rem;
-    height: 4rem;
+    width: calc(var(--width) / 2);
+    height: calc(var(--width) / 2);
     background-color: ${props => props.primary};
-    border-radius: 4rem;
+    border-radius: calc(var(--width) / 2);
     transition: transform 0.4s ease-in-out, top 0.3s ease-in-out;
     position: absolute;
     z-index: -1;
-    left: 2rem;
-    top: 2rem;
   }
 
+  ::after {
+    left: var(--after-left);
+    top: var(--after-top);
+  }
   ::before {
-    left: 2rem;
-    top: -4rem;
+    left: var(--before-left);
+    top: var(--before-top);
   }
 
   :hover {
@@ -58,11 +88,11 @@ export const Button = styled.button<{
     color: ${props => adjustColor(props.primary, -120)};
     ::after {
       transform: scale(2.1, 2);
-      top: -1rem;
+      top: var(--hover--after-top);
     }
     ::before {
       transform: scale(2, 2);
-      top: 1rem;
+      top: var(--hover-before-top);
     }
   }
 

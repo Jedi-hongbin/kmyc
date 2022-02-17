@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-16 22:14:34
+ * @LastEditTime: 2022-02-17 10:14:03
  * @Description:美军损失表
  */
 
@@ -81,7 +81,7 @@ const USDate: FC<IProps> = ({ isShow, handleCancel }): ReactElement => {
     <Container isShow={isShow}>
       <div onMouseDown={handleMouseDown} id='USDate_handle'></div>
       <Table />
-      <Button primary='#66a366' onClick={handleCancel}>
+      <Button primary='#ffffff' onClick={handleCancel} size='small'>
         收起
       </Button>
     </Container>
