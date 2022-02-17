@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 19:54:46
+ * @LastEditTime: 2022-02-17 20:22:41
  * @Description:战役字幕
  */
 import {
@@ -34,6 +34,8 @@ export const subtitleRef =
 
 interface IProps {}
 
+let timerId: NodeJS.Timeout;
+
 const Subtitles: FC<IProps> = (): ReactElement => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [subtitle, setSubtitle] = useState("");
@@ -59,7 +61,7 @@ const Subtitles: FC<IProps> = (): ReactElement => {
       if (i < length - 1) {
         i++;
         setSubtitle(subtitle.substr(0, i));
-        setTimeout(() => {
+        timerId = setTimeout(() => {
           fill();
         }, 80);
       } else {
@@ -69,6 +71,7 @@ const Subtitles: FC<IProps> = (): ReactElement => {
     fill();
     return () => {
       setSubtitle("");
+      clearTimeout(timerId);
     };
   }, [subtitleIndex]);
 
