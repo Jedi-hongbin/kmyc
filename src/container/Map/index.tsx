@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 11:53:48
+ * @LastEditTime: 2022-02-17 12:47:29
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -55,8 +55,8 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
-scene.background = new THREE.Color(0x213423);
-scene.fog = new THREE.FogExp2(0x213423, 0.01);
+scene.background = new THREE.Color(0x345438);
+scene.fog = new THREE.FogExp2(0x345438, 0.006);
 //@ts-ignore
 // scene.add(new THREE.AxesHelper(50));
 // scene2.add(new THREE.AxesHelper(20));
@@ -106,11 +106,11 @@ controls.mouseButtons = {
   MIDDLE: THREE.MOUSE.DOLLY,
   RIGHT: THREE.MOUSE.ROTATE,
 };
-controls.minDistance = -Infinity;
-controls.maxDistance = 400;
+controls.minDistance = 5;
+controls.maxDistance = 250;
 //可旋转角度
 controls.maxPolarAngle = Math.PI / 2.2;
-camera.position.set(0, 300, 0);
+camera.position.set(0, 250, 0);
 controls.target.set(0, 0, 0);
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
