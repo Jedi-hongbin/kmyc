@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-16 22:42:04
+ * @LastEditTime: 2022-02-17 12:09:40
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -312,13 +312,39 @@ export async function loadXCModel(
     count = 0;
   };
 
+  let prevIndex = animationIndex;
+
   const toggle: XCBack["toggle"] = nextIndex => {
     pictures.forEach((item, index) => {
       setMaterial(
         item,
         `${process.env.REACT_APP_URL}xc/${nextIndex}-${index}-y.jpg`
       );
+      //旋转角度
+      if (nextIndex === 1) {
+        item.rotateY(-Math.PI / 2);
+        item.rotateX(-Math.PI / 10);
+        item.rotateZ(Math.PI / 10);
+      } else {
+        if (prevIndex === 1) {
+          item.rotateY(Math.PI / 2);
+          item.rotateX(Math.PI / 10);
+          item.rotateZ(Math.PI / 10);
+        }
+      }
+      //位置
+      if (nextIndex === 1) {
+        item.position.x = (index - 1) * -5 * multiple;
+        item.position.z = -14 * multiple;
+      } else if (nextIndex === 2) {
+        item.position.x = -10 * multiple;
+        item.position.z = (index - 2) * 5 * multiple;
+      } else {
+        item.position.x = -10 * multiple;
+        item.position.z = (index - 1) * 5 * multiple;
+      }
     });
+    prevIndex = nextIndex;
   };
 
   return {

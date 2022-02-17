@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-14 21:31:34
+ * @LastEditTime: 2022-02-17 11:53:48
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -55,8 +55,8 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
-scene.background = new THREE.Color(0xcccccc);
-scene.fog = new THREE.FogExp2(0xcccccc, 0.008);
+scene.background = new THREE.Color(0x213423);
+scene.fog = new THREE.FogExp2(0x213423, 0.01);
 //@ts-ignore
 // scene.add(new THREE.AxesHelper(50));
 // scene2.add(new THREE.AxesHelper(20));
@@ -630,7 +630,7 @@ function clearAnimateTimer() {
  */
 const drawLine = () => {
   const material = new THREE.LineBasicMaterial({
-    color: 0xcccccc,
+    color: 0x172619,
   });
 
   for (let i = 0; i <= 100; i++) {

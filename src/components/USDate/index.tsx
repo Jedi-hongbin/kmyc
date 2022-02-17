@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 10:14:03
+ * @LastEditTime: 2022-02-17 10:36:50
  * @Description:美军损失表
  */
 
@@ -81,7 +81,7 @@ const USDate: FC<IProps> = ({ isShow, handleCancel }): ReactElement => {
     <Container isShow={isShow}>
       <div onMouseDown={handleMouseDown} id='USDate_handle'></div>
       <Table />
-      <Button primary='#ffffff' onClick={handleCancel} size='small'>
+      <Button primary='#aaffaa' onClick={handleCancel} size='small'>
         收起
       </Button>
     </Container>
@@ -92,6 +92,7 @@ export default memo(USDate);
 
 /* background: radial-gradient(#068a9feb, #cccccc);
 background: radial-gradient(#06519fe6, #cccccc); */
+/* background: radial-gradient(#545454e6, #3c3c3c 90%); */
 const Container = styled.div<{ isShow: boolean }>`
   width: 100vw;
   height: 60vh;
@@ -100,7 +101,7 @@ const Container = styled.div<{ isShow: boolean }>`
   bottom: 0;
   left: 0;
   transition: opacity 0.5s ease, transform 0.3s ease, visibility 0.3s ease;
-  background: radial-gradient(#545454e6, #3c3c3c 90%);
+  background: radial-gradient(#355235d1, #437143 90%);
 
   & > #USDate_handle {
     position: relative;

@@ -42,13 +42,13 @@ function App() {
         />
       ) : null}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      /> */}
+      />
       <Panel>
         {[
           "第一次战役",
@@ -59,7 +59,7 @@ function App() {
         ].map((text, index) => (
           <Button
             // primary='#aaffaa'
-            primary={adjustColor("#aaffaa", index * -20)}
+            primary={adjustColor("#aaffaa", index * -10)}
             key={text}
             onClick={() => setAnimateIndex(index + 1)}
           >
@@ -67,7 +67,7 @@ function App() {
           </Button>
         ))}
         <Button
-          primary={adjustColor("#aaffaa", 6 * -20)}
+          primary={adjustColor("#aaffaa", 6 * -10)}
           onClick={() => setIsShowUSDate(true)}
         >
           美军损失表
@@ -84,7 +84,7 @@ const Panel = styled.div`
   position: fixed;
   top: 1rem;
   left: 1rem;
-  background: #b6b6b688;
+  background: #263c26;
   border-radius: 1rem;
   ${flexCenter};
   flex-direction: column;

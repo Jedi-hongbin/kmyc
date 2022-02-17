@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 10:21:55
+ * @LastEditTime: 2022-02-17 10:34:28
  * @Description:通用按钮
  */
 
@@ -52,7 +52,7 @@ export const Button = styled.button<{
   border-radius: 0.5rem;
   background-color: ${props => props.primary + "65"};
   white-space: nowrap;
-  color: ${props => adjustColor(props.primary, -100)};
+  color: ${props => adjustColor(props.primary, -30)};
   margin: 0.3rem;
   font-weight: bold;
   cursor: pointer;
