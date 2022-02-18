@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 14:30:10
+ * @LastEditTime: 2022-02-18 09:21:55
  * @Description:控制面板
  */
 import {
@@ -18,6 +18,7 @@ import styled, { css } from "styled-components";
 import { flexCenter } from "../../styled";
 import { Button } from "../../styled/Button";
 import { adjustColor } from "../../utils/color";
+import MouseExplain from "./MouseExplain";
 
 /**
  * @description: 控制面板向外暴露方法
@@ -45,6 +46,7 @@ const Panel: FC<IProps> = ({
   setIsShowUSDate,
 }): ReactElement => {
   const [isHide, setIsHide] = useState(false);
+  const [isOpenExplain, setIsOpenExplain] = useState(false);
 
   useImperativeHandle(
     panelRef,
@@ -81,12 +83,18 @@ const Panel: FC<IProps> = ({
         美军损失表
       </Button>
 
-      <Button size='medium' primary='#ffaaaa' onClick={() => setIsHide(true)}>
-        HIDE
+      <Button
+        onMouseEnter={() => setIsOpenExplain(true)}
+        onMouseLeave={() => setIsOpenExplain(false)}
+        size='medium'
+        primary='#ffaaaa'
+      >
+        操作说明
       </Button>
-      <Button size='medium' primary='#aaaaff' onClick={() => setIsHide(false)}>
+      <MouseExplain show={isOpenExplain} />
+      {/* <Button size='medium' primary='#aaaaff' onClick={() => setIsHide(false)}>
         SHOW
-      </Button>
+      </Button> */}
     </Container>
   );
 };
