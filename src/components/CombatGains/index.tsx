@@ -2,13 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:14:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 16:35:55
+ * @LastEditTime: 2022-02-18 21:22:40
  * @Description:志愿军战绩
  */
 import { FC, ReactElement } from "react";
-import styled from "styled-components";
 import Annihilate from "./Annihilate";
 import CapturedWeapons from "./CapturedWeapons";
+import Destroy from "./Destroy";
+import Downsizing from "./Downsizing";
 
 interface IProps {}
 
@@ -17,10 +18,11 @@ const CombatGains: FC<IProps> = (): ReactElement => {
     <>
       <Annihilate />
       <CapturedWeapons />
+      <Destroy />
+      <Downsizing />
     </>
   );
 };
 
 export default CombatGains;
-
-const Container = styled.div``;
+//阵亡115786人，战伤221264人，失踪、被俘29095人，共计366145人

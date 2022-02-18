@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 22:00:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 20:05:17
+ * @LastEditTime: 2022-02-18 17:12:53
  * @Description: chart 表
  */
 import * as echarts from "echarts";
@@ -103,6 +103,13 @@ const option = {
     axisLine: {
       lineStyle: {
         color: "#fffae5",
+      },
+    },
+    splitLine: {
+      //   show: false,
+      lineStyle: {
+        // 使用深浅的间隔色
+        color: "#aaa",
       },
     },
   },

@@ -1,20 +1,18 @@
 /*
  * @Author: hongbin
- * @Date: 2022-02-18 15:21:23
+ * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 21:07:50
- * @Description:歼敌
+ * @LastEditTime: 2022-02-18 21:35:23
+ * @Description:减员情况
  */
 import { FC, memo, ReactElement } from "react";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
 import styled from "styled-components";
 
-interface IProps {}
-
 const option = {
   title: {
-    text: "歼敌",
+    text: "志愿军运动战减员情况",
     left: 10,
     textStyle: {
       color: "#fffae5",
@@ -35,32 +33,9 @@ const option = {
     bottom: "3%",
     containLabel: true,
   },
-  toolbox: {
-    right: 20,
-    feature: {
-      // saveAsImage: {
-      //     title: '保存为图片'
-      // },
-      magicType: {
-        type: ["line", "bar"],
-        title: {
-          line: "切换为折线图",
-          bar: "切换为柱状图",
-        },
-      },
-    },
-    iconStyle: {
-      borderColor: "#fffae5",
-    },
-    emphasis: {
-      iconStyle: {
-        borderColor: "#fffae5",
-      },
-    },
-  },
   xAxis: {
     type: "category",
-    data: ["毙伤敌", "俘敌", "敌投降"],
+    data: ["阵亡", "战伤", "失踪、被俘"],
     axisLabel: {
       interval: 0,
     },
@@ -87,53 +62,18 @@ const option = {
   },
   series: [
     {
-      name: "运动战时期",
       type: "bar",
-      data: [138293, 36835, 149],
-      smooth: true,
-      emphasis: {
-        focus: "series",
-      },
-      itemStyle: {
-        lineStyle: {
-          color: "#aaffaa",
-        },
-      },
-    },
-    {
-      name: "阵地战时期",
-      type: "bar",
-      data: [523661, 9253, 286],
-      smooth: true,
-      emphasis: {
-        focus: "series",
-      },
-      itemStyle: {
-        lineStyle: {
-          color: "#23a567",
-        },
-      },
-    },
-    {
-      name: "总数",
-      type: "bar",
-      data: [671954, 46088, 435],
-      smooth: true,
-      emphasis: {
-        focus: "series",
-      },
-      itemStyle: {
-        lineStyle: {
-          color: "#0099aa",
-        },
-      },
+      data: [115786, 221264, 29095],
+      barWidth: "30%",
     },
   ],
 };
 
-const Annihilate: FC<IProps> = (): ReactElement => {
+interface IProps {}
+
+const Downsizing: FC<IProps> = (): ReactElement => {
   useMount(() => {
-    const chartDom = document.getElementById("annihilate");
+    const chartDom = document.getElementById("Downsizing");
     const myChart = echarts.init(chartDom!);
     option && myChart.setOption(option);
     window.addEventListener("resize", (e: any) => {
@@ -141,19 +81,19 @@ const Annihilate: FC<IProps> = (): ReactElement => {
     });
   });
 
-  return <Container id='annihilate'></Container>;
+  return <Container id='Downsizing'></Container>;
 };
 
-export default memo(Annihilate);
+export default Downsizing;
 
 const Container = styled.div`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
-  width: 30vw;
+  width: 25vw;
   height: 30vh;
-  top: 0.5rem;
-  right: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
   /* @media screen and (max-width: 1000px) {

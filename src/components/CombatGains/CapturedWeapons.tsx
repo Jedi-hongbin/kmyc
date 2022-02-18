@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 16:57:40
+ * @LastEditTime: 2022-02-18 21:17:21
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement } from "react";
@@ -15,13 +15,23 @@ interface IProps {}
 const option = {
   title: {
     text: "缴获武器",
-    left: 10,
+    left: 15,
     textStyle: {
       color: "#fffae5",
     },
   },
   tooltip: {
     trigger: "axis",
+    // formatter: "{b0}: {c0}<br />{b1}: {c1}",
+    formatter: ([y, z]: any) => {
+      return `缴获${y.axisValue}<br />${y.seriesName} <b>${y.data}</b><br />${
+        z.seriesName
+      } <b>${
+        z.data
+      }</b><br/>总数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${
+        y.data + z.data
+      }</b>`;
+    },
   },
   legend: {
     data: [
@@ -177,7 +187,15 @@ const Container = styled.div`
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
   width: 48vw;
-  height: 40vh;
+  height: 35vh;
   bottom: 0.5rem;
   right: 0.5rem;
+  padding-top: 10px;
+  border-radius: 1rem;
+
+  @media screen and (min-width: 1920px) {
+    width: 38vw;
+    height: 30vh;
+    border-radius: 0.6rem;
+  }
 `;

@@ -42,21 +42,21 @@ function App() {
 
   return (
     <div>
-      {/* {loading ? (
+      {loading ? (
         <LoadingScreen
           setMap={setMap}
           addTexture={addTexture}
           handleLoad={handleLoad}
         />
-      ) : null} */}
+      ) : null}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      /> */}
+      />
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
