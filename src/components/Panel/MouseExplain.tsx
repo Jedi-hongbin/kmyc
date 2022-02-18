@@ -2,14 +2,12 @@
  * @Author: hongbin
  * @Date: 2022-02-18 08:52:51
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 09:24:36
+ * @LastEditTime: 2022-02-18 09:57:34
  * @Description: 介绍鼠标按键功能
  */
 import { FC, ReactElement } from "react";
 import styled, { css } from "styled-components";
-import leftKey from "../../assets/mouseleft.svg";
-import rightKey from "../../assets/mouseright.svg";
-import gunlun from "../../assets/mousegunlun.svg";
+import { mouseGunLun, mouseLeft, mouseRight } from "../icon";
 
 interface IProps {
   show: boolean;
@@ -19,9 +17,9 @@ const MouseExplain: FC<IProps> = ({ show }): ReactElement => {
   return (
     <Container show={show}>
       <Title>鼠标操作说明</Title>
-      <Box icon={leftKey} text='鼠标左键' explain='移动视线' />
-      <Box icon={rightKey} text='鼠标右键' explain='旋转视线' />
-      <Box icon={gunlun} text='鼠标滚轮' explain='缩放视线-可按下拉动' />
+      <Box icon={mouseLeft} text='鼠标左键' explain='移动视线' />
+      <Box icon={mouseRight} text='鼠标右键' explain='旋转视线' />
+      <Box icon={mouseGunLun} text='鼠标滚轮' explain='缩放视线-可按下拉动' />
     </Container>
   );
 };
@@ -29,14 +27,14 @@ const MouseExplain: FC<IProps> = ({ show }): ReactElement => {
 export default MouseExplain;
 
 interface BoxProps {
-  icon: string;
+  icon: JSX.Element;
   text: string;
   explain: string;
 }
 
 const Box: FC<BoxProps> = ({ icon, text, explain }) => (
   <div>
-    <img src={icon} alt={text} />
+    {icon}
     <div>
       <h6>{text}</h6>
       <p>{explain}</p>
@@ -75,7 +73,7 @@ const Container = styled.div<{ show: boolean }>`
   & > div {
     display: flex;
     margin: 0.5rem 0;
-    img {
+    svg {
       width: 1.5rem;
       height: 1.5rem;
     }
