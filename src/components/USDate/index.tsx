@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 20:03:45
+ * @LastEditTime: 2022-02-18 15:18:54
  * @Description:美军损失表
  */
 
@@ -97,7 +97,7 @@ const Container = styled.div<{ isShow: boolean }>`
   width: 100vw;
   height: 60vh;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   bottom: 0;
   left: 0;
   transition: opacity 0.5s ease, transform 0.3s ease, visibility 0.3s ease;

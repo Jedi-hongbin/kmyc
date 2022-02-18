@@ -5,6 +5,7 @@ import Map from "./container/Map";
 import USDate from "./components/USDate";
 import Panel from "./components/Panel";
 import Subtitles from "./components/Subtitles";
+import CombatGains from "./components/CombatGains";
 
 const needUpdateCharts = ["us"];
 
@@ -41,27 +42,28 @@ function App() {
 
   return (
     <div>
-      {loading ? (
+      {/* {loading ? (
         <LoadingScreen
           setMap={setMap}
           addTexture={addTexture}
           handleLoad={handleLoad}
         />
-      ) : null}
+      ) : null} */}
 
-      <Map
+      {/* <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      />
+      /> */}
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
       />
       <Subtitles />
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
+      <CombatGains />
     </div>
   );
 }

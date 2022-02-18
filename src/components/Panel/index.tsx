@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 09:21:55
+ * @LastEditTime: 2022-02-18 15:18:40
  * @Description:控制面板
  */
 import {
@@ -77,10 +77,17 @@ const Panel: FC<IProps> = ({
       ))}
       <Button
         size='medium'
-        primary={adjustColor("#aaffaa", 5 * -10)}
+        primary='#fffdff'
         onClick={() => setIsShowUSDate(true)}
       >
-        美军损失表
+        美军伤亡
+      </Button>
+      <Button
+        size='medium'
+        primary='#00faff'
+        onClick={() => setIsShowUSDate(true)}
+      >
+        志愿军战绩
       </Button>
 
       <Button
@@ -103,6 +110,7 @@ export default memo(Panel);
 
 const Container = styled.div<{ isHide: boolean }>`
   position: fixed;
+  z-index: 2;
   top: 0.4rem;
   left: 0.4rem;
   background: #263c26;
