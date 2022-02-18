@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/kmycdemo*
 /.pnp
 .pnp.js
 
