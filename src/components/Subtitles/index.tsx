@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 20:22:41
+ * @LastEditTime: 2022-02-19 09:59:08
  * @Description:战役字幕
  */
 import {
@@ -57,10 +57,12 @@ const Subtitles: FC<IProps> = (): ReactElement => {
     const subtitle = subtitleArr[subtitleIndex - 1];
     const { length } = subtitle;
     let i = 0;
+    // const dom = document.getElementById("aaa");
     const fill = () => {
       if (i < length - 1) {
         i++;
         setSubtitle(subtitle.substr(0, i));
+        // dom!.innerText = subtitle.substr(0, i);
         timerId = setTimeout(() => {
           fill();
         }, 80);
@@ -93,7 +95,7 @@ const Subtitles: FC<IProps> = (): ReactElement => {
 
   return (
     <>
-      {subtitle ? <Container>{subtitle}</Container> : null}
+      <Container id='aaa'>{subtitle}</Container>
       <audio ref={audioRef} preload='load' loop src={music}></audio>
     </>
   );

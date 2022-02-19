@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 20:20:26
+ * @LastEditTime: 2022-02-19 09:57:42
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -334,9 +334,6 @@ const Map: FC<IProps> = ({
         if (panelRef.current) {
           panelRef.current.hide();
         }
-        //字幕出来
-        subtitleRef.current?.start(animateIndex);
-
         //如果相册模型已经存在了 不必加载整个模型 只需切换即可
         if (XCRef.current) {
           XCRef.current.toggle(animateIndex);
@@ -532,13 +529,16 @@ function distance(x1: number, x2: number) {
  * @param {number[]} targetCamera 目标位置的相机位置
  * @param {number[]} targetAxis 目标位置的坐标轴位置
  * @param {number} speed 速度
+ * @param {() => void} every 每一帧都执行的函数
+ * @param {() => void} onEnd 结束动画执行
  * @return {void}
  */
 function move(
   targetCamera: number[],
   targetAxis: number[],
   speed = 16,
-  every?: () => void
+  every?: () => void,
+  onEnd?: () => void
 ) {
   // const targetCamera = [-10, 20, 26];
   // const targetAxis = [-9, 17, 0];
@@ -566,7 +566,7 @@ function move(
       count++;
       //  controls.update();
       every && every();
-    }
+    } else onEnd && onEnd();
   };
   r();
 }
@@ -593,7 +593,10 @@ function sightMove(animateIndex: number, onEnd?: () => void) {
   const configure = animationConfigure[animateIndex - 1];
 
   //移动到摄像机位置
-  move(configure.camera, configure.axis, 40);
+  move(configure.camera, configure.axis, 40, undefined, () => {
+    //字幕慢点出来 和动画一起跟新dom引起卡顿
+    subtitleRef.current?.start(animateIndex);
+  });
 
   //战役动画
   if (configure.jump) {
@@ -618,6 +621,7 @@ function sightMove(animateIndex: number, onEnd?: () => void) {
  * @description: 设置战役模型动画和实现动画
  * @param {GLTF} model
  * @param {number} animateIndex
+ * @param {() => void } onEnd 动画结束执行回调
  * @return {*}
  */
 function start(model: GLTF, animateIndex: number, onEnd: () => void) {
