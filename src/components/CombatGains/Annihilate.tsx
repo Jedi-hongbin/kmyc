@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 17:41:54
+ * @LastEditTime: 2022-02-19 21:48:04
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -158,23 +158,29 @@ const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
-  width: 33vw;
-  height: 30vh;
-  top: 32vh;
+  width: 33vmax;
+  height: 30vmin;
+  top: 32vmin;
   right: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
   ${detrusionTransition};
   /* @media screen and (max-width: 1000px) {
-    width: 60vw;
+    width: 60vmax;
   } */
 
   @media screen and (min-width: 1920px) {
-    top: 36vh;
-    width: 25vw;
-    height: 25vh;
+    top: 36vmin;
+    width: 25vmax;
+    height: 25vmin;
     border-radius: 0.6rem;
   }
 
   ${({ isShow }) => !isShow && rightDetrusion};
+
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg);
+    top: calc(75vmax - 0.5rem);
+    right: 8.5rem;
+  }
 `;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 11:59:59
+ * @LastEditTime: 2022-02-19 22:04:07
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -90,20 +90,26 @@ const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
-  width: 25vw;
-  height: 30vh;
+  width: 25vmax;
+  height: 30vmin;
   bottom: 0.5rem;
   left: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
   ${detrusionTransition};
   /* @media screen and (max-width: 1000px) {
-    width: 60vw;
+    width: 60vmax;
   } */
   @media screen and (min-width: 1920px) {
-    width: 20vw;
-    height: 22vh;
+    width: 20vmax;
+    height: 22vmin;
     border-radius: 0.6rem;
   }
   ${({ isShow }) => !isShow && leftDetrusion};
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+    bottom: auto;
+    top: 0.5rem;
+  }
 `;

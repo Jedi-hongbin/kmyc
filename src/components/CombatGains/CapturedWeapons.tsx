@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 14:43:52
+ * @LastEditTime: 2022-02-19 21:38:47
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -192,17 +192,23 @@ const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
-  width: 48vw;
-  height: 35vh;
+  width: 48vmax;
+  height: 35vmin;
   bottom: 0.5rem;
   right: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
   ${detrusionTransition};
   @media screen and (min-width: 1920px) {
-    width: 38vw;
-    height: 30vh;
+    width: 38vmax;
+    height: 30vmin;
     border-radius: 0.6rem;
   }
   ${({ isShow }) => !isShow && rightDetrusion};
+
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg) translateX(-48vmax);
+    left: 0.5rem;
+    transform-origin: bottom left;
+  }
 `;

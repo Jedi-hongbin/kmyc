@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 12:33:25
+ * @LastEditTime: 2022-02-19 22:02:16
  * @Description:控制面板
  */
 import {
@@ -126,4 +126,11 @@ const Container = styled.div<{ isHide: boolean }>`
         transform: translateX(0);
       }
     `};
+  @media screen and (max-width: 750px) {
+    left: auto;
+    top: 0.4rem;
+    right: 0.4rem;
+    transform: rotate(90deg) translateX(100%);
+    transform-origin: top right;
+  }
 `;
