@@ -2,13 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 15:18:54
+ * @LastEditTime: 2022-02-19 11:14:43
  * @Description:美军损失表
  */
 
 import { FC, memo, MouseEventHandler, ReactElement } from "react";
 import styled, { css } from "styled-components";
 import { Button } from "../../styled/Button";
+import { resizeChart } from "../../utils";
 import Table from "./Table";
 
 interface IProps {
@@ -16,17 +17,10 @@ interface IProps {
   handleCancel: () => void;
 }
 
-const resizeChart = () => {
-  const resizeEvent = new CustomEvent("charts_resize", {
-    detail: { key: ["us"] },
-  });
-  window.dispatchEvent(resizeEvent);
-};
-
 const handleMouseDown: MouseEventHandler<HTMLDivElement> = e => {
   const container = e.currentTarget.parentElement;
   if (!container) return console.error("无法获取把手父级", e);
-  console.log(container.offsetHeight);
+
   //最大高度
   const limitTop = document.body.offsetHeight;
   const limitBottom = e.currentTarget.offsetHeight;
@@ -51,16 +45,15 @@ const handleMouseDown: MouseEventHandler<HTMLDivElement> = e => {
     //节流
     if (t - timestamp > 500) {
       timestamp = t;
-      resizeChart();
+      resizeChart("us");
     }
     //防抖 防止拖动过快小于500毫秒 保证在最后一定会适应表单
     if (t - shake < 500) {
       clearTimeout(timer);
     }
     timer = setTimeout(() => {
-      console.log("1");
       shake = Date.now();
-      resizeChart();
+      resizeChart("us");
     }, 500);
     shake = t;
   };

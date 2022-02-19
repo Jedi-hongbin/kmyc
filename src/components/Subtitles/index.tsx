@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 09:59:08
+ * @LastEditTime: 2022-02-19 17:29:53
  * @Description:战役字幕
  */
 import {
@@ -39,22 +39,21 @@ let timerId: NodeJS.Timeout;
 const Subtitles: FC<IProps> = (): ReactElement => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [subtitle, setSubtitle] = useState("");
-  const [subtitleIndex, setSubtitleIndex] = useState(0);
 
   useMount(() => {
+    //离开当前标签页 音乐停止
     window.addEventListener("blur", () => {
       audioRef.current?.pause();
     });
   });
 
-  useEffect(() => {
-    if (!subtitleIndex) return;
+  const start = useCallback((index: number) => {
     if (audioRef.current) {
       audioRef.current.play();
       audioRef.current.volume = 0.3;
       //   audioRef.current!.playbackRate = 2;
     }
-    const subtitle = subtitleArr[subtitleIndex - 1];
+    const subtitle = subtitleArr[index - 1];
     const { length } = subtitle;
     let i = 0;
     // const dom = document.getElementById("aaa");
@@ -71,14 +70,6 @@ const Subtitles: FC<IProps> = (): ReactElement => {
       }
     };
     fill();
-    return () => {
-      setSubtitle("");
-      clearTimeout(timerId);
-    };
-  }, [subtitleIndex]);
-
-  const start = useCallback((index: number) => {
-    setSubtitleIndex(index);
   }, []);
 
   useImperativeHandle(
@@ -87,6 +78,10 @@ const Subtitles: FC<IProps> = (): ReactElement => {
       start,
       hide: () => {
         setSubtitle("");
+        clearTimeout(timerId);
+        setTimeout(() => {
+          clearTimeout(timerId);
+        }, 100);
         audioRef.current?.pause();
       },
     }),
@@ -95,7 +90,7 @@ const Subtitles: FC<IProps> = (): ReactElement => {
 
   return (
     <>
-      <Container id='aaa'>{subtitle}</Container>
+      {subtitle ? <Container id='aaa'>{subtitle}</Container> : null}
       <audio ref={audioRef} preload='load' loop src={music}></audio>
     </>
   );

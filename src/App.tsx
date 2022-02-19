@@ -6,6 +6,7 @@ import USDate from "./components/USDate";
 import Panel from "./components/Panel";
 import Subtitles from "./components/Subtitles";
 import CombatGains from "./components/CombatGains";
+import { detrusionChart } from "./utils";
 
 const needUpdateCharts = ["us"];
 
@@ -22,6 +23,11 @@ function App() {
   const [animateIndex, setAnimateIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isShowUSDate, setIsShowUSDate] = useState(false); //美军受损表
+
+  const goHome = useCallback(() => {
+    setAnimateIndex(-1);
+    detrusionChart(false);
+  }, []);
 
   const addTexture = (name: string, texture: any) => {
     textures.current[name] = texture;
@@ -60,6 +66,7 @@ function App() {
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
+        goHome={goHome}
       />
       <Subtitles />
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 09:57:42
+ * @LastEditTime: 2022-02-19 17:38:09
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -25,6 +25,8 @@ import {
 import qiangImg from "../../assets/map/moxinnaganky.png";
 import { panelRef } from "../../components/Panel";
 import { subtitleRef } from "../../components/Subtitles";
+import { detrusionChart } from "../../utils";
+import useMount from "../../hook/useMount";
 //@ts-ignore
 const stats = new Stats();
 
@@ -58,7 +60,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
 scene.background = new THREE.Color(0x345438);
-scene.fog = new THREE.FogExp2(0x345438, 0.006);
+scene.fog = new THREE.FogExp2(0x345438, 0.008);
 //@ts-ignore
 // scene.add(new THREE.AxesHelper(50));
 // scene2.add(new THREE.AxesHelper(20));
@@ -112,8 +114,9 @@ controls.minDistance = 5;
 controls.maxDistance = 250;
 //可旋转角度
 controls.maxPolarAngle = Math.PI / 2.2;
-camera.position.set(0, 250, 0);
-controls.target.set(0, 0, 0);
+// [40, 93, -5], [40, 10, -5]
+camera.position.set(30, 250, 0);
+controls.target.set(30, 0, 0);
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
  */
@@ -130,21 +133,37 @@ const Map: FC<IProps> = ({
   const XCRef = useRef<XCBack>(null); //保存四个相册模型和调度方法 之后切换只需要切换纹理贴图
 
   useEffect(() => {
-    if (animateIndex) {
+    if (animateIndex > 0) {
       loadCampaignModel(animateIndex);
+    } else if (animateIndex === -1) {
+      // move([30, 93, -5], [30, 10, -5], 50, undefined, () => {
+      controls.reset();
+      // });
+      // controls.autoRotate = false;
     }
     return () => {
       const gltf = cacheModel.current;
       //清除当前的战役模型
       gltf && scene.remove(gltf.scene);
       clearAnimateTimer();
-      if (animateIndex) {
+      if (animateIndex > 0) {
+        //上一个播放的动画，恢复战役图标显示
         // eslint-disable-next-line react-hooks/exhaustive-deps
         showMash(MXNGArr.current[animateIndex - 1]);
         XCRef.current?.hide();
+        subtitleRef.current?.hide();
+        panelRef.current?.show();
       }
     };
   }, [animateIndex]);
+
+  useMount(() => {
+    window.addEventListener("keyup", e => {
+      if (e.code === "Space") {
+        controls.autoRotate = !controls.autoRotate;
+      }
+    });
+  });
 
   useEffect(() => {
     if (!isLoading) {
@@ -174,10 +193,18 @@ const Map: FC<IProps> = ({
       scene.add(gltf.scene);
       document.documentElement.appendChild(stats.dom);
       //由小入大
-      move([0, 93, -5], [0, 10, -5], 50, () => {
-        render();
-        stats && stats.update();
-      });
+      move(
+        [30, 93, -5],
+        [30, 10, -5],
+        50,
+        () => {
+          render();
+          stats && stats.update();
+        },
+        () => {
+          controls.saveState();
+        }
+      );
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
         const url = `${process.env.REACT_APP_URL}${i}.jpg`;
@@ -208,8 +235,6 @@ const Map: FC<IProps> = ({
         scene,
         MXNGArr.current
       );
-
-      //  hover后小幅度缩放动画 & 战役图标hover动画
 
       // 声明 raycaster 和 mouse 变量
       const raycaster = new THREE.Raycaster();
@@ -542,7 +567,7 @@ function move(
 ) {
   // const targetCamera = [-10, 20, 26];
   // const targetAxis = [-9, 17, 0];
-
+  const max = speed - 1;
   const diffCamera: typeof targetCamera = [];
   const diffAxis: typeof targetAxis = [];
 
@@ -554,7 +579,7 @@ function move(
 
   let count = 0;
   const r = () => {
-    if (count < speed) {
+    if (count < max) {
       camera.position.x += diffCamera[0] / speed;
       camera.position.y += diffCamera[1] / speed;
       camera.position.z += diffCamera[2] / speed;
@@ -629,6 +654,7 @@ function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   scene.add(model.scene);
   sightMove(animateIndex, onEnd);
   controls.autoRotate = false;
+  detrusionChart(true);
 }
 
 function clearAnimateTimer() {

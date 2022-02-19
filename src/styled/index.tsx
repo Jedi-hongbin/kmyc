@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:48:55
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-06 15:53:15
+ * @LastEditTime: 2022-02-19 11:02:33
  * @Description: 常用styled
  */
 import styled, { css, keyframes } from "styled-components";
@@ -86,6 +86,24 @@ export const scrollbar = css`
     height: 8px;
     background-color: rgba(1, 1, 1, 0);
   }
+`;
+
+export const detrusionTransition = css`
+  transition-property: transform, opacity, visibility;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+`;
+
+export const rightDetrusion = css`
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+`;
+
+export const leftDetrusion = css`
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-100%);
 `;
 
 export const FlexDiv = styled.div<{

@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 12:09:40
+ * @LastEditTime: 2022-02-19 16:53:35
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -293,6 +293,7 @@ export async function loadXCModel(
     pictures.push(instance);
   }
 
+  let timer1: number;
   let count = 0;
   const range = 30;
   const show = () => {
@@ -303,13 +304,17 @@ export async function loadXCModel(
         item.scale.x += multiple / range / 10;
       });
       count++;
-      requestAnimationFrame(show);
+      timer1 = requestAnimationFrame(show);
     }
   };
 
   const hide = () => {
     pictures.forEach(setZero);
     count = 0;
+    cancelAnimationFrame(timer1);
+    requestAnimationFrame(() => {
+      cancelAnimationFrame(timer1);
+    });
   };
 
   let prevIndex = animationIndex;

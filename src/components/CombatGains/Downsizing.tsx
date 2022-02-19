@@ -2,13 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 21:35:23
+ * @LastEditTime: 2022-02-19 11:59:59
  * @Description:减员情况
  */
-import { FC, memo, ReactElement } from "react";
+import { FC, memo, ReactElement, useState } from "react";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
 import styled from "styled-components";
+import { detrusionTransition, leftDetrusion } from "../../styled";
 
 const option = {
   title: {
@@ -20,12 +21,6 @@ const option = {
   },
   tooltip: {
     trigger: "axis",
-  },
-  legend: {
-    data: ["运动战时期", "阵地战时期", "总数"],
-    textStyle: {
-      color: "#fffae5",
-    },
   },
   grid: {
     left: "3%",
@@ -72,6 +67,7 @@ const option = {
 interface IProps {}
 
 const Downsizing: FC<IProps> = (): ReactElement => {
+  const [isShow, setIsShow] = useState(true);
   useMount(() => {
     const chartDom = document.getElementById("Downsizing");
     const myChart = echarts.init(chartDom!);
@@ -79,14 +75,18 @@ const Downsizing: FC<IProps> = (): ReactElement => {
     window.addEventListener("resize", (e: any) => {
       myChart.resize();
     });
+    window.addEventListener("custom_detrusion", (e: any) => {
+      const state = e.detail.detrusion;
+      setIsShow(state);
+    });
   });
 
-  return <Container id='Downsizing'></Container>;
+  return <Container isShow={isShow} id='Downsizing'></Container>;
 };
 
-export default Downsizing;
+export default memo(Downsizing);
 
-const Container = styled.div`
+const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
@@ -96,13 +96,14 @@ const Container = styled.div`
   left: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
+  ${detrusionTransition};
   /* @media screen and (max-width: 1000px) {
     width: 60vw;
   } */
-
   @media screen and (min-width: 1920px) {
     width: 20vw;
-    height: 20vh;
+    height: 22vh;
     border-radius: 0.6rem;
   }
+  ${({ isShow }) => !isShow && leftDetrusion};
 `;

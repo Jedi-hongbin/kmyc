@@ -2,13 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 21:07:50
+ * @LastEditTime: 2022-02-19 17:41:54
  * @Description:歼敌
  */
-import { FC, memo, ReactElement } from "react";
+import { FC, memo, ReactElement, useState } from "react";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { detrusionTransition, rightDetrusion } from "../../styled";
 
 interface IProps {}
 
@@ -132,6 +133,8 @@ const option = {
 };
 
 const Annihilate: FC<IProps> = (): ReactElement => {
+  const [isShow, setIsShow] = useState(true);
+
   useMount(() => {
     const chartDom = document.getElementById("annihilate");
     const myChart = echarts.init(chartDom!);
@@ -139,30 +142,39 @@ const Annihilate: FC<IProps> = (): ReactElement => {
     window.addEventListener("resize", (e: any) => {
       myChart.resize();
     });
+
+    window.addEventListener("custom_detrusion", (e: any) => {
+      const state = e.detail.detrusion;
+      setIsShow(state);
+    });
   });
 
-  return <Container id='annihilate'></Container>;
+  return <Container isShow={isShow} id='annihilate'></Container>;
 };
 
 export default memo(Annihilate);
 
-const Container = styled.div`
+const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
   background: radial-gradient(#355235d1, #437143 90%);
-  width: 30vw;
+  width: 33vw;
   height: 30vh;
-  top: 0.5rem;
+  top: 32vh;
   right: 0.5rem;
   padding-top: 10px;
   border-radius: 1rem;
+  ${detrusionTransition};
   /* @media screen and (max-width: 1000px) {
     width: 60vw;
   } */
 
   @media screen and (min-width: 1920px) {
-    width: 20vw;
-    height: 20vh;
+    top: 36vh;
+    width: 25vw;
+    height: 25vh;
     border-radius: 0.6rem;
   }
+
+  ${({ isShow }) => !isShow && rightDetrusion};
 `;

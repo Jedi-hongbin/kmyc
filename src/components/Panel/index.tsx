@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 15:18:40
+ * @LastEditTime: 2022-02-19 12:33:25
  * @Description:控制面板
  */
 import {
@@ -31,6 +31,7 @@ export const panelRef = createRef<{
 interface IProps {
   setAnimateIndex: Dispatch<React.SetStateAction<number>>;
   setIsShowUSDate: Dispatch<React.SetStateAction<boolean>>;
+  goHome: () => void;
 }
 
 const campaignNames = [
@@ -44,6 +45,7 @@ const campaignNames = [
 const Panel: FC<IProps> = ({
   setAnimateIndex,
   setIsShowUSDate,
+  goHome,
 }): ReactElement => {
   const [isHide, setIsHide] = useState(false);
   const [isOpenExplain, setIsOpenExplain] = useState(false);
@@ -82,12 +84,8 @@ const Panel: FC<IProps> = ({
       >
         美军伤亡
       </Button>
-      <Button
-        size='medium'
-        primary='#00faff'
-        onClick={() => setIsShowUSDate(true)}
-      >
-        志愿军战绩
+      <Button size='medium' primary='#00faff' onClick={goHome}>
+        回到主页
       </Button>
 
       <Button
