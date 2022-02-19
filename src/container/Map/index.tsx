@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 17:38:09
+ * @LastEditTime: 2022-02-19 17:47:18
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -139,7 +139,7 @@ const Map: FC<IProps> = ({
       // move([30, 93, -5], [30, 10, -5], 50, undefined, () => {
       controls.reset();
       // });
-      // controls.autoRotate = false;
+      controls.autoRotate = false;
     }
     return () => {
       const gltf = cacheModel.current;
