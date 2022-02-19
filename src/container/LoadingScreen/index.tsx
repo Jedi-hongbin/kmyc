@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-11 21:11:56
+ * @LastEditTime: 2022-02-19 21:15:46
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -127,8 +127,8 @@ const LoadingScreen: FC<IProps> = ({
 export default LoadingScreen;
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100vmax;
+  height: 100vmin;
   position: fixed;
   top: 0;
   left: 0;
@@ -142,6 +142,11 @@ const Container = styled.div`
     :last-child {
       background: linear-gradient(60deg, #0af, #0fa 80%);
     }
+  }
+
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg) translateY(-100vmin);
+    transform-origin: top left;
   }
 `;
 

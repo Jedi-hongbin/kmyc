@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 16:02:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-10 20:26:23
+ * @LastEditTime: 2022-02-19 21:16:27
  * @Description:进度条组件
  */
 import { FC, ReactElement } from "react";
@@ -19,7 +19,7 @@ const ProgressBar: FC<IProps> = ({ progress }): ReactElement => {
 export default ProgressBar;
 
 export const Bar = styled.div<{ width: number }>`
-  width: 100vw;
+  width: 100vmax;
   /* background: #fff; */
   background: transparent;
   position: relative;
@@ -48,13 +48,13 @@ export const Bar = styled.div<{ width: number }>`
 
           ::after {
             transition-duration: 0.2s;
-            width: 120vw;
+            width: 120vmax;
           }
         `
       : css`
           height: 0.3rem;
           ::after {
-            width: ${width + "vw"};
+            width: ${width + "vmax"};
           }
         `};
 `;

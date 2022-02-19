@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-17 19:51:19
+ * @LastEditTime: 2022-02-19 20:40:12
  * @Description:通用按钮
  */
 
@@ -28,7 +28,7 @@ export const Button = styled.button<{
           --after-left: 0.75rem;
           --after-top: 1rem;
           --before-left: 0.75rem;
-          --before-top: -1.5rem;
+          --before-top: -1.6rem;
           --hover--after-top: -0.5rem;
           --hover-before-top: 0.5rem;
         `
