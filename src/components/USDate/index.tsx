@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 11:14:43
+ * @LastEditTime: 2022-02-20 13:32:22
  * @Description:美军损失表
  */
 
@@ -74,7 +74,11 @@ const USDate: FC<IProps> = ({ isShow, handleCancel }): ReactElement => {
     <Container isShow={isShow}>
       <div onMouseDown={handleMouseDown} id='USDate_handle'></div>
       <Table />
-      <Button primary='#aaffaa' onClick={handleCancel} size='small'>
+      <Button
+        primary='#aaffaa'
+        onClick={handleCancel}
+        size={window.isPhone ? "medium" : "small"}
+      >
         收起
       </Button>
     </Container>
@@ -87,8 +91,8 @@ export default memo(USDate);
 background: radial-gradient(#06519fe6, #cccccc); */
 /* background: radial-gradient(#545454e6, #3c3c3c 90%); */
 const Container = styled.div<{ isShow: boolean }>`
-  width: 100vw;
-  height: 60vh;
+  width: 100vmax;
+  height: 60vmin;
   position: fixed;
   z-index: 2;
   bottom: 0;
@@ -139,10 +143,32 @@ const Container = styled.div<{ isShow: boolean }>`
           visibility: visible;
           transform: none;
           opacity: 1;
+          @media screen and (max-width: 750px) {
+            transform: rotate(90deg);
+            bottom: 100%;
+            left: "auto";
+          }
         `
       : css`
           visibility: none;
           transform: translateY(100%);
           opacity: 0;
+          @media screen and (max-width: 750px) {
+            transform: translateX(-100%) rotate(90deg);
+            bottom: 100%;
+            left: "auto";
+          }
         `};
+
+  @media screen and (max-width: 750px) {
+    height: 80vmin;
+    transform-origin: bottom left;
+    #USDate_handle {
+      height: 0;
+    }
+    #us_data {
+      width: 100%;
+      height: 100%;
+    }
+  }
 `;

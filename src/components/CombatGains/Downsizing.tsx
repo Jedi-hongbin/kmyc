@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 22:04:07
+ * @LastEditTime: 2022-02-20 13:13:07
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -11,12 +11,15 @@ import useMount from "../../hook/useMount";
 import styled from "styled-components";
 import { detrusionTransition, leftDetrusion } from "../../styled";
 
+const { isPhone, pageWidth } = window;
+
 const option = {
   title: {
     text: "志愿军运动战减员情况",
-    left: 10,
+    left: isPhone ? 0 : 10,
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 12 : 20,
     },
   },
   tooltip: {
@@ -27,12 +30,14 @@ const option = {
     right: "4%",
     bottom: "3%",
     containLabel: true,
+    height: isPhone ? pageWidth / 5 : "auto",
   },
   xAxis: {
     type: "category",
-    data: ["阵亡", "战伤", "失踪、被俘"],
+    data: ["阵亡", "战伤", "失踪,被俘"],
     axisLabel: {
       interval: 0,
+      fontSize: isPhone ? 10 : 12,
     },
     axisLine: {
       lineStyle: {
@@ -107,6 +112,7 @@ const Container = styled.div<{ isShow: boolean }>`
   }
   ${({ isShow }) => !isShow && leftDetrusion};
   @media screen and (max-width: 750px) {
+    padding: 0;
     transform: rotate(90deg) translateY(-100%);
     transform-origin: top left;
     bottom: auto;

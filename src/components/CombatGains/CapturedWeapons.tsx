@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 21:38:47
+ * @LastEditTime: 2022-02-20 13:12:27
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -13,12 +13,15 @@ import { detrusionTransition, rightDetrusion } from "../../styled";
 
 interface IProps {}
 
+const { isPhone, pageWidth } = window;
+
 const option = {
   title: {
     text: "缴获武器",
-    left: 15,
+    left: isPhone ? 0 : 15,
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 12 : 20,
     },
   },
   tooltip: {
@@ -42,6 +45,7 @@ const option = {
     ],
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 10 : 12,
     },
   },
   grid: {
@@ -49,9 +53,10 @@ const option = {
     right: "4%",
     bottom: "3%",
     containLabel: true,
+    height: isPhone ? pageWidth / 3.8 : "auto",
   },
   toolbox: {
-    right: 20,
+    right: isPhone ? 0 : 20,
     feature: {
       // saveAsImage: {
       //     title: '保存为图片'
@@ -91,6 +96,7 @@ const option = {
     ],
     axisLabel: {
       interval: 0,
+      fontSize: isPhone ? 8 : 12,
     },
     axisLine: {
       lineStyle: {
@@ -207,6 +213,7 @@ const Container = styled.div<{ isShow: boolean }>`
   ${({ isShow }) => !isShow && rightDetrusion};
 
   @media screen and (max-width: 750px) {
+    padding: 0px;
     transform: rotate(90deg) translateX(-48vmax);
     left: 0.5rem;
     transform-origin: bottom left;

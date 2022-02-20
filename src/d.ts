@@ -9,5 +9,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 declare global {
   interface Window {
     gltfLoader: GLTFLoader;
+    pageWidth: number;
+    isPhone: boolean;
   }
 }

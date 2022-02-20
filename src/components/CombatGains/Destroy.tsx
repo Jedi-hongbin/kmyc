@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 21:41:51
+ * @LastEditTime: 2022-02-20 14:13:24
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -13,20 +13,16 @@ import { detrusionTransition, rightDetrusion } from "../../styled";
 
 interface IProps {}
 
+const { isPhone } = window;
+
 const option = {
   title: {
     text: "击毁武器",
-    left: 15,
+    left: isPhone ? 0 : 15,
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 10 : 20,
     },
-  },
-  tooltip: {},
-  grid: {
-    left: "3%",
-    right: "4%",
-    bottom: "3%",
-    containLabel: true,
   },
   series: [
     {
@@ -43,7 +39,7 @@ const option = {
       selectedOffset: 10,
       clockwise: true,
       label: {
-        fontSize: 13,
+        fontSize: isPhone ? 10 : 13,
         color: "#fffae5",
       },
       labelLine: {
@@ -51,7 +47,7 @@ const option = {
           color: "#fffae5",
         },
       },
-      center: ["55%", "50%"],
+      center: isPhone ? ["50%", "57%"] : ["55%", "50%"],
       itemStyle: {},
     },
   ],
@@ -95,7 +91,7 @@ const Container = styled.div<{ isShow: boolean }>`
   ${({ isShow }) => !isShow && rightDetrusion};
 
   @media screen and (max-width: 750px) {
-    bottom: 0.5rem;
+    padding: 0;
     transform: rotate(90deg) translateY(-30vmax) translateX(calc(70vmax - 1rem));
     transform-origin: top left;
   }

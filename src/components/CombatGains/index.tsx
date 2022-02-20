@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:14:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 10:00:59
+ * @LastEditTime: 2022-02-20 12:38:49
  * @Description:志愿军战绩
  */
 import { FC, ReactElement } from "react";
@@ -16,9 +16,9 @@ interface IProps {}
 const CombatGains: FC<IProps> = (): ReactElement => {
   return (
     <>
+      <Destroy />
       <Annihilate />
       <CapturedWeapons />
-      <Destroy />
       <Downsizing />
     </>
   );

@@ -2,32 +2,39 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 21:48:04
+ * @LastEditTime: 2022-02-20 14:18:52
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { detrusionTransition, rightDetrusion } from "../../styled";
 
 interface IProps {}
 
+const { isPhone, pageWidth } = window;
+
 const option = {
   title: {
     text: "歼敌",
-    left: 10,
+    left: isPhone ? 0 : 10,
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 10 : 20,
     },
   },
   tooltip: {
     trigger: "axis",
   },
   legend: {
-    data: ["运动战时期", "阵地战时期", "总数"],
+    data: isPhone
+      ? ["运动战时期", "阵地战时期"]
+      : ["运动战时期", "阵地战时期", "总数"],
+    left: isPhone ? 30 : "auto",
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 10 : 20,
     },
   },
   grid: {
@@ -35,8 +42,9 @@ const option = {
     right: "4%",
     bottom: "3%",
     containLabel: true,
+    height: isPhone ? pageWidth / 4.5 : "auto",
   },
-  toolbox: {
+  toolbox: !isPhone && {
     right: 20,
     feature: {
       // saveAsImage: {
@@ -64,6 +72,7 @@ const option = {
     data: ["毙伤敌", "俘敌", "敌投降"],
     axisLabel: {
       interval: 0,
+      fontSize: isPhone ? 9 : 12,
     },
     axisLine: {
       lineStyle: {
@@ -115,7 +124,7 @@ const option = {
         },
       },
     },
-    {
+    !isPhone && {
       name: "总数",
       type: "bar",
       data: [671954, 46088, 435],
@@ -179,8 +188,12 @@ const Container = styled.div<{ isShow: boolean }>`
   ${({ isShow }) => !isShow && rightDetrusion};
 
   @media screen and (max-width: 750px) {
+    padding-top: 1px;
     transform: rotate(90deg);
-    top: calc(75vmax - 0.5rem);
-    right: 8.5rem;
+    top: auto;
+    right: auto;
+    transform-origin: bottom left;
+    bottom: calc(33vmax + 0.5rem);
+    left: calc(33vmin + 2rem);
   }
 `;

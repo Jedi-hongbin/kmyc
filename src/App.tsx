@@ -48,13 +48,13 @@ function App() {
 
   return (
     <div>
-      {loading ? (
+      {/* {loading ? (
         <LoadingScreen
           setMap={setMap}
           addTexture={addTexture}
           handleLoad={handleLoad}
         />
-      ) : null}
+      ) : null} */}
 
       {/* <Map
         animateIndex={animateIndex}

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 22:00:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 17:12:53
+ * @LastEditTime: 2022-02-20 13:29:13
  * @Description: chart 表
  */
 import * as echarts from "echarts";
@@ -11,14 +11,16 @@ import useMount from "../../hook/useMount";
 
 interface IProps {}
 
+const { isPhone, pageWidth } = window;
 // charts.push({ name: "us", chart: myChart });
 
 const option = {
   title: {
     text: "美军损失图表",
-    left: 20,
+    left: isPhone ? 0 : 20,
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 12 : 20,
     },
   },
   tooltip: {
@@ -28,13 +30,15 @@ const option = {
     data: ["总数", "陆军", "海军", "海军陆战队", "空军"],
     textStyle: {
       color: "#fffae5",
+      fontSize: isPhone ? 10 : 12,
     },
   },
   grid: {
     left: "3%",
     right: "4%",
-    bottom: "3%",
+    bottom: "1%",
     containLabel: true,
+    height: isPhone ? pageWidth / 1.4 : "auto",
   },
   toolbox: {
     right: 20,
@@ -91,6 +95,7 @@ const option = {
       //x轴的文字改为竖版显示
       formatter: (value: string) =>
         value.replace(/-/g, "|").split("").join("\n"),
+      fontSize: isPhone ? 8 : 12,
     },
     axisLine: {
       lineStyle: {
