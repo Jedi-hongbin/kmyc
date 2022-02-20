@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 20:40:12
+ * @LastEditTime: 2022-02-20 14:27:18
  * @Description:通用按钮
  */
 
@@ -110,5 +110,19 @@ export const Button = styled.button<{
   :active {
     transform: translateY(3px);
     transition-duration: 0.1s;
+  }
+
+  @media screen and (max-width: 750px) {
+    width: calc(var(--width) + 3rem);
+    :hover {
+      background-color: ${props => props.primary};
+    }
+    :active {
+      transform: translateY(1px);
+    }
+    ::after,
+    ::before {
+      display: none;
+    }
   }
 `;
