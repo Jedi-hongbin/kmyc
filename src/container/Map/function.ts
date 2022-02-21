@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 16:53:35
+ * @LastEditTime: 2022-02-21 17:29:28
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -327,9 +327,11 @@ export async function loadXCModel(
       );
       //旋转角度
       if (nextIndex === 1) {
-        item.rotateY(-Math.PI / 2);
-        item.rotateX(-Math.PI / 10);
-        item.rotateZ(Math.PI / 10);
+        if (prevIndex !== 1) {
+          item.rotateY(-Math.PI / 2);
+          item.rotateX(-Math.PI / 10);
+          item.rotateZ(Math.PI / 10);
+        }
       } else {
         if (prevIndex === 1) {
           item.rotateY(Math.PI / 2);
