@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 14:13:24
+ * @LastEditTime: 2022-02-21 10:30:07
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -24,6 +24,7 @@ const option = {
       fontSize: isPhone ? 10 : 20,
     },
   },
+  tooltip: {},
   series: [
     {
       type: "pie",
@@ -92,7 +93,12 @@ const Container = styled.div<{ isShow: boolean }>`
 
   @media screen and (max-width: 750px) {
     padding: 0;
-    transform: rotate(90deg) translateY(-30vmax) translateX(calc(70vmax - 1rem));
+    transform: rotate(90deg);
     transform-origin: top left;
+    top: calc(70vmax - 0.5rem);
+    /* top: auto;
+    bottom: calc(15vmax + 1rem); */
+    right: auto;
+    left: calc(100vmin - 0.5rem);
   }
 `;

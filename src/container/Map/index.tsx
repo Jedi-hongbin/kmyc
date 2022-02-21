@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 17:47:18
+ * @LastEditTime: 2022-02-21 13:13:30
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -11,7 +11,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { IAnimationConfigure } from "./types";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
-import Stats from "three/examples/jsm/libs/stats.module";
+// import Stats from "three/examples/jsm/libs/stats.module";
 import {
   clickQiangAnimation,
   hideMash,
@@ -28,7 +28,7 @@ import { subtitleRef } from "../../components/Subtitles";
 import { detrusionChart } from "../../utils";
 import useMount from "../../hook/useMount";
 //@ts-ignore
-const stats = new Stats();
+// const stats = new Stats();
 
 interface IProps {
   animateIndex: number;
@@ -114,9 +114,18 @@ controls.minDistance = 5;
 controls.maxDistance = 250;
 //可旋转角度
 controls.maxPolarAngle = Math.PI / 2.2;
-// [40, 93, -5], [40, 10, -5]
-camera.position.set(30, 250, 0);
-controls.target.set(30, 0, 0);
+
+//移动端让地图‘横’过来
+if (window.isPhone) {
+  // scene.rotateX(3.14);
+  // scene.rotateY(3.14);
+  // scene.rotateZ(3.14 / 2);
+  camera.position.set(10, 74, 0);
+  controls.target.set(9, 10, 0);
+} else {
+  camera.position.set(30, 250, 0);
+  controls.target.set(30, 0, 0);
+}
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
  */
@@ -174,7 +183,7 @@ const Map: FC<IProps> = ({
         window.requestAnimationFrame(tick);
         // camera.rotateZ(elapsed * 0.001)
         controls.update();
-        stats && stats.update();
+        // stats && stats.update();
       };
 
       tick();
@@ -191,15 +200,16 @@ const Map: FC<IProps> = ({
       if (textures[20]) return;
       console.log("map model load");
       scene.add(gltf.scene);
-      document.documentElement.appendChild(stats.dom);
+      // document.documentElement.appendChild(stats.dom);
       //由小入大
+
       move(
-        [30, 93, -5],
-        [30, 10, -5],
+        [window.isPhone ? 10 : 30, 93, -5],
+        [window.isPhone ? 9 : 30, 10, -5],
         50,
         () => {
           render();
-          stats && stats.update();
+          // stats && stats.update();
         },
         () => {
           controls.saveState();
@@ -616,15 +626,18 @@ function play(gltf: GLTF) {
 /**视线移动*/
 function sightMove(animateIndex: number, onEnd?: () => void) {
   const configure = animationConfigure[animateIndex - 1];
-
-  //移动到摄像机位置
-  move(configure.camera, configure.axis, 40, undefined, () => {
-    //字幕慢点出来 和动画一起跟新dom引起卡顿
+  if (window.isPhone) {
     subtitleRef.current?.start(animateIndex);
-  });
+  }
+  //移动到摄像机位置
+  else
+    move(configure.camera, configure.axis, 40, undefined, () => {
+      //字幕慢点出来 和动画一起跟新dom引起卡顿
+      subtitleRef.current?.start(animateIndex);
+    });
 
-  //战役动画
-  if (configure.jump) {
+  //战役动画 pc端才播放
+  if (configure.jump && !window.isPhone) {
     for (const { time, camera, axis, speed } of configure.jump) {
       const timer = setTimeout(() => {
         move(camera, axis, speed);
@@ -635,7 +648,8 @@ function sightMove(animateIndex: number, onEnd?: () => void) {
   //结束动画 开启自动旋转 执行回调
   if (configure.end) {
     const timer = setTimeout(() => {
-      move(configure.end.camera, configure.end.axis, configure.end.speed);
+      !window.isPhone &&
+        move(configure.end.camera, configure.end.axis, configure.end.speed);
       controls.autoRotate = true;
       onEnd && onEnd();
     }, configure.end.duration);

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 14:27:18
+ * @LastEditTime: 2022-02-20 18:21:25
  * @Description:通用按钮
  */
 
@@ -36,7 +36,7 @@ export const Button = styled.button<{
       ? css`
           --width: 5rem;
           --padding: 0.2rem;
-          --font-size: 0.5rem;
+          --font-size: 1vmax;
           --margin: 0.2rem;
           --after-left: 1.25rem;
           --after-top: 1.5rem;

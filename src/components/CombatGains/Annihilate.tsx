@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 14:18:52
+ * @LastEditTime: 2022-02-20 19:49:52
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -31,10 +31,10 @@ const option = {
     data: isPhone
       ? ["运动战时期", "阵地战时期"]
       : ["运动战时期", "阵地战时期", "总数"],
-    left: isPhone ? 30 : "auto",
+    left: isPhone ? 30 : "center",
     textStyle: {
       color: "#fffae5",
-      fontSize: isPhone ? 10 : 20,
+      fontSize: isPhone ? 10 : 12,
     },
   },
   grid: {
@@ -194,6 +194,6 @@ const Container = styled.div<{ isShow: boolean }>`
     right: auto;
     transform-origin: bottom left;
     bottom: calc(33vmax + 0.5rem);
-    left: calc(33vmin + 2rem);
+    left: calc(36vmin + 1rem);
   }
 `;

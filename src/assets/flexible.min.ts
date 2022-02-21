@@ -45,5 +45,6 @@ export {};
   //注入适配移动端全局变量
   const { offsetWidth } = document.body;
   window.pageWidth = offsetWidth;
+  // window.isPhone = offsetWidth < 750 || offsetHeight < 750;
   window.isPhone = offsetWidth < 750;
 })(window, document);

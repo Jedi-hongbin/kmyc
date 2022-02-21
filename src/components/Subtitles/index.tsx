@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 17:29:53
+ * @LastEditTime: 2022-02-21 10:58:19
  * @Description:战役字幕
  */
 import {
@@ -10,7 +10,6 @@ import {
   memo,
   ReactElement,
   useCallback,
-  useEffect,
   useRef,
   useState,
   createRef,
@@ -101,10 +100,10 @@ export default memo(Subtitles);
 const Container = styled.div`
   position: fixed;
   z-index: 1;
-  bottom: 5vh;
+  bottom: 5vmin;
   /* height: 15vh; */
-  width: 60vw;
-  margin-left: 20vw;
+  width: 60vmax;
+  margin-left: 20vmax;
   /* background: radial-gradient(#355235d1, #437143 90%); */
   background: radial-gradient(#35523587, #4371438c 90%);
   border-radius: 0.5rem;
@@ -113,4 +112,13 @@ const Container = styled.div`
   letter-spacing: 1px;
   font-size: 0.5rem;
   display: flex;
+
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg);
+    transform-origin: top left;
+    margin: 0;
+    left: 12vmax;
+    top: 20vmax;
+    height: 11vmax;
+  }
 `;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 22:02:16
+ * @LastEditTime: 2022-02-21 13:11:55
  * @Description:控制面板
  */
 import {
@@ -55,7 +55,7 @@ const Panel: FC<IProps> = ({
     () => {
       return {
         hide: () => {
-          setIsHide(true);
+          !window.isPhone && setIsHide(true);
         },
         show: () => {
           setIsHide(false);
