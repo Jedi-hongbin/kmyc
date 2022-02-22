@@ -7,6 +7,7 @@ import Panel from "./components/Panel";
 import Subtitles from "./components/Subtitles";
 import CombatGains from "./components/CombatGains";
 import { detrusionChart } from "./utils";
+import ThemeProvider from "./styled/ThemeProvide";
 
 const needUpdateCharts = ["us"];
 
@@ -47,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <ThemeProvider>
       {loading ? (
         <LoadingScreen
           setMap={setMap}
@@ -71,7 +72,7 @@ function App() {
       <Subtitles />
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
       <CombatGains />
-    </div>
+    </ThemeProvider>
   );
 }
 

@@ -1,4 +1,5 @@
 // import THREE from "three";
+import "styled-components";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 // declare global {
@@ -11,5 +12,14 @@ declare global {
     gltfLoader: GLTFLoader;
     pageWidth: number;
     isPhone: boolean;
+  }
+}
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    /**
+     * 在不支持透明背景的浏览器中替换背景
+     */
+    replaceBg: string;
   }
 }

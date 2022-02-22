@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-21 13:11:55
+ * @LastEditTime: 2022-02-22 21:05:16
  * @Description:控制面板
  */
 import {
@@ -117,6 +117,7 @@ const Container = styled.div<{ isHide: boolean }>`
   flex-direction: column;
   padding: 0.4rem;
   transition: transform 0.3s ease;
+  ${props => props.theme.replaceBg};
 
   ${({ isHide }) =>
     isHide &&

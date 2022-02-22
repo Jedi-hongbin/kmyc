@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 19:49:52
+ * @LastEditTime: 2022-02-22 21:05:23
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -187,7 +187,7 @@ const Container = styled.div<{ isShow: boolean }>`
 
   ${({ isShow }) => !isShow && rightDetrusion};
 
-  @media screen and (max-width: 750px) {
+  @media screen and (max-width: 750px), (max-height: 500px) {
     padding-top: 1px;
     transform: rotate(90deg);
     top: auto;
@@ -196,4 +196,5 @@ const Container = styled.div<{ isShow: boolean }>`
     bottom: calc(33vmax + 0.5rem);
     left: calc(36vmin + 1rem);
   }
+  ${props => props.theme.replaceBg};
 `;

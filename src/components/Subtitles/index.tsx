@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-21 10:58:19
+ * @LastEditTime: 2022-02-22 21:05:02
  * @Description:战役字幕
  */
 import {
@@ -112,6 +112,7 @@ const Container = styled.div`
   letter-spacing: 1px;
   font-size: 0.5rem;
   display: flex;
+  ${props => props.theme.replaceBg};
 
   @media screen and (max-width: 750px) {
     transform: rotate(90deg);

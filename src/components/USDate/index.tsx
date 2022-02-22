@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 21:02:38
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 19:42:02
+ * @LastEditTime: 2022-02-22 21:04:51
  * @Description:美军损失表
  */
 
@@ -98,7 +98,8 @@ const Container = styled.div<{ isShow: boolean }>`
   bottom: 0;
   left: 0;
   transition: opacity 0.5s ease, transform 0.3s ease, visibility 0.3s ease;
-  background: radial-gradient(#355235d1, #437143 90%);
+  background: radial-gradient(#35523587, #437143 90%);
+  ${props => props.theme.replaceBg};
 
   & > #USDate_handle {
     position: relative;

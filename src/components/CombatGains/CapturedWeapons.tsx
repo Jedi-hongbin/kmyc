@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 19:42:30
+ * @LastEditTime: 2022-02-22 21:05:31
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -218,4 +218,5 @@ const Container = styled.div<{ isShow: boolean }>`
     left: 0.5rem;
     transform-origin: bottom left;
   }
+  ${props => props.theme.replaceBg};
 `;
