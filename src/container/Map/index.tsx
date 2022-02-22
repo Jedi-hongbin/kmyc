@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-21 13:13:30
+ * @LastEditTime: 2022-02-22 18:37:18
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -21,6 +21,8 @@ import {
   smallPositionAnimation,
   smallScaleAnimation,
   XCBack,
+  loadAxisModel,
+  AxisRef,
 } from "./function";
 import qiangImg from "../../assets/map/moxinnaganky.png";
 import { panelRef } from "../../components/Panel";
@@ -140,6 +142,7 @@ const Map: FC<IProps> = ({
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
   const XCRef = useRef<XCBack>(null); //保存四个相册模型和调度方法 之后切换只需要切换纹理贴图
+  const AxisRef = useRef<AxisRef>(null); //战役柱状图
 
   useEffect(() => {
     if (animateIndex > 0) {
@@ -162,6 +165,8 @@ const Map: FC<IProps> = ({
         XCRef.current?.hide();
         subtitleRef.current?.hide();
         panelRef.current?.show();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        AxisRef.current?.hide();
       }
     };
   }, [animateIndex]);
@@ -359,6 +364,10 @@ const Map: FC<IProps> = ({
         start(gltf, animateIndex, () => {
           XCRef.current?.show();
           panelRef.current?.show();
+          if (AxisRef.current?.models.length) {
+            scene.add(...AxisRef.current.models);
+            AxisRef.current.models = [];
+          } else AxisRef.current?.toggle(animateIndex);
         });
         //@ts-ignore
         cacheModel.current = gltf;
@@ -379,6 +388,11 @@ const Map: FC<IProps> = ({
             scene.add(...ref.models);
           });
         }
+        //先加载模型并不添加到地图中
+        loadAxisModel(scene, animateIndex).then(ref => {
+          //@ts-ignore
+          AxisRef.current = ref;
+        });
       },
       undefined,
       e => {

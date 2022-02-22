@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-21 17:29:28
+ * @LastEditTime: 2022-02-22 18:34:35
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -18,6 +18,10 @@ import xcModel from "../../assets/map/xc.glb";
 import { IAnimationConfigure } from "./types";
 // import { Scene } from "three/src/scenes/Scene";
 import { Scene } from "three/src/Three";
+//@ts-ignore
+import axisModel from "../../assets/map/axis.glb";
+//@ts-ignore
+import axisTextModel from "../../assets/map/axisText.glb";
 
 /**
  * @description: 加载枪械图标
@@ -359,5 +363,155 @@ export async function loadXCModel(
     hide,
     models: pictures,
     toggle,
+  };
+}
+
+interface IModel {
+  name: "b" | "f";
+  model: Object3D;
+}
+
+/**
+ * 战役数据
+ */
+interface CampaignData {
+  /**
+   * 毙敌人数 [南朝鲜，英法，美]
+   */
+  b: [n: number, yf: number, m: number];
+  /**
+   * 俘敌人数 [南朝鲜，英法，美]
+   */
+  f: [n: number, yf: number, m: number];
+  /**
+   * 图标位置
+   */
+  position: {
+    b: [x: number, y: number];
+    f: [x: number, y: number];
+  };
+}
+
+const campaignData: CampaignData[] = [
+  {
+    b: [7584, 147, 2991],
+    f: [4741, 0, 527],
+    position: { b: [30, -30], f: [30, 0] },
+  },
+  {
+    b: [5962, 116, 20867],
+    f: [5568, 121, 3254],
+    position: { b: [30, -30], f: [30, 0] },
+  },
+  {
+    b: [4593, 270, 1141],
+    f: [5967, 1, 366],
+    position: { b: [30, -30], f: [30, 0] },
+  },
+  {
+    b: [8861, 646, 34578],
+    f: [7769, 1, 1214],
+    position: { b: [30, -30], f: [30, 0] },
+  },
+  {
+    b: [23654, 4957, 31926],
+    f: [5233, 1115, 958],
+    position: { b: [30, -30], f: [30, 0] },
+  },
+];
+
+const columnarName = ["n", "yf", "m"];
+
+const maxScaleY = 1.1; //最大放大倍数
+
+export interface AxisRef {
+  models: Object3D[];
+  hide: () => void;
+  toggle: (nextIndex: number) => void;
+}
+
+/**
+ * @description: 加载战役数据柱状图模型
+ * @param {Scene} scene
+ * @param {number} animationNum
+ * @return {*}
+ */
+export async function loadAxisModel(
+  scene: Scene,
+  animationNum: number
+): Promise<AxisRef> {
+  const axis = await window.gltfLoader.loadAsync(axisModel);
+  const axisText = await window.gltfLoader.loadAsync(axisTextModel);
+  console.log("Axis Model:", axis, axisText);
+
+  const bi = axis.scene; //毙伤敌
+  const fu = axis.scene.clone(); //俘敌
+  const models: IModel[] = [
+    { name: "b", model: bi },
+    { name: "f", model: fu },
+  ];
+  let prevColumnarIndex = animationNum;
+
+  const handleModel = (animationNum: number, update?: boolean) => {
+    for (let i = 0; i < models.length; i++) {
+      const { name, model } = models[i];
+      model.scale.set(1, 1, 1);
+      const configure = campaignData[animationNum - 1];
+      const data = configure[name];
+      const max = Math.max(...data) / (maxScaleY - i * 0.2);
+
+      //根据数值设置高度 也就是 y轴缩放倍数
+      // eslint-disable-next-line no-loop-func
+      data.forEach((num: number, index: number) => {
+        const scaleY = num / max;
+        const axisName = columnarName[index];
+        const columnar = model.children.find(mesh => mesh.name === axisName);
+        columnar!.scale.z = scaleY;
+        //添加人数
+        const numText = axisText.scene.children.find(
+          mesh => mesh.name === `${animationNum}${axisName}${name}`
+        );
+        numText && model.add(numText.clone());
+        console.log(numText);
+        if (update) {
+          //去掉上一个人数
+          const prevNumText = model.children.find(
+            mesh => mesh.name === `${prevColumnarIndex}${axisName}${name}`
+          );
+          prevNumText && model.remove(prevNumText);
+          console.log(prevNumText);
+        }
+      });
+      if (!update) {
+        // 添加title
+        const title = axisText.scene.children.find(
+          mesh => mesh.name === `${i}t`
+        );
+        model.add(title!);
+      }
+
+      // 设置位置
+      const [x, z] = configure["position"][name];
+      model.position.x = x;
+      model.position.z = z;
+    }
+    update && (prevColumnarIndex = animationNum);
+  };
+
+  //init
+  handleModel(animationNum);
+
+  bi.scale.x += 0.3;
+  bi.scale.y += 0.3;
+  bi.scale.z += 0.3;
+
+  return {
+    toggle: (nextIndex: number) => handleModel(nextIndex, true),
+    hide: () => {
+      models.forEach(({ model }) => {
+        model.scale.set(0, 0, 0);
+      });
+    },
+    models: [bi, fu],
   };
 }
