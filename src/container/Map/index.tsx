@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 18:37:18
+ * @LastEditTime: 2022-02-22 20:07:11
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -254,9 +254,13 @@ const Map: FC<IProps> = ({
       // 声明 raycaster 和 mouse 变量
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
+      let prevDate = Date.now();
       //hover监听
       renderer.domElement.addEventListener("mousemove", event => {
         event.preventDefault();
+        // 截流减少计算
+        if (Date.now() - prevDate < 150) return;
+        prevDate = Date.now();
         const intersects = getIntersects(event);
         // 获取选中最近的 Mesh 对象
         if (intersects.length) {
