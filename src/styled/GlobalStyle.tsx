@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
      
     }
   }
-  @media screen and (orientation: landscape) and (max-height: 750px) {
+  @media screen and (orientation: landscape) and (max-height: 550px) {
     * {
       z-index: -1 !important;
     }

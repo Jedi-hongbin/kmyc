@@ -19,3 +19,8 @@
 > - 加入模块: 战斗概述
 > - 图标加入展示敌我投入力量对比
 > - mousemove 事件加入截流 减少计算
+
+2022-02-23
+
+> - 在需要的时候调用 controls.update 减少卡顿
+> - safari 浏览器 按钮动画 伪元素 transform 动画超出 overflow:hidden 范围

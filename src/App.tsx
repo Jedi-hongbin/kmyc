@@ -49,13 +49,13 @@ function App() {
 
   return (
     <ThemeProvider>
-      {loading ? (
-        <LoadingScreen
-          setMap={setMap}
-          addTexture={addTexture}
-          handleLoad={handleLoad}
-        />
-      ) : null}
+      {/* {loading ? ( */}
+      <LoadingScreen
+        setMap={setMap}
+        addTexture={addTexture}
+        handleLoad={handleLoad}
+      />
+      {/* ) : null} */}
 
       <Map
         animateIndex={animateIndex}

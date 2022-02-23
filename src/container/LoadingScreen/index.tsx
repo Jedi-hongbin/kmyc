@@ -2,21 +2,19 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-19 21:15:46
+ * @LastEditTime: 2022-02-23 21:06:54
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import { flexCenter } from "../../styled";
-import ProgressBar from "./ProgressBar";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 //@ts-ignore
 import mapModel from "../../assets/map/tmap.glb";
 import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
-import { adjustColor } from "../../utils/color";
+import TextLoadBar from "./TextLoadBar";
 
 interface IProps {
   // setMap: (gltf: GLTF) => void;
@@ -43,7 +41,7 @@ const LoadingScreen: FC<IProps> = ({
       //留一小点时间执行动画，再通知上级 已经ok了 可以下一步了
       setTimeout(() => {
         handleLoad();
-      }, 100);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
@@ -99,71 +97,32 @@ const LoadingScreen: FC<IProps> = ({
 
   if (isLoadFail) return <LoadFail errMsg={isLoadFail} />;
 
-  const renderText = (str: string, color: string) =>
-    str.split("").map((t, i) => (
-      <span
-        style={{
-          color: adjustColor(color, i * 15),
-        }}
-        key={t}
-      >
-        {t}
-      </span>
-    ));
-
   return (
-    <Container>
-      <Back leave={progress >= 100} dir='up'>
-        {renderText("抗美援朝", "#00aaff")}
-      </Back>
-      <ProgressBar progress={progress} />
-      <Back leave={progress >= 100} dir='down'>
-        {renderText("保家卫国", "#00ffaa")}
-      </Back>
-    </Container>
+    <>
+      <TextLoadBar progress={progress} />
+      {/* <Container>
+      </Container> */}
+    </>
   );
 };
 
 export default LoadingScreen;
 
-const Container = styled.div`
-  width: 100vmax;
-  height: 100vmin;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  z-index: 9;
-  & > div {
-    :first-child {
-      background: linear-gradient(60deg, #0af, #0fa 60%);
-    }
-    :last-child {
-      background: linear-gradient(60deg, #0af, #0fa 80%);
-    }
-  }
+// const Container = styled.div`
+//   width: 100vmax;
+//   height: 100vmin;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   display: flex;
+//   flex-direction: column;
+//   z-index: 9;
+//   background: radial-gradient(#060606f0, #000000 90%);
+//   overflow: hidden;
+//   opacity: 0.9;
 
-  @media screen and (max-width: 750px) {
-    transform: rotate(90deg) translateY(-100vmin);
-    transform-origin: top left;
-  }
-`;
-
-const Back = styled.div<{ leave: boolean; dir: "up" | "down" }>`
-  flex: 1;
-  ${flexCenter};
-  justify-content: ${props => (props.dir === "up" ? "flex-start" : "flex-end")};
-  padding: 0 2rem;
-  font-size: 6rem;
-  font-weight: bold;
-  letter-spacing: 1rem;
-  text-shadow: 3px -1px 0px #168269;
-  transition-property: transform;
-  transition-duration: 0.7s;
-  transition-timing-function: cubic-bezier(0.12, 0.04, 0.47, 1.4);
-  transform: ${({ leave, dir }) =>
-    leave ? `translateY(${dir === "up" ? -100 : 100}%)` : "none"};
-`;
-/* transform: ${props =>
-  props.leave ? `translateY(${props.dir === "up" ? -85 : 100}%)` : "none"}; */
+//   @media screen and (max-width: 750px) {
+//     transform: rotate(90deg) translateY(-100vmin);
+//     transform-origin: top left;
+//   }
+// `;
