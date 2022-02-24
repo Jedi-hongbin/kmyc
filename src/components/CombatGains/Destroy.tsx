@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 21:05:38
+ * @LastEditTime: 2022-02-24 12:06:06
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -48,7 +48,7 @@ const option = {
           color: "#fffae5",
         },
       },
-      center: isPhone ? ["50%", "57%"] : ["55%", "60%"],
+      center: isPhone ? ["50%", "57%"] : ["50%", "60%"],
       itemStyle: {},
     },
   ],
@@ -94,12 +94,8 @@ const Container = styled.div<{ isShow: boolean }>`
   @media screen and (max-width: 750px) {
     padding: 0;
     transform: rotate(90deg);
-    transform-origin: top left;
-    top: calc(70vmax - 0.5rem);
-    /* top: auto;
-    bottom: calc(15vmax + 1rem); */
-    right: auto;
-    left: calc(100vmin - 0.5rem);
+    transform-origin: top right;
+    top: calc(100vmax - 0.5rem);
   }
   ${props => props.theme.replaceBg};
 `;

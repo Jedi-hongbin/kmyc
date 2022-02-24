@@ -49,21 +49,21 @@ function App() {
 
   return (
     <ThemeProvider>
-      {/* {loading ? ( */}
-      <LoadingScreen
-        setMap={setMap}
-        addTexture={addTexture}
-        handleLoad={handleLoad}
-      />
-      {/* ) : null} */}
+      {loading ? (
+        <LoadingScreen
+          setMap={setMap}
+          addTexture={addTexture}
+          handleLoad={handleLoad}
+        />
+      ) : null}
 
-      <Map
+      {/* <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      />
+      /> */}
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
