@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 21:05:31
+ * @LastEditTime: 2022-02-24 13:46:37
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -176,7 +176,7 @@ const option = {
 };
 
 const CapturedWeapons: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   useMount(() => {
     const chartDom = document.getElementById("CapturedWeapons");
     const myChart = echarts.init(chartDom!);

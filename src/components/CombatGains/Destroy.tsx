@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 12:06:06
+ * @LastEditTime: 2022-02-24 13:46:43
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -55,7 +55,7 @@ const option = {
 };
 
 const Destroy: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   useMount(() => {
     const chartDom = document.getElementById("Destroy");
     const myChart = echarts.init(chartDom!);

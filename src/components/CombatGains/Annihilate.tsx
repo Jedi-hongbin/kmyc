@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 21:05:23
+ * @LastEditTime: 2022-02-24 13:43:57
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -142,7 +142,7 @@ const option = {
 };
 
 const Annihilate: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
 
   useMount(() => {
     const chartDom = document.getElementById("annihilate");

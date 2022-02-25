@@ -2,12 +2,12 @@
  * @Author: hongbin
  * @Date: 2022-02-18 08:52:51
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-18 12:34:49
+ * @LastEditTime: 2022-02-25 11:21:58
  * @Description: 介绍鼠标按键功能
  */
 import { FC, ReactElement } from "react";
 import styled, { css } from "styled-components";
-import { mouseGunLun, mouseLeft, mouseRight, SpaceBar } from "../icon";
+import { mouseGunLun, mouseLeft, mouseRight, Music, SpaceBar } from "../icon";
 
 interface IProps {
   show: boolean;
@@ -16,11 +16,12 @@ interface IProps {
 const MouseExplain: FC<IProps> = ({ show }): ReactElement => {
   return (
     <Container show={show}>
-      <Title>鼠标操作说明</Title>
+      <Title>操作说明</Title>
       <Box icon={mouseLeft} text='鼠标左键' explain='移动视线' />
       <Box icon={mouseRight} text='鼠标右键' explain='旋转视线' />
       <Box icon={mouseGunLun} text='鼠标滚轮' explain='缩放视线-可按下拉动' />
       <Box icon={SpaceBar} text='空格键' explain='开启/关闭镜头自动旋转' />
+      <Box icon={Music} text='S键' explain='开启/关闭背景音乐' />
     </Container>
   );
 };

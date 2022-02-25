@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-23 18:13:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 12:02:09
+ * @LastEditTime: 2022-02-24 13:44:24
  * @Description:文本加载条
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -50,7 +50,7 @@ const TextLoadBar: FC<IProps> = ({ progress }): ReactElement => {
           index={index}
         >
           <Background src={bg} alt='' />
-          {/* {count > index ? <Text>{text}</Text> : null} */}
+          {count > index ? <Text>{text}</Text> : null}
         </Column>
       ))}
     </>

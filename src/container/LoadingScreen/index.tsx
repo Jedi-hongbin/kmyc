@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 11:31:02
+ * @LastEditTime: 2022-02-24 13:47:28
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import mapModel from "../../assets/map/tmap.glb";
 import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
 import TextLoadBar from "./TextLoadBar";
+import { detrusionChart } from "../../utils";
 
 interface IProps {
   // setMap: (gltf: GLTF) => void;
@@ -38,7 +39,10 @@ const LoadingScreen: FC<IProps> = ({
 
   useEffect(() => {
     if (progress >= 100) {
-      //留一小点时间执行动画，再通知上级 已经ok了 可以下一步了
+      //留一小点时间执行动画
+      setTimeout(() => {
+        detrusionChart(false);
+      }, 200);
       setTimeout(() => {
         handleLoad();
       }, 500);

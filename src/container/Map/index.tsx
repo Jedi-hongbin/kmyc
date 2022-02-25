@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 08:25:04
+ * @LastEditTime: 2022-02-24 21:38:33
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -218,6 +218,7 @@ const Map: FC<IProps> = ({
         50,
         () => {
           render();
+          controls.update();
           // stats && stats.update();
         },
         () => {
@@ -621,7 +622,7 @@ function move(
       controls.target.z += diffAxis[2] / speed;
       t = requestAnimationFrame(r);
       count++;
-      controls.update();
+      // controls.update();
       every && every();
     } else onEnd && onEnd();
   };

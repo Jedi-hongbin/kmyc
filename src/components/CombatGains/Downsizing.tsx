@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 21:05:41
+ * @LastEditTime: 2022-02-24 13:46:50
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -72,7 +72,7 @@ const option = {
 interface IProps {}
 
 const Downsizing: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   useMount(() => {
     const chartDom = document.getElementById("Downsizing");
     const myChart = echarts.init(chartDom!);

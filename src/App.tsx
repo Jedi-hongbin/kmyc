@@ -8,6 +8,7 @@ import Subtitles from "./components/Subtitles";
 import CombatGains from "./components/CombatGains";
 import { detrusionChart } from "./utils";
 import ThemeProvider from "./styled/ThemeProvide";
+import BackGroundMusic from "./components/BackGroundMusic";
 
 const needUpdateCharts = ["us"];
 
@@ -57,13 +58,13 @@ function App() {
         />
       ) : null}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      /> */}
+      />
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
@@ -72,6 +73,7 @@ function App() {
       <Subtitles />
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
       <CombatGains />
+      <BackGroundMusic />
     </ThemeProvider>
   );
 }
