@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 08:52:51
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 11:21:58
+ * @LastEditTime: 2022-02-25 13:28:17
  * @Description: 介绍鼠标按键功能
  */
 import { FC, ReactElement } from "react";
@@ -45,13 +45,14 @@ const Box: FC<BoxProps> = ({ icon, text, explain }) => (
 );
 
 const Title = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: bold;
   margin-bottom: 0.3rem;
 `;
 
 const Container = styled.div<{ show: boolean }>`
   padding: 0.4rem 0.6rem;
+  padding-right: 0.2rem;
   color: #fffae5;
   position: absolute;
   z-index: 1;
@@ -62,7 +63,7 @@ const Container = styled.div<{ show: boolean }>`
   border-radius: 0.5rem;
   left: 100%;
   top: 0;
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   display: flex;
   flex-direction: column;
   letter-spacing: 1px;
@@ -74,10 +75,10 @@ const Container = styled.div<{ show: boolean }>`
 
   & > div {
     display: flex;
-    margin: 0.5rem 0;
+    margin: 0.3rem 0;
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1.3rem;
+      height: 1.3rem;
     }
     & > div {
       margin-left: 0.1rem;
