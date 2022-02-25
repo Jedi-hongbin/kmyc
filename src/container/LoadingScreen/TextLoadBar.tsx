@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-23 18:13:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 17:43:28
+ * @LastEditTime: 2022-02-25 19:54:33
  * @Description:文本加载条
  */
 import { FC, ReactElement, useEffect, useState } from "react";

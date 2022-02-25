@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 17:43:38
+ * @LastEditTime: 2022-02-25 20:36:37
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -22,6 +22,8 @@ interface IProps {
   addTexture: (name: string, texture: any) => void;
   handleLoad: () => void;
 }
+//刚进入页面的时间
+const enterTime = Date.now();
 
 const LoadingScreen: FC<IProps> = ({
   setMap,
@@ -42,12 +44,33 @@ const LoadingScreen: FC<IProps> = ({
       setTimeout(() => {
         detrusionChart(false);
       }, 200);
+      //2s 将文字概述播放完
+
+      //有缓存的情况下加载时间<2s 让其执行完再进入页面
       setTimeout(() => {
         handleLoad();
       }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
+
+  /**
+   * 进度增长检测 不准4s内加载完成
+   * @param {number} increase 增长的数值
+   * @param {number} prev state原本数值
+   * @return {number} newValue
+   */
+  const timeCheck = (increase: number) => (prev: number) => {
+    if (increase + prev < 100) return prev + increase;
+    // >= 100 检测时间
+    if (Date.now() - enterTime > 3500) return 100;
+    //time < 3500
+    setTimeout(() => {
+      setProgress(100);
+    }, 3500 - (Date.now() - enterTime));
+
+    return prev;
+  };
 
   //先加载10个大面积纹理贴图
   const loadTexture = () => {
@@ -59,12 +82,12 @@ const LoadingScreen: FC<IProps> = ({
       const texture = textureLoader.load(
         url,
         _ => {
-          setProgress(prev => prev + 5);
+          setProgress(timeCheck(5));
         },
         undefined,
         err => {
           console.error("load texture fail:", err);
-          setProgress(prev => prev + 5);
+          setProgress(timeCheck(5));
         }
       );
       texture.flipY = false;
@@ -78,9 +101,9 @@ const LoadingScreen: FC<IProps> = ({
     const manager = new THREE.LoadingManager();
     manager.onProgress = (_, loaded, total) => {
       const progress = Math.floor((loaded / total) * 100);
-      if (progress === 100) return setProgress(prev => prev + 50 - prevModel);
+      if (progress === 100) return setProgress(timeCheck(50 - prevModel));
       prevModel += progress / 4;
-      setProgress(prev => prev + progress / 4);
+      setProgress(timeCheck(progress / 4));
     };
     //设置错误信息
     manager.onError = setIsLoadFail;
