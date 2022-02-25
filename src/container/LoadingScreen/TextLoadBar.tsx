@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-23 18:13:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 13:44:24
+ * @LastEditTime: 2022-02-25 17:43:28
  * @Description:文本加载条
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -71,7 +71,8 @@ const animation = keyframes`
 `;
 
 const Text = styled.p`
-  color: #fffae5;
+  /* color: #fffae5; */
+  color: #a0f5a0;
   font-weight: 700;
   letter-spacing: 1px;
   line-height: ${percent + "vmin"};
@@ -99,7 +100,7 @@ const Column = styled.div<{ index: number; leave: boolean; range: number }>`
   overflow: hidden;
   background-color: #2d2d2d;
   /* transition: transform 0.5s cubic-bezier(0.64, -0.4, 0.32, 0.46), */
-  transition: transform 0.5s ease, opacity 0.1s linear;
+  transition: transform 0.4s ease-out, opacity 0.4s linear;
   transition-delay: ${({ index }) => index / 20 + "s"};
 
   ::after {
@@ -107,7 +108,8 @@ const Column = styled.div<{ index: number; leave: boolean; range: number }>`
     position: absolute;
     width: inherit;
     height: inherit;
-    background-color: #000000;
+    /* background: #016218; */
+    background: linear-gradient(90deg, #005200, #002000);
     opacity: 0.8;
   }
 
@@ -120,8 +122,8 @@ const Column = styled.div<{ index: number; leave: boolean; range: number }>`
     css`
       opacity: 0;
       transform: ${index % 2 === 0
-        ? "translate(-100%,-100%)"
-        : "translate(100%,100%)"};
+        ? "translate(-10%,-10%) scaleY(0.9)"
+        : "translate(10%,10%) scaleY(0.9)"};
       @media screen and (max-width: 750px) {
         transform: ${index % 2 === 0
           ? "rotate(90deg) translate(-100%,-100%)"
@@ -142,9 +144,4 @@ const Background = styled.img`
   position: absolute;
   right: 0;
   bottom: 0;
-
-  /* @media screen and (max-width: 750px) {
-    transform: rotate(90deg) translateY(100vmin);
-    transform-origin: right bottom;
-  } */
 `;
