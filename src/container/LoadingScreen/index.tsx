@@ -2,11 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 13:47:28
+ * @LastEditTime: 2022-02-25 11:44:54
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
-import styled from "styled-components";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
