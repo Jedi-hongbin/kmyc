@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 11:30:45
+ * @LastEditTime: 2022-02-28 16:23:20
  * @Description:战役字幕
  */
 import {
@@ -106,12 +106,13 @@ const Container = styled.div`
   width: 60vmax;
   margin-left: 20vmax;
   /* background: radial-gradient(#355235d1, #437143 90%); */
-  background: radial-gradient(#35523587, #4371438c 90%);
+  background: radial-gradient(#35523566, #4371436e 90%);
   border-radius: 0.5rem;
   padding: 0.4rem;
   color: #fffae5;
   letter-spacing: 1px;
-  font-size: 0.7vmax;
+  font-size: 0.85vmax;
+  opacity: 0.9;
   display: flex;
   ${props => props.theme.replaceBg};
 
