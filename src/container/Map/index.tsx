@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 13:21:43
+ * @LastEditTime: 2022-02-28 22:05:32
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -98,7 +98,16 @@ const Map: FC<IProps> = ({
 
   useEffect(() => {
     if (!isLoading) {
-      tick();
+      //由小入大
+      move(
+        [window.isPhone ? 10 : 30, 93, -5],
+        [window.isPhone ? 9 : 30, 10, -5],
+        50,
+        undefined,
+        () => {
+          controls.saveState();
+        }
+      );
     }
   }, [isLoading]);
 
@@ -113,21 +122,8 @@ const Map: FC<IProps> = ({
       console.log("map model load");
       scene.add(gltf.scene);
       // document.documentElement.appendChild(stats.dom);
-      //由小入大
+      tick();
 
-      move(
-        [window.isPhone ? 10 : 30, 93, -5],
-        [window.isPhone ? 9 : 30, 10, -5],
-        50,
-        () => {
-          render();
-          controls.update();
-          // stats && stats.update();
-        },
-        () => {
-          controls.saveState();
-        }
-      );
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
         const url = `${process.env.REACT_APP_URL}${i}.jpg`;

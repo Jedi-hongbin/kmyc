@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 20:36:37
+ * @LastEditTime: 2022-02-28 22:00:40
  * @Description: 加载数据屏 获取数据后进入页面
  */
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useCallback, useEffect, useState } from "react";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -13,8 +13,8 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import mapModel from "../../assets/map/tmap.glb";
 import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
-import TextLoadBar from "./TextLoadBar";
 import { detrusionChart } from "../../utils";
+import TextLoadScene from "./TextLoadScene";
 
 interface IProps {
   // setMap: (gltf: GLTF) => void;
@@ -24,6 +24,7 @@ interface IProps {
 }
 //刚进入页面的时间
 const enterTime = Date.now();
+const maxLoadTime = 8000; //最多8秒展示文字动画
 
 const LoadingScreen: FC<IProps> = ({
   setMap,
@@ -32,6 +33,7 @@ const LoadingScreen: FC<IProps> = ({
 }): ReactElement => {
   const [progress, setProgress] = useState(0);
   const [isLoadFail, setIsLoadFail] = useState("");
+  const [isCanJump, setIsCanJump] = useState(false);
 
   useMount(() => {
     dracoLoader();
@@ -44,18 +46,15 @@ const LoadingScreen: FC<IProps> = ({
       setTimeout(() => {
         detrusionChart(false);
       }, 200);
-      //2s 将文字概述播放完
-
-      //有缓存的情况下加载时间<2s 让其执行完再进入页面
       setTimeout(() => {
         handleLoad();
-      }, 500);
+      }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
 
   /**
-   * 进度增长检测 不准4s内加载完成
+   * 进度增长检测
    * @param {number} increase 增长的数值
    * @param {number} prev state原本数值
    * @return {number} newValue
@@ -63,12 +62,13 @@ const LoadingScreen: FC<IProps> = ({
   const timeCheck = (increase: number) => (prev: number) => {
     if (increase + prev < 100) return prev + increase;
     // >= 100 检测时间
-    if (Date.now() - enterTime > 3500) return 100;
-    //time < 3500
+    if (Date.now() - enterTime > maxLoadTime) return 100;
+    //time < maxLoadTime
     setTimeout(() => {
       setProgress(100);
-    }, 3500 - (Date.now() - enterTime));
-
+    }, maxLoadTime - (Date.now() - enterTime));
+    //显示跳过按钮
+    setIsCanJump(true);
     return prev;
   };
 
@@ -121,34 +121,19 @@ const LoadingScreen: FC<IProps> = ({
     window.gltfLoader = normalGltfLoader;
   };
 
+  const onJump = useCallback(() => {
+    setProgress(100);
+  }, []);
+
   if (isLoadFail) return <LoadFail errMsg={isLoadFail} />;
 
   return (
-    <>
-      <TextLoadBar progress={progress} />
-      {/* <Container>
-      </Container> */}
-    </>
+    <TextLoadScene
+      isCanJump={isCanJump}
+      progress={progress}
+      handleJump={onJump}
+    />
   );
 };
 
 export default LoadingScreen;
-
-// const Container = styled.div`
-//   width: 100vmax;
-//   height: 100vmin;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   display: flex;
-//   flex-direction: column;
-//   z-index: 9;
-//   background: radial-gradient(#060606f0, #000000 90%);
-//   overflow: hidden;
-//   opacity: 0.9;
-
-//   @media screen and (max-width: 750px) {
-//     transform: rotate(90deg) translateY(-100vmin);
-//     transform-origin: top left;
-//   }
-// `;

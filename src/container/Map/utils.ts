@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 13:15:54
+ * @LastEditTime: 2022-02-28 21:53:57
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -99,7 +99,7 @@ if (window.isPhone) {
   camera.position.set(10, 74, 0);
   controls.target.set(9, 10, 0);
 } else {
-  camera.position.set(30, 250, 0);
+  camera.position.set(30, 180, 0);
   controls.target.set(30, 0, 0);
 }
 
