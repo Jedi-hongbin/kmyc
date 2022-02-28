@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 20:44:15
+ * @LastEditTime: 2022-02-28 22:08:56
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -157,4 +157,10 @@ const Container = styled.div<{ leave: boolean }>`
     animation-fill-mode: forwards;
   }
   ${({ leave }) => leave && leaveCss};
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg);
+    transform-origin: left top;
+    top: 0vmax;
+    left: 100vmin;
+  }
 `;

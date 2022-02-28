@@ -24,3 +24,8 @@
 
 > - 在需要的时候调用 controls.update 减少卡顿
 > - safari 浏览器 按钮动画 伪元素 transform 动画超出 overflow:hidden 范围
+
+2022-02-28
+
+> - 在需要的时候调用 controls.update 减少卡顿 可参考 http://www.chubao.cn/s/godness/index.html
+> - 战役素材少，每场战役中的战斗有地点标注 点击出现相关事件意义 照片 可取自 跨过鸭绿江电视剧

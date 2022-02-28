@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 22:05:32
+ * @LastEditTime: 2022-02-28 22:09:48
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -26,7 +26,6 @@ import {
   controls,
   scene,
   clearAnimateTimer,
-  render,
   tick,
   renderer,
   drawLine,
