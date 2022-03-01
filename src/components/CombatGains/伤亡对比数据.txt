@@ -1,0 +1,137 @@
+/*
+ * @Author: hongbin
+ * @Date: 2022-02-18 18:07:10
+ * @LastEditors: hongbin
+ * @LastEditTime: 2022-03-01 09:29:48
+ * @Description:击毁武器
+ */
+import { FC, ReactElement, memo, useState } from "react";
+import styled from "styled-components";
+import * as echarts from "echarts";
+import useMount from "../../hook/useMount";
+import { detrusionTransition, rightDetrusion } from "../../styled";
+
+interface IProps {}
+
+const { isPhone, pageWidth } = window;
+
+const option = {
+  title: {
+    text: "中美伤亡对比",
+    left: isPhone ? 0 : 15,
+    textStyle: {
+      color: "#fffae5",
+      fontSize: isPhone ? 10 : 20,
+    },
+  },
+  tooltip: {
+    trigger: "axis",
+  },
+  legend: {
+    data: ["中", "美"],
+    left: isPhone ? 30 : "center",
+    textStyle: {
+      color: "#fffae5",
+      fontSize: isPhone ? 10 : 12,
+    },
+  },
+  grid: {
+    left: "3%",
+    right: "4%",
+    bottom: "3%",
+    containLabel: true,
+    height: isPhone ? pageWidth / 5 : "auto",
+  },
+  xAxis: {
+    type: "category",
+    data: ["阵亡", "受伤", "失踪,被俘"],
+    axisLabel: {
+      interval: 0,
+      fontSize: isPhone ? 10 : 12,
+    },
+    axisLine: {
+      lineStyle: {
+        color: "#fffae5",
+      },
+    },
+  },
+  yAxis: {
+    type: "value",
+    axisLine: {
+      lineStyle: {
+        color: "#fffae5",
+      },
+    },
+    splitLine: {
+      //   show: false,
+      lineStyle: {
+        // 使用深浅的间隔色
+        color: "#aaa",
+      },
+    },
+  },
+  series: [
+    {
+      type: "bar",
+      name: "中",
+      data: [114084, 383218, 25621],
+      itemStyle: {
+        // color: "#3Baa3A",
+      },
+    },
+    {
+      type: "bar",
+      name: "美",
+      data: [54246, 103284, 8177 + 7140],
+      itemStyle: {
+        // color: "#00aaff",
+      },
+    },
+  ],
+};
+
+const Destroy: FC<IProps> = (): ReactElement => {
+  const [isShow, setIsShow] = useState(false);
+  useMount(() => {
+    const chartDom = document.getElementById("Destroy");
+    const myChart = echarts.init(chartDom!);
+    option && myChart.setOption(option);
+    window.addEventListener("resize", (e: any) => {
+      myChart.resize();
+    });
+    window.addEventListener("custom_detrusion", (e: any) => {
+      const state = e.detail.detrusion;
+      setIsShow(state);
+    });
+  });
+  return <Container isShow={isShow} id='Destroy'></Container>;
+};
+
+export default memo(Destroy);
+
+const Container = styled.div<{ isShow: boolean }>`
+  position: fixed !important;
+  z-index: 1;
+  background: radial-gradient(#355235d1, #437143 90%);
+  width: 30vmax;
+  height: 29vmin;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding-top: 10px;
+  border-radius: 1rem;
+  ${detrusionTransition};
+  @media screen and (min-width: 1920px) {
+    width: 20vmax;
+    height: 29vmin;
+    border-radius: 0.6rem;
+  }
+  ${({ isShow }) => !isShow && rightDetrusion};
+
+  @media screen and (max-width: 750px) {
+    padding: 0;
+    transform: rotate(90deg);
+    transform-origin: top right;
+    top: calc(100vmax - 0.5rem);
+  }
+  ${props => props.theme.replaceBg};
+`;
