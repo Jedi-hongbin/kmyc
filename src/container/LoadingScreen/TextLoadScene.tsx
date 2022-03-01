@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 10:51:48
+ * @LastEditTime: 2022-03-01 22:37:28
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -133,6 +133,7 @@ const Container = styled.div<{ leave: boolean }>`
     right: 0;
     bottom: 0;
     background-color: #000000;
+    opacity: 0.7;
     animation: ${maskShow} 4s linear;
     animation-fill-mode: forwards;
   }

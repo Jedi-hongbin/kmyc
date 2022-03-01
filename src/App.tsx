@@ -9,6 +9,7 @@ import CombatGains from "./components/CombatGains";
 import { detrusionChart } from "./utils";
 import ThemeProvider from "./styled/ThemeProvide";
 import BackGroundMusic from "./components/BackGroundMusic";
+import CampaignDetail from "./components/CampaignDetail";
 
 const needUpdateCharts = ["us"];
 
@@ -56,7 +57,9 @@ function App() {
           addTexture={addTexture}
           handleLoad={handleLoad}
         />
-      ) : null}
+      ) : (
+        <CampaignDetail />
+      )}
 
       <Map
         animateIndex={animateIndex}

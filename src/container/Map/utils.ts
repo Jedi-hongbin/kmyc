@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 20:42:04
+ * @LastEditTime: 2022-03-01 22:33:22
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -540,7 +540,7 @@ export const eventListener = (selectAnimation: any) => {
   });
 };
 
-interface IPositionConfigure {
+export interface IPositionConfigure {
   name: string;
   position: [x: number, y: number, z: number];
   bothSides: [d: string, w: string];
