@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 10:22:05
+ * @LastEditTime: 2022-03-01 20:24:53
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -34,6 +34,7 @@ import {
   animationConfigure,
   start,
   eventListener,
+  loadPositionIcon,
 } from "./utils";
 
 interface IProps {
@@ -59,6 +60,7 @@ const Map: FC<IProps> = ({
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
   const XCRef = useRef<XCBack>(null); //保存四个相册模型和调度方法 之后切换只需要切换纹理贴图
   const AxisRef = useRef<AxisRef>(null); //战役柱状图
+  const PositionRef = useRef<{ clear: () => void }>(null); //战斗图标功能
 
   useEffect(() => {
     if (animateIndex > 0) {
@@ -91,6 +93,8 @@ const Map: FC<IProps> = ({
         panelRef.current?.show();
         // eslint-disable-next-line react-hooks/exhaustive-deps
         AxisRef.current?.hide();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        PositionRef.current?.clear();
       }
     };
   }, [animateIndex]);
@@ -111,7 +115,7 @@ const Map: FC<IProps> = ({
         [window.isPhone ? 9 : 30, 10, -5],
         50,
         undefined,
-        () => {
+        async () => {
           controls.saveState();
         }
       );
@@ -173,13 +177,16 @@ const Map: FC<IProps> = ({
       `${process.env.REACT_APP_URL}map/${animateIndex}-animate.glb`,
       (gltf: any) => {
         console.log("战役模型:", gltf);
-        start(gltf, animateIndex, () => {
+        start(gltf, animateIndex, async () => {
           XCRef.current?.show();
           panelRef.current?.show();
           if (AxisRef.current?.models.length) {
             scene.add(...AxisRef.current.models);
             AxisRef.current.models = [];
           } else AxisRef.current?.toggle(animateIndex);
+          //播放结束 展示 小战役图标
+          //@ts-ignore
+          PositionRef.current = await loadPositionIcon(animateIndex);
         });
         //@ts-ignore
         cacheModel.current = gltf;
@@ -187,9 +194,7 @@ const Map: FC<IProps> = ({
         const icon = MXNGArr.current[animateIndex - 1];
         hideMash(icon);
         //控制面板退下
-        if (panelRef.current) {
-          panelRef.current.hide();
-        }
+        panelRef.current?.hide();
         //如果相册模型已经存在了 不必加载整个模型 只需切换即可
         if (XCRef.current) {
           XCRef.current.toggle(animateIndex);

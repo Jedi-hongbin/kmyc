@@ -21,3 +21,15 @@ export const resizeChart = (...charts: string[]) => {
   });
   window.dispatchEvent(resizeEvent);
 };
+
+/**
+ * @description:显示战斗信息
+ * @param {object} 战斗信息
+ * @return {void}
+ */
+export const showCombatInfo = (detail: object) => {
+  const resizeEvent = new CustomEvent("custom_showCombatInfo", {
+    detail,
+  });
+  window.dispatchEvent(resizeEvent);
+};
