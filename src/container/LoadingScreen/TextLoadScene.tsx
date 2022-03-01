@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 22:08:56
+ * @LastEditTime: 2022-03-01 08:30:34
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -82,7 +82,7 @@ const ToJump = styled.div`
 
 const up = keyframes`
 0%{top:115vmin};
-100%{top:18vmin};
+100%{top:13vmin};
 `;
 
 const show = keyframes`
@@ -117,7 +117,6 @@ const Section = styled.div`
   line-height: 4.5vmax;
   animation: ${up} 6s linear;
   animation-fill-mode: forwards;
-  font-size: 1.5vmax;
   letter-spacing: 2px;
   text-indent: 2vmax;
   width: inherit;
@@ -144,6 +143,7 @@ const Container = styled.div<{ leave: boolean }>`
   position: relative;
   z-index: 9;
   color: #fffae5;
+  font-size: 1.5vmax;
 
   &::after {
     content: "";
