@@ -2,19 +2,15 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 08:30:34
+ * @LastEditTime: 2022-03-01 10:51:48
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import bg from "../../assets/bg.png";
-import { Jump } from "../../components/icon";
-import { flexCenter } from "../../styled";
 
 interface IProps {
   progress: number;
-  isCanJump: boolean;
-  handleJump: () => void;
 }
 
 const section = [
@@ -30,25 +26,28 @@ const section = [
 ];
 
 const { length } = section;
+/**
+ * 防止内存泄漏
+ */
+let timer: NodeJS.Timeout;
 
-const TextLoadScene: FC<IProps> = ({
-  isCanJump,
-  progress,
-  handleJump,
-}): ReactElement => {
+const TextLoadScene: FC<IProps> = ({ progress }): ReactElement => {
   const [count, setCount] = useState(-1);
 
   useEffect(() => {
     if (count < length) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setCount(prev => prev + 1);
       }, 5500 / length + 1);
     }
   }, [count]);
 
+  if (progress === 100) {
+    clearTimeout(timer);
+  }
+
   return (
     <Container leave={progress === 100}>
-      {isCanJump ? <ToJump onClick={handleJump}>跳过 {Jump}</ToJump> : null}
       <Background src={bg} alt='' />
       <Section>
         {section.map((text, index) =>
@@ -60,25 +59,6 @@ const TextLoadScene: FC<IProps> = ({
 };
 
 export default memo(TextLoadScene);
-
-const ToJump = styled.div`
-  position: absolute;
-  top: 2vmax;
-  right: 3vmax;
-  z-index: 1;
-  cursor: pointer;
-  ${flexCenter};
-  svg {
-    transition: transform 0.3s cubic-bezier(0.45, -0.53, 0.85, 1.06);
-    width: 2vmax;
-    height: 2vmax;
-  }
-  :hover {
-    svg {
-      transform: translateX(1vmin);
-    }
-  }
-`;
 
 const up = keyframes`
 0%{top:115vmin};
@@ -114,7 +94,7 @@ const Background = styled.img`
 
 const Section = styled.div`
   position: absolute;
-  line-height: 4.5vmax;
+  line-height: 8vmin;
   animation: ${up} 6s linear;
   animation-fill-mode: forwards;
   letter-spacing: 2px;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 22:09:48
+ * @LastEditTime: 2022-03-01 10:22:05
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -72,7 +72,15 @@ const Map: FC<IProps> = ({
     return () => {
       const gltf = cacheModel.current;
       //清除当前的战役模型
-      gltf && scene.remove(gltf.scene);
+      if (gltf) {
+        gltf.scene.traverse(function (item) {
+          if (item instanceof THREE.Mesh) {
+            item.geometry.dispose(); //删除几何体
+            item.material.dispose(); //删除材质
+          }
+        });
+        scene.remove(gltf.scene);
+      }
       clearAnimateTimer();
       if (animateIndex > 0) {
         //上一个播放的动画，恢复战役图标显示
@@ -193,7 +201,7 @@ const Map: FC<IProps> = ({
           });
         }
         //先加载模型并不添加到地图中
-        loadAxisModel(scene, animateIndex).then(ref => {
+        loadAxisModel(animateIndex).then(ref => {
           //@ts-ignore
           AxisRef.current = ref;
         });

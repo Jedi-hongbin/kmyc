@@ -2,12 +2,11 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 22:00:40
+ * @LastEditTime: 2022-03-01 10:46:50
  * @Description: 加载数据屏 获取数据后进入页面
  */
-import { FC, ReactElement, useCallback, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 //@ts-ignore
 import mapModel from "../../assets/map/tmap.glb";
@@ -15,9 +14,12 @@ import useMount from "../../hook/useMount";
 import LoadFail from "./LoadFail";
 import { detrusionChart } from "../../utils";
 import TextLoadScene from "./TextLoadScene";
+import styled from "styled-components";
+import { Jump } from "../../components/icon";
+import { flexCenter } from "../../styled";
+import { LoadingManager, sRGBEncoding, TextureLoader } from "three";
 
 interface IProps {
-  // setMap: (gltf: GLTF) => void;
   setMap: React.Dispatch<React.SetStateAction<GLTF | undefined>>;
   addTexture: (name: string, texture: any) => void;
   handleLoad: () => void;
@@ -25,6 +27,7 @@ interface IProps {
 //刚进入页面的时间
 const enterTime = Date.now();
 const maxLoadTime = 8000; //最多8秒展示文字动画
+let timer: NodeJS.Timeout;
 
 const LoadingScreen: FC<IProps> = ({
   setMap,
@@ -64,7 +67,7 @@ const LoadingScreen: FC<IProps> = ({
     // >= 100 检测时间
     if (Date.now() - enterTime > maxLoadTime) return 100;
     //time < maxLoadTime
-    setTimeout(() => {
+    timer = setTimeout(() => {
       setProgress(100);
     }, maxLoadTime - (Date.now() - enterTime));
     //显示跳过按钮
@@ -74,7 +77,7 @@ const LoadingScreen: FC<IProps> = ({
 
   //先加载10个大面积纹理贴图
   const loadTexture = () => {
-    const textureLoader = new THREE.TextureLoader();
+    const textureLoader = new TextureLoader();
 
     for (let i = 0; i < 10; i++) {
       const index = i.toString().padStart(2, "0");
@@ -91,14 +94,14 @@ const LoadingScreen: FC<IProps> = ({
         }
       );
       texture.flipY = false;
-      texture.encoding = THREE.sRGBEncoding;
+      texture.encoding = sRGBEncoding;
       addTexture(index, texture);
     }
   };
   //模型加载占50% 当前大小会返回 33 66 100 三次进度加载回调，如果文件变大需要更改完善此段代码
   const dracoLoader = () => {
     let prevModel = 0;
-    const manager = new THREE.LoadingManager();
+    const manager = new LoadingManager();
     manager.onProgress = (_, loaded, total) => {
       const progress = Math.floor((loaded / total) * 100);
       if (progress === 100) return setProgress(timeCheck(50 - prevModel));
@@ -121,19 +124,46 @@ const LoadingScreen: FC<IProps> = ({
     window.gltfLoader = normalGltfLoader;
   };
 
-  const onJump = useCallback(() => {
-    setProgress(100);
-  }, []);
-
   if (isLoadFail) return <LoadFail errMsg={isLoadFail} />;
 
   return (
-    <TextLoadScene
-      isCanJump={isCanJump}
-      progress={progress}
-      handleJump={onJump}
-    />
+    <>
+      <ToJump
+        style={{
+          opacity: progress === 100 ? 0 : isCanJump ? 1 : 0,
+        }}
+        onClick={() => {
+          clearTimeout(timer);
+          setProgress(100);
+        }}
+      >
+        跳过 {Jump}
+      </ToJump>
+      <TextLoadScene progress={progress} />
+    </>
   );
 };
 
 export default LoadingScreen;
+
+const ToJump = styled.div`
+  position: absolute;
+  top: 2vmax;
+  right: 3vmax;
+  z-index: 10;
+  color: #fffae5;
+  font-size: 1.5vmax;
+  cursor: pointer;
+  transition: opacity 0.2s linear;
+  ${flexCenter};
+  svg {
+    transition: transform 0.3s cubic-bezier(0.45, -0.53, 0.85, 1.06);
+    width: 2vmax;
+    height: 2vmax;
+  }
+  :hover {
+    svg {
+      transform: translateX(1vmin);
+    }
+  }
+`;

@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 18:34:35
+ * @LastEditTime: 2022-03-01 10:22:42
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -406,17 +406,17 @@ const campaignData: CampaignData[] = [
   {
     b: [4593, 270, 1141],
     f: [5967, 1, 366],
-    position: { b: [30, -30], f: [30, 0] },
+    position: { b: [30, 10], f: [30, 30] },
   },
   {
     b: [8861, 646, 34578],
     f: [7769, 1, 1214],
-    position: { b: [30, -30], f: [30, 0] },
+    position: { b: [30, 10], f: [30, 30] },
   },
   {
     b: [23654, 4957, 31926],
     f: [5233, 1115, 958],
-    position: { b: [30, -30], f: [30, 0] },
+    position: { b: [30, 10], f: [30, 30] },
   },
 ];
 
@@ -432,17 +432,13 @@ export interface AxisRef {
 
 /**
  * @description: 加载战役数据柱状图模型
- * @param {Scene} scene
  * @param {number} animationNum
  * @return {*}
  */
-export async function loadAxisModel(
-  scene: Scene,
-  animationNum: number
-): Promise<AxisRef> {
+export async function loadAxisModel(animationNum: number): Promise<AxisRef> {
   const axis = await window.gltfLoader.loadAsync(axisModel);
   const axisText = await window.gltfLoader.loadAsync(axisTextModel);
-  console.log("Axis Model:", axis, axisText);
+  axis.scene.position.z += 1;
 
   const bi = axis.scene; //毙伤敌
   const fu = axis.scene.clone(); //俘敌
@@ -472,7 +468,6 @@ export async function loadAxisModel(
           mesh => mesh.name === `${animationNum}${axisName}${name}`
         );
         numText && model.add(numText.clone());
-        console.log(numText);
         if (update) {
           //去掉上一个人数
           const prevNumText = model.children.find(
