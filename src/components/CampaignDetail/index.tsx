@@ -2,10 +2,16 @@
  * @Author: hongbin
  * @Date: 2022-03-01 20:49:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 22:42:53
+ * @LastEditTime: 2022-03-02 08:50:28
  * @Description: 战役详情
  */
-import { FC, ReactElement, useState } from "react";
+import {
+  createRef,
+  FC,
+  ReactElement,
+  useImperativeHandle,
+  useState,
+} from "react";
 import styled, { css } from "styled-components";
 import { controls, IPositionConfigure } from "../../container/Map/utils";
 import useMount from "../../hook/useMount";
@@ -13,9 +19,10 @@ import { Button } from "../../styled/Button";
 import p1 from "../../assets/provisional/1.jpg";
 import p2 from "../../assets/provisional/2.jpg";
 import p3 from "../../assets/provisional/3.jpg";
-import { scrollbar } from "../../styled";
 
 interface IProps {}
+
+export const CampaignDetailRef = createRef<{ hide: () => void }>();
 
 const CampaignDetail: FC<IProps> = (): ReactElement => {
   const [isHide, setIsHide] = useState(true);
@@ -27,6 +34,14 @@ const CampaignDetail: FC<IProps> = (): ReactElement => {
       setDetails(e.detail);
     });
   });
+
+  useImperativeHandle(
+    CampaignDetailRef,
+    () => ({
+      hide: () => setIsHide(true),
+    }),
+    []
+  );
 
   if (!details) return <Container isHide={isHide}></Container>;
 

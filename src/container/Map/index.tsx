@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 20:24:53
+ * @LastEditTime: 2022-03-02 08:50:56
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useEffect, useRef } from "react";
@@ -36,6 +36,7 @@ import {
   eventListener,
   loadPositionIcon,
 } from "./utils";
+import { CampaignDetailRef } from "../../components/CampaignDetail";
 
 interface IProps {
   animateIndex: number;
@@ -95,6 +96,7 @@ const Map: FC<IProps> = ({
         AxisRef.current?.hide();
         // eslint-disable-next-line react-hooks/exhaustive-deps
         PositionRef.current?.clear();
+        CampaignDetailRef.current?.hide();
       }
     };
   }, [animateIndex]);

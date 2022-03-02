@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 15:36:35
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-28 16:23:20
+ * @LastEditTime: 2022-03-02 07:19:23
  * @Description:战役字幕
  */
 import {
@@ -112,7 +112,7 @@ const Container = styled.div`
   color: #fffae5;
   letter-spacing: 1px;
   font-size: 0.85vmax;
-  opacity: 0.9;
+  opacity: 0.8;
   display: flex;
   ${props => props.theme.replaceBg};
 

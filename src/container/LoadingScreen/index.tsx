@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 15:39:40
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 10:46:50
+ * @LastEditTime: 2022-03-02 07:17:58
  * @Description: 加载数据屏 获取数据后进入页面
  */
 import { FC, ReactElement, useEffect, useState } from "react";
@@ -165,5 +165,11 @@ const ToJump = styled.div`
     svg {
       transform: translateX(1vmin);
     }
+  }
+  @media screen and (max-width: 750px) {
+    transform-origin: right bottom;
+    transform: rotate(89deg);
+    top: 96vmax;
+    right: 8vmin;
   }
 `;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 22:37:28
+ * @LastEditTime: 2022-03-02 07:13:15
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -79,7 +79,7 @@ const maskShow = keyframes`
         opacity:1;
     }
     100%{
-        opacity:0.7;
+        opacity:0.5;
     }
 `;
 
@@ -90,6 +90,7 @@ const Background = styled.img`
   right: 0;
   bottom: 0;
   animation: ${show} 1s linear;
+  animation-fill-mode: forwards;
 `;
 
 const Section = styled.div`
@@ -133,8 +134,7 @@ const Container = styled.div<{ leave: boolean }>`
     right: 0;
     bottom: 0;
     background-color: #000000;
-    opacity: 0.7;
-    animation: ${maskShow} 4s linear;
+    animation: ${maskShow} 9s ease;
     animation-fill-mode: forwards;
   }
   ${({ leave }) => leave && leaveCss};
