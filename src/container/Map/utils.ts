@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 08:57:20
+ * @LastEditTime: 2022-03-02 20:52:27
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -551,7 +551,7 @@ const positionConfigure: IPositionConfigure[][] = [
   [
     {
       name: "两水洞,丰下洞遭遇战",
-      position: [-30, 2, -20],
+      position: [-25, 2, -23],
       bothSides: [
         "南第６师第２团第３营（加强)",
         "志第４０军第１１８师第３５４团及师侦察连、３５３团一部",
@@ -560,7 +560,7 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "草黄龄防御战",
-      position: [1, 4, -27],
+      position: [-3, 4, -32],
       bothSides: [
         "美陆战第１师、南第３师及南首都师一部",
         "志第４２军第１２４师、１２６师１个团，炮兵第４５团及４４团１个营，另有人民军炮兵、坦克兵各一部配合",
@@ -570,14 +570,14 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "龟头洞进攻战",
-      position: [-25, 2, -23],
+      position: [-22, 2, -22],
       bothSides: ["南第６、第８师各两个营", "志第４０军第１１９、１２０师"],
       results:
         "歼灭南第６、第８师各两个营的大部，俘敌４００余人，缴获榴弹炮２０余门、汽车６０余辆。",
     },
     {
       name: "云山进攻战",
-      position: [-22, 2, -20],
+      position: [-28, 2, -20],
       bothSides: [
         "美骑兵第１师８团、南第１师１２团",
         "志第３９军，炮兵第２６、２９团及第２５团２营，高射炮兵第１团",
@@ -587,7 +587,7 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "飞虎山防御战",
-      position: [-28, 2, -23],
+      position: [-18, 2, -20],
       bothSides: ["南第７师", "志第３８军３３５团"],
       results: "歼敌１９００余人。",
     },
@@ -775,9 +775,9 @@ export const loadPositionIcon = async (animateIndex: number) => {
 
   const model = gltf.scene.children[0];
   model.userData.type = 3;
-  model.scale.x -= 1;
-  model.scale.y -= 1;
-  model.scale.z -= 1;
+  model.scale.x -= 1.2;
+  model.scale.y -= 1.2;
+  model.scale.z -= 1.2;
   const config = positionConfigure[animateIndex - 1];
   const iconScene = new THREE.Scene();
   for (const { position, ...info } of config) {

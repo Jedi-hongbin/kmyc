@@ -66,10 +66,9 @@ const Map: FC<IProps> = ({
   useEffect(() => {
     if (animateIndex > 0) {
       loadCampaignModel(animateIndex);
+      loadPositionIcon(animateIndex);
     } else if (animateIndex === -1) {
-      // move([30, 93, -5], [30, 10, -5], 50, undefined, () => {
       controls.reset();
-      // });
       controls.autoRotate = false;
     }
     return () => {
