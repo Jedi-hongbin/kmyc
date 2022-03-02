@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 13:46:37
+ * @LastEditTime: 2022-03-02 18:22:01
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -18,7 +18,7 @@ const { isPhone, pageWidth } = window;
 const option = {
   title: {
     text: "缴获武器",
-    left: isPhone ? 0 : 15,
+    left: isPhone ? 0 : window.vmax(1),
     textStyle: {
       color: "#fffae5",
       fontSize: isPhone ? 12 : 20,

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 07:13:15
+ * @LastEditTime: 2022-03-02 18:14:26
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
@@ -50,9 +50,16 @@ const TextLoadScene: FC<IProps> = ({ progress }): ReactElement => {
     <Container leave={progress === 100}>
       <Background src={bg} alt='' />
       <Section>
-        {section.map((text, index) =>
-          index < count ? <p key={text + index}>{text}</p> : null
-        )}
+        {section.map((text, index) => (
+          <p
+            style={{
+              opacity: index < count ? 1 : 0,
+            }}
+            key={text + index}
+          >
+            {text}
+          </p>
+        ))}
       </Section>
     </Container>
   );
@@ -103,8 +110,9 @@ const Section = styled.div`
   width: inherit;
   z-index: 1;
   p {
+    transition: opacity 1s linear;
     text-align: center;
-    animation: ${show} 1s linear;
+
     &:first-child {
       font-size: 2vmax;
     }

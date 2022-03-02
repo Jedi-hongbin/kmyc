@@ -61,13 +61,13 @@ function App() {
         <CampaignDetail />
       )}
 
-      <Map
+      {/* <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
-      />
+      /> */}
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 13:46:43
+ * @LastEditTime: 2022-03-02 18:42:28
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -18,7 +18,7 @@ const { isPhone } = window;
 const option = {
   title: {
     text: "击毁武器",
-    left: isPhone ? 0 : 15,
+    left: isPhone ? 0 : window.vmax(1),
     textStyle: {
       color: "#fffae5",
       fontSize: isPhone ? 10 : 20,
@@ -48,7 +48,7 @@ const option = {
           color: "#fffae5",
         },
       },
-      center: isPhone ? ["50%", "57%"] : ["50%", "60%"],
+      center: isPhone ? ["50%", "57%"] : ["50%", "55%"],
       itemStyle: {},
     },
   ],

@@ -43,8 +43,10 @@ export {};
   //   }
 
   //注入适配移动端全局变量
-  const { offsetWidth } = document.body;
+  const { offsetWidth, offsetHeight } = document.body;
   window.pageWidth = offsetWidth;
   // window.isPhone = offsetWidth < 750 || offsetHeight < 750;
   window.isPhone = offsetWidth < 750;
+  window.vmax = (range: number) => (offsetWidth / 100) * range;
+  window.vmin = (range: number) => (offsetHeight / 100) * range;
 })(window, document);

@@ -12,6 +12,8 @@ declare global {
     gltfLoader: GLTFLoader;
     pageWidth: number;
     isPhone: boolean;
+    vmax: (range: number) => number;
+    vmin: (range: number) => number;
   }
 }
 

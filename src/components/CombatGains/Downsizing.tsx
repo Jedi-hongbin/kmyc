@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-24 13:46:50
+ * @LastEditTime: 2022-03-02 18:22:28
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -16,7 +16,7 @@ const { isPhone, pageWidth } = window;
 const option = {
   title: {
     text: "志愿军运动战减员情况",
-    left: isPhone ? 0 : 10,
+    left: isPhone ? 0 : window.vmax(1),
     textStyle: {
       color: "#fffae5",
       fontSize: isPhone ? 12 : 20,
