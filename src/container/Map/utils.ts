@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 22:33:22
+ * @LastEditTime: 2022-03-02 08:57:20
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -595,34 +595,34 @@ const positionConfigure: IPositionConfigure[][] = [
   [
     {
       name: "德川进攻战斗",
-      position: [-20, 4, -21],
+      position: [-20, 3, -21],
       bothSides: ["南第７师", "志第３８军"],
       results:
         "攻占德川，歼南第７师大部，在志第４２军协同下，打开战役缺口，为第二次战役胜利，创造了有利条件。",
     },
     {
       name: "宁远、孟山进攻战斗",
-      position: [-30, 4, -20],
+      position: [-20, 2, -20],
       bothSides: ["南第８师", "志第４２军"],
       results:
         "攻占宁远、孟山，歼南第８师大部，在志第３８军协同下，打开战役缺口，为第二次战役胜利，创造了有利条件。",
     },
     {
       name: "上九洞进攻战斗",
-      position: [-30, 4, -22],
+      position: [-20, 2, -22],
       bothSides: ["美第２５师２４团", "志第３９军３４８团及３４７团４连"],
       results: "歼敌一部，利用俘虏喊话争取美第２４团１个连（１１５人）投降。",
     },
     {
       name: "长津湖地区进攻战斗",
-      position: [-25, 4, -20],
+      position: [-10, 5, -32],
       bothSides: ["美第７师，陆战第１师各一部", "志第２７军"],
       results:
         "大部歼灭美第７师第３２团及第３１团第３营和师属炮兵１个营，重创美陆战第１师两个团，毙伤俘敌４７００余人。",
     },
     {
       name: "富盛里、小民泰里防御战斗",
-      position: [-30, 4, -30],
+      position: [-25, 2, -22],
       bothSides: [
         "美陆战第１师１团１营、坦克１个营，英海军陆战队第４１特遣队",
         "志第２０军６０师",
@@ -631,7 +631,7 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "三所里迂回战斗",
-      position: [-30, 4, -30],
+      position: [-26, 2, -20],
       bothSides: [
         "美第２５师、骑兵第１师、英第２９旅各一部",
         "志第３８军１１３师",
@@ -792,7 +792,7 @@ export const loadPositionIcon = async (animateIndex: number) => {
   let timer: number;
   let i = 0;
   const r = () => {
-    if (i < 19) {
+    if (i < 15) {
       timer = requestAnimationFrame(r);
     }
     for (const item of iconScene.children) {

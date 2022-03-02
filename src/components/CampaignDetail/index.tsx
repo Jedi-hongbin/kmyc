@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-01 20:49:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 08:50:28
+ * @LastEditTime: 2022-03-02 09:17:34
  * @Description: 战役详情
  */
 import {
@@ -81,7 +81,7 @@ const hideStyle = css`
 `;
 
 const Container = styled.div<{ isHide: boolean }>`
-  position: absolute;
+  position: fixed;
   color: #fffae5;
   width: 39vmax;
   /* height: 96vmin; */
@@ -142,4 +142,9 @@ const Container = styled.div<{ isHide: boolean }>`
   }
 
   ${({ isHide }) => isHide && hideStyle};
+  @media screen and (max-width: 750px) {
+    transform-origin: right bottom;
+    transform: rotate(90deg);
+    right: 98vmin;
+  }
 `;
