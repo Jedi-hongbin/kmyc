@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-10 16:18:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 12:18:51
+ * @LastEditTime: 2022-03-04 15:44:52
  * @Description:通用按钮
  */
 
@@ -110,6 +110,12 @@ export const Button = styled.button<{
   :active {
     transform: translateY(3px);
     transition-duration: 0.1s;
+  }
+
+  svg {
+    position: absolute;
+    right: 1vmax;
+    top: 25%;
   }
 
   @media screen and (max-width: 750px) {

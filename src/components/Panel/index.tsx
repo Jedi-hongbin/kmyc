@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-22 21:05:16
+ * @LastEditTime: 2022-03-04 15:44:37
  * @Description:控制面板
  */
 import {
@@ -18,6 +18,7 @@ import styled, { css } from "styled-components";
 import { flexCenter } from "../../styled";
 import { Button } from "../../styled/Button";
 import { adjustColor } from "../../utils/color";
+import { LoadIcon } from "../icon";
 import MouseExplain from "./MouseExplain";
 
 /**
@@ -32,6 +33,7 @@ interface IProps {
   setAnimateIndex: Dispatch<React.SetStateAction<number>>;
   setIsShowUSDate: Dispatch<React.SetStateAction<boolean>>;
   goHome: () => void;
+  loadingIndex: number;
 }
 
 const campaignNames = [
@@ -46,6 +48,7 @@ const Panel: FC<IProps> = ({
   setAnimateIndex,
   setIsShowUSDate,
   goHome,
+  loadingIndex,
 }): ReactElement => {
   const [isHide, setIsHide] = useState(false);
   const [isOpenExplain, setIsOpenExplain] = useState(false);
@@ -75,6 +78,7 @@ const Panel: FC<IProps> = ({
           onClick={() => setAnimateIndex(index + 1)}
         >
           {name}
+          {index + 1 === loadingIndex ? <LoadIcon /> : null}
         </Button>
       ))}
       <Button
@@ -97,9 +101,6 @@ const Panel: FC<IProps> = ({
         操作说明
       </Button>
       <MouseExplain show={isOpenExplain} />
-      {/* <Button size='medium' primary='#aaaaff' onClick={() => setIsHide(false)}>
-        SHOW
-      </Button> */}
     </Container>
   );
 };

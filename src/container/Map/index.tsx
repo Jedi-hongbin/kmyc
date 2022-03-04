@@ -2,10 +2,10 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 08:50:56
+ * @LastEditTime: 2022-03-04 16:13:50
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
-import { FC, memo, ReactElement, useEffect, useRef } from "react";
+import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
 import { Object3D } from "three";
 import * as THREE from "three";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
@@ -38,17 +38,21 @@ import {
 } from "./utils";
 import { CampaignDetailRef } from "../../components/CampaignDetail";
 
+let loadingTimer: NodeJS.Timeout;
+
 interface IProps {
   animateIndex: number;
   gltf: GLTF | undefined;
   textures: { [key: string]: THREE.Texture };
   selectAnimation: (index: number) => void;
   isLoading: boolean;
+  setLoadingIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 /**
  * 不缓存加载过的模型是因为有动画不好处理,在动画未结束时移除模型,下次添加模型会保持离开时的关键帧
  */
+let currentIndex: number;
 
 const Map: FC<IProps> = ({
   gltf,
@@ -56,6 +60,7 @@ const Map: FC<IProps> = ({
   animateIndex,
   selectAnimation,
   isLoading,
+  setLoadingIndex,
 }): ReactElement => {
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
@@ -63,10 +68,66 @@ const Map: FC<IProps> = ({
   const AxisRef = useRef<AxisRef>(null); //战役柱状图
   const PositionRef = useRef<{ clear: () => void }>(null); //战斗图标功能
 
+  /**加载战役模型*/
+  const loadCampaignModel = useCallback((loadAnimateIndex: number) => {
+    loadingTimer = setTimeout(() => {
+      setLoadingIndex(loadAnimateIndex);
+    }, 100);
+
+    window.gltfLoader.load(
+      `${process.env.REACT_APP_URL}map/${loadAnimateIndex}-animate.glb`,
+      (gltf: any) => {
+        if (currentIndex !== loadAnimateIndex) return;
+        clearTimeout(loadingTimer);
+        setLoadingIndex(0); //重置 停止加载
+        console.log("战役模型:", gltf);
+        start(gltf, loadAnimateIndex, async () => {
+          XCRef.current?.show();
+          panelRef.current?.show();
+          if (AxisRef.current?.models.length) {
+            scene.add(...AxisRef.current.models);
+            AxisRef.current.models = [];
+          } else AxisRef.current?.toggle(loadAnimateIndex);
+          //播放结束 展示 小战役图标
+          //@ts-ignore
+          PositionRef.current = await loadPositionIcon(loadAnimateIndex);
+        });
+        //@ts-ignore
+        cacheModel.current = gltf;
+        //战役图标隐藏
+        const icon = MXNGArr.current[loadAnimateIndex - 1];
+        hideMash(icon);
+        //控制面板退下
+        panelRef.current?.hide();
+        //如果相册模型已经存在了 不必加载整个模型 只需切换即可
+        if (XCRef.current) {
+          XCRef.current.toggle(loadAnimateIndex);
+        } else {
+          loadXCModel(loadAnimateIndex, textureLoader).then(ref => {
+            //@ts-ignore
+            XCRef.current = ref;
+            scene.add(...ref.models);
+          });
+        }
+        //先加载模型并不添加到地图中
+        loadAxisModel(loadAnimateIndex).then(ref => {
+          //@ts-ignore
+          AxisRef.current = ref;
+        });
+      },
+      undefined,
+      e => {
+        alert("战役模型加载出错");
+        console.error("战役模型加载出错", e);
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (animateIndex > 0) {
+      currentIndex = animateIndex;
       loadCampaignModel(animateIndex);
-      loadPositionIcon(animateIndex);
     } else if (animateIndex === -1) {
       controls.reset();
       controls.autoRotate = false;
@@ -98,7 +159,7 @@ const Map: FC<IProps> = ({
         CampaignDetailRef.current?.hide();
       }
     };
-  }, [animateIndex]);
+  }, [animateIndex, loadCampaignModel]);
 
   useMount(() => {
     window.addEventListener("keyup", e => {
@@ -171,54 +232,6 @@ const Map: FC<IProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);
-
-  /**加载战役模型*/
-  const loadCampaignModel = (animateIndex: number) => {
-    window.gltfLoader.load(
-      `${process.env.REACT_APP_URL}map/${animateIndex}-animate.glb`,
-      (gltf: any) => {
-        console.log("战役模型:", gltf);
-        start(gltf, animateIndex, async () => {
-          XCRef.current?.show();
-          panelRef.current?.show();
-          if (AxisRef.current?.models.length) {
-            scene.add(...AxisRef.current.models);
-            AxisRef.current.models = [];
-          } else AxisRef.current?.toggle(animateIndex);
-          //播放结束 展示 小战役图标
-          //@ts-ignore
-          PositionRef.current = await loadPositionIcon(animateIndex);
-        });
-        //@ts-ignore
-        cacheModel.current = gltf;
-        //战役图标隐藏
-        const icon = MXNGArr.current[animateIndex - 1];
-        hideMash(icon);
-        //控制面板退下
-        panelRef.current?.hide();
-        //如果相册模型已经存在了 不必加载整个模型 只需切换即可
-        if (XCRef.current) {
-          XCRef.current.toggle(animateIndex);
-        } else {
-          loadXCModel(animateIndex, textureLoader).then(ref => {
-            //@ts-ignore
-            XCRef.current = ref;
-            scene.add(...ref.models);
-          });
-        }
-        //先加载模型并不添加到地图中
-        loadAxisModel(animateIndex).then(ref => {
-          //@ts-ignore
-          AxisRef.current = ref;
-        });
-      },
-      undefined,
-      e => {
-        alert("战役模型加载出错");
-        console.error("战役模型加载出错", e);
-      }
-    );
-  };
 
   return <div id='kmyc_canvas'></div>;
 };

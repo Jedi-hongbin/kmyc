@@ -24,6 +24,7 @@ function App() {
   const textures = useRef<{ [key: string]: any }>({});
   const [map, setMap] = useState<GLTF>();
   const [animateIndex, setAnimateIndex] = useState(0);
+  const [loadingIndex, setLoadingIndex] = useState(0); //正在加载第几次战役模型
   const [loading, setLoading] = useState(true);
   const [isShowUSDate, setIsShowUSDate] = useState(false); //美军受损表
 
@@ -67,11 +68,13 @@ function App() {
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
+        setLoadingIndex={setLoadingIndex}
       />
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
         goHome={goHome}
+        loadingIndex={loadingIndex}
       />
       <Subtitles />
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
