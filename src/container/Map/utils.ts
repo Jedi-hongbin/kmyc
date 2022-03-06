@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 13:23:47
+ * @LastEditTime: 2022-03-06 21:18:38
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -737,7 +737,7 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "雪马里地区进攻战斗",
-      position: [-12, 4, 10],
+      position: [-12, 3, 10],
       bothSides: [
         "英第２９旅皇家格特斯特郡团第１营及炮兵、坦克各一部",
         "志第６３军第５６０团",
@@ -772,7 +772,7 @@ const positionConfigure: IPositionConfigure[][] = [
     },
     {
       name: "大水洞、沙五郎寺进攻战斗",
-      position: [-8, 4, 8],
+      position: [-8, 3.5, 8],
       bothSides: ["美第２师、陆战第１师", "志第１５军第４４师"],
       results: "将美第２师第３８团团部及第１、第２营大部歼灭",
       images: [101, 102, 103],

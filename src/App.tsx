@@ -33,7 +33,7 @@ function App() {
     if (!loading) {
       setTimeout(() => {
         setIsHideLoadScene(true);
-      }, 200);
+      }, 300);
     }
   }, [loading]);
 
