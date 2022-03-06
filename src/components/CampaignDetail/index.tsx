@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-01 20:49:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 09:17:34
+ * @LastEditTime: 2022-03-06 12:55:28
  * @Description: 战役详情
  */
 import {
@@ -16,9 +16,6 @@ import styled, { css } from "styled-components";
 import { controls, IPositionConfigure } from "../../container/Map/utils";
 import useMount from "../../hook/useMount";
 import { Button } from "../../styled/Button";
-import p1 from "../../assets/provisional/1.jpg";
-import p2 from "../../assets/provisional/2.jpg";
-import p3 from "../../assets/provisional/3.jpg";
 
 interface IProps {}
 
@@ -53,9 +50,9 @@ const CampaignDetail: FC<IProps> = (): ReactElement => {
       <h6>我: {details.bothSides[1]}</h6>
       <p>{details.results}</p>
       <div>
-        <img alt='' src={p1} />
-        <img alt='' src={p2} />
-        <img alt='' src={p3} />
+        {details.images?.map(img => (
+          <img alt='' src={`${process.env.REACT_APP_URL}small/${img}.jpg`} />
+        ))}
       </div>
 
       <Button
@@ -124,9 +121,9 @@ const Container = styled.div<{ isHide: boolean }>`
     overflow: scroll hidden;
 
     img {
-      border-radius: 1vmax;
+      border-radius: 1vmin;
       margin-left: 1vmax;
-      max-width: 11vmax;
+      max-width: 13vmax;
       margin-bottom: 1vmin;
     }
 
