@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-01 20:49:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 12:55:28
+ * @LastEditTime: 2022-03-06 13:26:51
  * @Description: 战役详情
  */
 import {
@@ -51,7 +51,11 @@ const CampaignDetail: FC<IProps> = (): ReactElement => {
       <p>{details.results}</p>
       <div>
         {details.images?.map(img => (
-          <img alt='' src={`${process.env.REACT_APP_URL}small/${img}.jpg`} />
+          <img
+            key={img}
+            alt=''
+            src={`${process.env.REACT_APP_URL}small/${img}.jpg`}
+          />
         ))}
       </div>
 

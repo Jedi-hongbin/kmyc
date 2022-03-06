@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 12:57:43
+ * @LastEditTime: 2022-03-06 13:23:47
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -829,3 +829,11 @@ export const loadPositionIcon = async (animateIndex: number) => {
 
   return { clear };
 };
+/**
+ * 空格键 切换控制器暂停
+ */
+window.addEventListener("keyup", e => {
+  if (e.code === "Space") {
+    controls.autoRotate = !controls.autoRotate;
+  }
+});

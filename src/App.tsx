@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import LoadingScreen from "./container/LoadingScreen";
 import Map from "./container/Map";
@@ -25,8 +25,17 @@ function App() {
   const [map, setMap] = useState<GLTF>();
   const [animateIndex, setAnimateIndex] = useState(0);
   const [loadingIndex, setLoadingIndex] = useState(0); //正在加载第几次战役模型
+  const [isHideLoadScene, setIsHideLoadScene] = useState(false); //是否隐藏加载屏
   const [loading, setLoading] = useState(true);
   const [isShowUSDate, setIsShowUSDate] = useState(false); //美军受损表
+
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        setIsHideLoadScene(true);
+      }, 200);
+    }
+  }, [loading]);
 
   const goHome = useCallback(() => {
     setAnimateIndex(-1);
@@ -52,14 +61,14 @@ function App() {
 
   return (
     <ThemeProvider>
-      {loading ? (
+      {isHideLoadScene ? (
+        <CampaignDetail />
+      ) : (
         <LoadingScreen
           setMap={setMap}
           addTexture={addTexture}
           handleLoad={handleLoad}
         />
-      ) : (
-        <CampaignDetail />
       )}
 
       <Map

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-04 16:13:50
+ * @LastEditTime: 2022-03-06 13:24:17
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -21,7 +21,6 @@ import {
 import qiangImg from "../../assets/map/moxinnaganky.png";
 import { panelRef } from "../../components/Panel";
 import { subtitleRef } from "../../components/Subtitles";
-import useMount from "../../hook/useMount";
 import {
   controls,
   scene,
@@ -161,21 +160,14 @@ const Map: FC<IProps> = ({
     };
   }, [animateIndex, loadCampaignModel]);
 
-  useMount(() => {
-    window.addEventListener("keyup", e => {
-      if (e.code === "Space") {
-        controls.autoRotate = !controls.autoRotate;
-      }
-    });
-  });
-
   useEffect(() => {
     if (!isLoading) {
+      tick();
       //由小入大
       move(
         [window.isPhone ? 10 : 30, 93, -5],
         [window.isPhone ? 9 : 30, 10, -5],
-        50,
+        40,
         undefined,
         async () => {
           controls.saveState();
@@ -195,7 +187,6 @@ const Map: FC<IProps> = ({
       console.log("map model load");
       scene.add(gltf.scene);
       // document.documentElement.appendChild(stats.dom);
-      tick();
 
       //加载其他地图纹理
       for (let i = 10; i < 33; i++) {
