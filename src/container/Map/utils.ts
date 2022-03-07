@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 21:18:38
+ * @LastEditTime: 2022-03-07 23:01:33
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -246,6 +246,154 @@ export const animationConfigure: IAnimationConfigure[] = [
   },
 ];
 
+interface IDescArrowConfig {
+  [key: string]: {
+    desc: string;
+    id: number;
+  };
+}
+
+/**
+ * 箭头 或 位置图标等 需要hover有文字介绍的相关配置
+ */
+const descArrowConfig: Array<IDescArrowConfig> = [
+  {},
+  {
+    箭头011: {
+      desc: "40军向两水洞,丰下洞进军",
+      id: 1,
+    },
+    箭头001: {
+      desc: "39军向云山进军",
+      id: 2,
+    },
+    箭头003: {
+      desc: "42军向草黄岭进军\n草黄岭防御战组织美军前进",
+      id: 3,
+    },
+    箭头004: {
+      desc: "美陆战第１师、南第３师及南首都师一部",
+      id: 4,
+    },
+  },
+  {
+    贝塞尔曲线110: {
+      desc: "战役胜利志愿军向三八线推进",
+      id: 5,
+    },
+    贝塞尔曲线111: {
+      desc: "战役胜利志愿军向三八线推进",
+      id: 5,
+    },
+    贝塞尔曲线112: {
+      desc: "战役胜利志愿军向三八线推进",
+      id: 5,
+    },
+    贝塞尔曲线007: {
+      desc: "迂回切断、包围歼击",
+      id: 6,
+    },
+    贝塞尔曲线008: {
+      desc: "10余万志愿军翻山越岭，隐蔽接敌",
+      id: 7,
+    },
+    贝塞尔曲线009: {
+      desc: "将美军陆战第1师和步兵第7师截为5段，形成了分割围歼的有利态势。",
+      id: 8,
+    },
+    贝塞尔曲线010: {
+      desc: "志愿军第9兵团，由20军、26军和27军组成，近15万人",
+      id: 9,
+    },
+    贝塞尔曲线011: {
+      desc: "零下30-40摄氏度的严寒中苦斗20天",
+      id: 10,
+    },
+    贝塞尔曲线012: {
+      desc: '"联合国军"全部被逐出朝鲜东北部',
+      id: 11,
+    },
+    柱体007: {
+      desc: "陆战一师和第3、第7步兵师，以及韩国第1军团，约10万人",
+      id: 12,
+    },
+    柱体008: {
+      desc: "陆战一师和第3、第7步兵师，以及韩国第1军团，约10万人",
+      id: 12,
+    },
+    柱体: {
+      desc: "陆战一师和第3、第7步兵师，以及韩国第1军团，约10万人",
+      id: 12,
+    },
+  },
+  {
+    贝塞尔曲线038: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线039: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线040: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线041: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线042: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线043: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线044: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+    贝塞尔曲线079: {
+      desc: "击退美军，占领汉城",
+      id: 13,
+    },
+  },
+  {},
+  {
+    箭头022: {
+      desc: "27军第81师阻击县里之敌退路",
+      id: 14,
+    },
+    箭头023: {
+      desc: "27军第81师阻击县里之敌退路",
+      id: 14,
+    },
+    箭头024: {
+      desc: "20军进击县里",
+      id: 15,
+    },
+    贝塞尔曲线022: {
+      desc: "沿途战斗13次攻占预定地区五马峙",
+      id: 16,
+    },
+    tm005: {
+      desc: "40军完成战役割裂任务",
+      id: 17,
+    },
+  },
+];
+
+let currentArrowConfig: IDescArrowConfig;
+
+let descArrowKey: string[];
+
+function setDescArrowConfig(index: number) {
+  currentArrowConfig = descArrowConfig[index];
+  descArrowKey = Object.keys(currentArrowConfig);
+}
+
 //  不再 tick 每一帧调用  大部分动画只调用一遍
 export function onesAnimate(mash: Object3D<Event>, animate: AnimationClip) {
   const mixer = new THREE.AnimationMixer(mash);
@@ -388,6 +536,7 @@ export function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   sightMove(animateIndex, onEnd);
   controls.autoRotate = false;
   detrusionChart(true);
+  setDescArrowConfig(animateIndex);
 }
 
 export function clearAnimateTimer() {
@@ -458,10 +607,18 @@ export const eventListener = (selectAnimation: any) => {
       //莫辛纳甘枪模型
       else if (selectObject.userData.type === 1) {
         hoverIcon(selectObject);
+      } else if (selectObject.userData.type === 3) {
+        //位置图标 hover name
+        handleArrowDescriptor(
+          { name: selectObject.userData.name, positionIcon: true },
+          event.pageY,
+          event.pageX
+        );
       }
       //其他模型
       else if (!selectObject.userData.animation) {
         smallScaleAnimation(selectObject);
+        handleArrowDescriptor(selectObject, event.pageY, event.pageX);
       }
     }
   });
@@ -498,7 +655,8 @@ export const eventListener = (selectAnimation: any) => {
     return intersects;
   };
 
-  renderer.domElement.addEventListener("click", event => {
+  // renderer.domElement.addEventListener("click", event => {
+  window.addEventListener("click", event => {
     event.preventDefault();
     const intersects = getIntersects(event);
     // 获取选中最近的 Mesh 对象
@@ -837,3 +995,73 @@ window.addEventListener("keyup", e => {
     controls.autoRotate = !controls.autoRotate;
   }
 });
+
+/**
+ * @description: 生成介绍标签
+ * @param {string} text 介绍文本
+ * @param {number} top top值
+ * @param {number} left left值
+ * @return {HTMLDivElement}
+ */
+function generateDesc(text: string, top: number, left: number) {
+  const wrap = document.createElement("div");
+  wrap.innerText = text;
+  wrap.className = "label";
+  wrap.style.top = top + 10 + "px";
+  wrap.style.left = left + "px";
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
+/**
+ * 记录上一次hover的箭头名
+ */
+let prevDescId: string | number;
+
+const labelConfig: {
+  [key: string | number]: {
+    timeout: any;
+    dom: HTMLDivElement;
+  };
+} = {};
+const hideTime = 700;
+
+function handleArrowDescriptor(
+  model: { name: string; positionIcon?: boolean },
+  pageY: number,
+  pageX: number
+) {
+  const { name: modelName, positionIcon } = model;
+  if (!descArrowKey.includes(modelName) && !positionIcon) return;
+
+  const config = currentArrowConfig[modelName];
+  if (!positionIcon && !config) throw new Error(modelName + " no config");
+  let configID: string | number;
+  if (positionIcon) {
+    configID = modelName;
+  } else configID = config.id;
+
+  if (prevDescId === configID || labelConfig[configID]?.dom) {
+    //已存在 - 跟随移动
+    Object.assign(labelConfig[configID].dom.style, {
+      top: pageY + "px",
+      left: pageX + "px",
+      visibility: "visible",
+      opacity: 1,
+    });
+    clearTimeout(labelConfig[configID].timeout);
+  } else {
+    //@ts-ignore
+    labelConfig[configID] = {};
+    prevDescId = configID;
+    labelConfig[configID].dom = generateDesc(
+      positionIcon ? modelName : config.desc,
+      pageY,
+      pageX
+    );
+  }
+  labelConfig[configID].timeout = setTimeout(() => {
+    labelConfig[configID].dom.style.visibility = "hidden";
+    labelConfig[configID].dom.style.opacity = "0";
+  }, hideTime);
+}

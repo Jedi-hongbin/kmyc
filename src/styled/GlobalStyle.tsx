@@ -24,6 +24,19 @@ const GlobalStyle = createGlobalStyle`
     --nav-height: 4rem;
   }
 
+  .label{
+    position : fixed;
+    z-index : 9;
+    font-size : 1vmin;
+    transform : translateX(-50%);
+    transition : all 0.2s ease;
+    background : #00000088;
+    color : #fff;
+    padding : 1vmin;
+    border-radius: 1vmin;
+    cursor: default;
+  }
+
   @media screen and (max-width: 750px){
     html{
       font-size: 65%;
