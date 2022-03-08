@@ -2,11 +2,12 @@
  * @Author: hongbin
  * @Date: 2022-02-18 08:52:51
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-25 13:28:17
+ * @LastEditTime: 2022-03-08 21:47:12
  * @Description: 介绍鼠标按键功能
  */
 import { FC, ReactElement } from "react";
 import styled, { css } from "styled-components";
+import { chartBG } from "../../styled/GlobalStyle";
 import { mouseGunLun, mouseLeft, mouseRight, Music, SpaceBar } from "../icon";
 
 interface IProps {
@@ -58,7 +59,6 @@ const Container = styled.div<{ show: boolean }>`
   z-index: 1;
   margin-left: 0.4rem;
   /* background: inherit; */
-  background: radial-gradient(#355235d1, #437143 90%);
   width: 10rem;
   border-radius: 0.5rem;
   left: 100%;
@@ -72,7 +72,7 @@ const Container = styled.div<{ show: boolean }>`
   transition-timing-function: ease;
   transform-origin: left bottom;
   transition-delay: 0.1s;
-
+  ${chartBG};
   & > div {
     display: flex;
     margin: 0.3rem 0;
