@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-01 20:49:44
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 13:26:51
+ * @LastEditTime: 2022-03-08 09:02:40
  * @Description: 战役详情
  */
 import {
@@ -129,6 +129,7 @@ const Container = styled.div<{ isHide: boolean }>`
       margin-left: 1vmax;
       max-width: 13vmax;
       margin-bottom: 1vmin;
+      height: 12vmin;
     }
 
     ::-webkit-scrollbar-thumb {
