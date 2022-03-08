@@ -44,6 +44,10 @@ const GlobalStyle = createGlobalStyle`
     :root {
      
     }
+    .label {
+      transform: rotate(90deg) translateX(-50%);
+      transform-origin: left top;
+    }
   }
   @media screen and (orientation: landscape) and (max-height: 550px) {
     * {
