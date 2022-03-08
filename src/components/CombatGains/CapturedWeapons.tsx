@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 16:35:27
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 18:22:01
+ * @LastEditTime: 2022-03-08 13:38:59
  * @Description:缴获武器
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -10,6 +10,7 @@ import styled from "styled-components";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
 import { detrusionTransition, rightDetrusion } from "../../styled";
+import { chartBG } from "../../styled/GlobalStyle";
 
 interface IProps {}
 
@@ -197,7 +198,7 @@ export default memo(CapturedWeapons);
 const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
-  background: radial-gradient(#355235d1, #437143 90%);
+  ${chartBG};
   width: 48vmax;
   height: 35vmin;
   bottom: 0.5rem;

@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 // import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import GlobalStyle from "./styled/GlobalStyle";
 import "./assets/flexible.min";
+import GlobalStyle from "./styled/GlobalStyle";
 import App from "./App";
 
 ReactDOM.render(

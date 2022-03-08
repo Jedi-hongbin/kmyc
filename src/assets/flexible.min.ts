@@ -49,4 +49,5 @@ export {};
   window.isPhone = offsetWidth < 750;
   window.vmax = (range: number) => (offsetWidth / 100) * range;
   window.vmin = (range: number) => (offsetHeight / 100) * range;
+  window.MACOS = navigator.userAgent.indexOf("Macintosh") !== -1;
 })(window, document);

@@ -1,10 +1,10 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   html,body {
     height: 100%;
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
-    background: #345438;
+    background: ${window.MACOS ? "#345438" : "rgb(31 87 31)"};
     overflow: hidden;
   }
  
@@ -79,3 +79,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default GlobalStyle;
+
+export const chartBG = css`
+  background: ${window.MACOS
+    ? "radial-gradient(#355235d1, #437143 90%)"
+    : "radial-gradient(rgb(3 71 3 / 82%), rgb(8 127 8) 90%)"};
+`;

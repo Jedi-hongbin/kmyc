@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 18:22:28
+ * @LastEditTime: 2022-03-08 13:39:08
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -10,6 +10,7 @@ import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
 import styled from "styled-components";
 import { detrusionTransition, leftDetrusion } from "../../styled";
+import { chartBG } from "../../styled/GlobalStyle";
 
 const { isPhone, pageWidth } = window;
 
@@ -94,7 +95,7 @@ export default memo(Downsizing);
 const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
-  background: radial-gradient(#355235d1, #437143 90%);
+  ${chartBG};
   width: 25vmax;
   height: 30vmin;
   bottom: 0.5rem;

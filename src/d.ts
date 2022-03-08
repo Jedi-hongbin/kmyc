@@ -14,6 +14,10 @@ declare global {
     isPhone: boolean;
     vmax: (range: number) => number;
     vmin: (range: number) => number;
+    /**
+     * 是否是mac电脑  mac和window对颜色显示有差异
+     */
+    MACOS: boolean;
   }
 }
 

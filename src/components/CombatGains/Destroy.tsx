@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 18:42:28
+ * @LastEditTime: 2022-03-08 13:39:03
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -10,6 +10,7 @@ import styled from "styled-components";
 import * as echarts from "echarts";
 import useMount from "../../hook/useMount";
 import { detrusionTransition, rightDetrusion } from "../../styled";
+import { chartBG } from "../../styled/GlobalStyle";
 
 interface IProps {}
 
@@ -76,7 +77,7 @@ export default memo(Destroy);
 const Container = styled.div<{ isShow: boolean }>`
   position: fixed !important;
   z-index: 1;
-  background: radial-gradient(#355235d1, #437143 90%);
+  ${chartBG};
   width: 30vmax;
   height: 29vmin;
   top: 0.5rem;
