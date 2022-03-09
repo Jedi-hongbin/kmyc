@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-09 16:52:42
+ * @LastEditTime: 2022-03-09 23:39:54
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -1065,4 +1065,49 @@ function handleArrowDescriptor(
     labelConfig[configID].dom.style.visibility = "hidden";
     labelConfig[configID].dom.style.opacity = "0";
   }, hideTime);
+}
+
+/**
+ * 战役语音讲解类
+ */
+export class Explain {
+  /**
+   * 播放器
+   */
+  private audio: HTMLAudioElement;
+  /**
+   * 缓存的音频对象
+   */
+  private cache: { [key: number]: string };
+  /**
+   * 战役语音讲解类
+   */
+  constructor() {
+    const audio = document.createElement("audio");
+    document.body.appendChild(audio);
+    this.audio = audio;
+    this.cache = {};
+  }
+  /**
+   * 异步加载讲解音频
+   */
+  async asyncLoadVoice(animationIndex: number) {
+    let source = this.cache[animationIndex];
+    if (!source) {
+      const music = await fetch(
+        `${process.env.REACT_APP_URL}voice/${animationIndex}-voice.mp3`
+      );
+      const blob = await music.blob();
+      source = window.URL.createObjectURL(blob);
+      this.cache[animationIndex] = this.audio.src;
+    }
+    this.audio.src = source;
+    this.audio.play();
+  }
+  /**
+   * 停止播放战役讲解
+   */
+  stop() {
+    this.audio.pause();
+  }
 }

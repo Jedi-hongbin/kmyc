@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-06 13:24:17
+ * @LastEditTime: 2022-03-09 23:39:31
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -34,11 +34,12 @@ import {
   start,
   eventListener,
   loadPositionIcon,
+  Explain,
 } from "./utils";
 import { CampaignDetailRef } from "../../components/CampaignDetail";
 
 let loadingTimer: NodeJS.Timeout;
-
+const explain = new Explain();
 interface IProps {
   animateIndex: number;
   gltf: GLTF | undefined;
@@ -69,14 +70,16 @@ const Map: FC<IProps> = ({
 
   /**加载战役模型*/
   const loadCampaignModel = useCallback((loadAnimateIndex: number) => {
+    //100毫秒以后再更新状态是为了在有缓存的情况下 使用缓存模型 dom不必更新
     loadingTimer = setTimeout(() => {
       setLoadingIndex(loadAnimateIndex);
     }, 100);
 
     window.gltfLoader.load(
       `${process.env.REACT_APP_URL}map/${loadAnimateIndex}-animate.glb`,
-      (gltf: any) => {
+      async (gltf: any) => {
         if (currentIndex !== loadAnimateIndex) return;
+        await explain.asyncLoadVoice(loadAnimateIndex);
         clearTimeout(loadingTimer);
         setLoadingIndex(0); //重置 停止加载
         console.log("战役模型:", gltf);
@@ -156,6 +159,7 @@ const Map: FC<IProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
         PositionRef.current?.clear();
         CampaignDetailRef.current?.hide();
+        explain.stop();
       }
     };
   }, [animateIndex, loadCampaignModel]);
