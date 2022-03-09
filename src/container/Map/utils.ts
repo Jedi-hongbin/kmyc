@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 13:32:08
+ * @LastEditTime: 2022-03-09 16:52:42
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -949,9 +949,9 @@ export const loadPositionIcon = async (animateIndex: number) => {
 
   const model = gltf.scene.children[0];
   model.userData.type = 3;
-  model.scale.x -= 1.2;
-  model.scale.y -= 1.2;
-  model.scale.z -= 1.2;
+  model.scale.x -= 0.75;
+  model.scale.y -= 0.75;
+  model.scale.z -= 0.75;
   const config = positionConfigure[animateIndex - 1];
   const iconScene = new THREE.Scene();
   for (const { position, ...info } of config) {
@@ -970,9 +970,9 @@ export const loadPositionIcon = async (animateIndex: number) => {
       timer = requestAnimationFrame(r);
     }
     for (const item of iconScene.children) {
-      item.scale.x += 0.05;
-      item.scale.y += 0.05;
-      item.scale.z += 0.05;
+      item.scale.x += 0.03;
+      item.scale.y += 0.03;
+      item.scale.z += 0.03;
     }
     i++;
   };
