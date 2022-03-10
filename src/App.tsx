@@ -71,14 +71,14 @@ function App() {
         />
       )}
 
-      {/* <Map
+      <Map
         animateIndex={animateIndex}
         gltf={map}
         textures={textures.current}
         selectAnimation={selectAnimation}
         isLoading={loading}
         setLoadingIndex={setLoadingIndex}
-      /> */}
+      />
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
