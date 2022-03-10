@@ -2,12 +2,13 @@
  * @Author: hongbin
  * @Date: 2022-02-28 16:26:19
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-02 18:14:26
+ * @LastEditTime: 2022-03-10 10:56:52
  * @Description:TextLoadScene
  */
 import { FC, memo, ReactElement, useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import bg from "../../assets/bg.png";
+import DataSource from "./DataSource";
 
 interface IProps {
   progress: number;
@@ -61,6 +62,7 @@ const TextLoadScene: FC<IProps> = ({ progress }): ReactElement => {
           </p>
         ))}
       </Section>
+      <DataSource />
     </Container>
   );
 };
