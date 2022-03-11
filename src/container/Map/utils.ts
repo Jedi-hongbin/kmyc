@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-09 23:39:54
+ * @LastEditTime: 2022-03-12 00:08:39
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -107,13 +107,9 @@ if (window.isPhone) {
 }
 
 export const tick = () => {
-  // const elapsed = clock.getElapsedTime()
   render();
-  // sun.position.x = Math.cos(elapsedTime)
   window.requestAnimationFrame(tick);
-  // camera.rotateZ(elapsed * 0.001)
   controls.update();
-  // stats && stats.update();
 };
 
 //=> end中的axis相机的轨道 y值必须小不能大于5 否则自由移动时相机下不去，无法获得更小的视野
@@ -128,12 +124,14 @@ export const animationConfigure: IAnimationConfigure[] = [
         camera: [6, 17, -5],
         axis: [3, 12, -8],
         speed: 30,
+        frame: 400,
       },
       {
         time: 6500,
         camera: [-15, 20, -3],
         axis: [-14, 15, -8],
         speed: 30,
+        frame: 650,
       },
     ],
     end: {
@@ -141,6 +139,7 @@ export const animationConfigure: IAnimationConfigure[] = [
       camera: [-15, 14, -15],
       axis: [-12, 4, -35],
       speed: 35,
+      frame: 750,
     },
     icon: [-21, 7, -22],
   },
@@ -491,6 +490,63 @@ function play(gltf: GLTF) {
   });
 }
 
+/**
+ * 开始计算帧数
+ */
+// class ComputeFrame {
+//   handle: number;
+
+//   /**
+//    * 按帧计算 视线切换
+//    */
+//   constructor() {
+//     this.handle = 0;
+//   }
+//   /**
+//    * 开始计算帧数
+//    */
+//   compute(index: number, onEnd?: () => void) {
+//     this.stop();
+//     const { jump, end } = animationConfigure[index - 1];
+//     const endFrame = end.frame as number;
+//     let count = 0;
+//     let prev = 0;
+
+//     const clock = new THREE.Clock();
+//     const tick = () => {
+//       // const elapsed = clock.getDelta();
+//       // prev += elapsed / 10;
+//       // console.log(prev);
+//       // const diff = (Date.now() - prev) * 0.01;
+//       // console.log(Math.floor(count * diff), count, diff);
+//       // for (let i = 0; i < jump.length; i++) {
+//       //   if (Math.floor(count * diff) - jump[i].frame! === 1) {
+//       //     console.log("jump:", jump[i]);
+//       //     // alert(`${count} --- ${jump[i].frame!}`);
+//       //   }
+//       // }
+//       // this.handle = requestAnimationFrame(tick);
+//       // if (count === endFrame) {
+//       //   // this.stop();
+//       //   onEnd && onEnd();
+//       // }
+//       // count++;
+//       // prev = Date.now();
+//     };
+//     tick();
+//     // move(camera, axis, speed);
+//   }
+
+//   /**
+//    * 停止帧数计算
+//    */
+//   stop() {
+//     cancelAnimationFrame(this.handle);
+//   }
+// }
+
+// const computeFrame = new ComputeFrame();
+
 /**视线移动*/
 function sightMove(animateIndex: number, onEnd?: () => void) {
   const configure = animationConfigure[animateIndex - 1];
@@ -503,6 +559,8 @@ function sightMove(animateIndex: number, onEnd?: () => void) {
       //字幕慢点出来 和动画一起跟新dom引起卡顿
       subtitleRef.current?.start(animateIndex);
     });
+
+  // computeFrame.compute(animateIndex);
 
   //战役动画 pc端才播放
   if (configure.jump && !window.isPhone) {
