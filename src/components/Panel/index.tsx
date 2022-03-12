@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 13:40:29
+ * @LastEditTime: 2022-03-12 12:55:54
  * @Description:控制面板
  */
 import {
@@ -112,7 +112,7 @@ const Container = styled.div<{ isHide: boolean }>`
   z-index: 2;
   top: 0.4rem;
   left: 0.4rem;
-  background: ${window.MACOS ? "#263c26" : "rgb(32 106 41)"};
+  background: ${window.MACOS ? "#263c26" : "rgb(18 56 23)"};
   border-radius: 1rem;
   ${flexCenter};
   flex-direction: column;

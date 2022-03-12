@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-12 00:08:39
+ * @LastEditTime: 2022-03-12 12:54:21
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -43,7 +43,8 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 export const scene = new THREE.Scene();
 const scene2 = new THREE.Scene();
-const bgColor = window.MACOS ? 0x345438 : 0x1f571f;
+// const bgColor = window.MACOS ? 0x345438 : 0x1f571f;
+const bgColor = window.MACOS ? 0x345438 : 0x025503;
 scene.background = new THREE.Color(bgColor);
 scene.fog = new THREE.FogExp2(bgColor, 0.008);
 
@@ -120,14 +121,14 @@ export const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 5000,
+        time: 19000,
         camera: [6, 17, -5],
         axis: [3, 12, -8],
         speed: 30,
         frame: 400,
       },
       {
-        time: 6500,
+        time: 28000,
         camera: [-15, 20, -3],
         axis: [-14, 15, -8],
         speed: 30,
@@ -135,7 +136,7 @@ export const animationConfigure: IAnimationConfigure[] = [
       },
     ],
     end: {
-      duration: 9000,
+      duration: 31000,
       camera: [-15, 14, -15],
       axis: [-12, 4, -35],
       speed: 35,
@@ -149,20 +150,20 @@ export const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 4500,
+        time: 20000,
         camera: [-8, 12, -25],
         axis: [-7, 11, -28],
         speed: 20,
       },
       {
-        time: 6500,
+        time: 34000,
         camera: [-10, 20, 30],
         axis: [-9, 15, 0],
         speed: 30,
       },
     ],
     end: {
-      duration: 9000,
+      duration: 38000,
       camera: [-9, 15, -10],
       axis: [-10, 4, -25],
     },
@@ -174,20 +175,20 @@ export const animationConfigure: IAnimationConfigure[] = [
     //镜头跳转
     jump: [
       {
-        time: 1500,
+        time: 2000,
         camera: [0, 18, 31.5],
         axis: [-1.5, 15, 26],
         speed: 40,
       },
       {
-        time: 6000,
+        time: 20000,
         camera: [8, 18, 30],
         axis: [6.6, 15, 24],
         speed: 50,
       },
     ],
     end: {
-      duration: 7000,
+      duration: 30000,
       camera: [1.5, 18, 39],
       axis: [0, 5, 14],
       speed: 50,
@@ -205,14 +206,14 @@ export const animationConfigure: IAnimationConfigure[] = [
         speed: 40,
       },
       {
-        time: 2000,
+        time: 33000,
         camera: [0.8, 20, 31],
         axis: [-0.6, 15, 27],
         speed: 50,
       },
     ],
     end: {
-      duration: 6500,
+      duration: 37000,
       camera: [-8, 21, 7.5],
       axis: [-8.5, 5, 6.3],
       speed: 50,
@@ -224,20 +225,20 @@ export const animationConfigure: IAnimationConfigure[] = [
     axis: [-2.5, 15, 17],
     jump: [
       {
-        time: 3000,
+        time: 2000,
         camera: [-1.4, 18, 23],
         axis: [-2, 15, 18.4],
         speed: 40,
       },
       {
-        time: 7000,
+        time: 6000,
         camera: [7, 18, 22],
         axis: [6, 15, 17],
         speed: 50,
       },
     ],
     end: {
-      duration: 11000,
+      duration: 38000,
       camera: [-4, 20, 14],
       axis: [-4.3, 5, 12],
       speed: 50,
