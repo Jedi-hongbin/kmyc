@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-12 12:54:21
+ * @LastEditTime: 2022-03-13 00:01:16
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -395,30 +395,6 @@ function setDescArrowConfig(index: number) {
   descArrowKey = Object.keys(currentArrowConfig);
 }
 
-//  不再 tick 每一帧调用  大部分动画只调用一遍
-export function onesAnimate(mash: Object3D<Event>, animate: AnimationClip) {
-  const mixer = new THREE.AnimationMixer(mash);
-  const action = mixer.clipAction(animate);
-  //TODO: 解决ts-ignore
-  // @ts-ignore
-  action.setLoop(THREE.LoopOnce);
-  action.play();
-  const clip = action.getClip();
-  const duration = clip.duration;
-  const clock = new THREE.Clock();
-  let sum = 0;
-
-  //循环更新
-  const run = () => {
-    if (sum > duration) return;
-    window.requestAnimationFrame(run);
-    const t = clock.getDelta();
-    sum += t;
-    mixer.update(t);
-  };
-  run();
-}
-
 function distance(x1: number, x2: number) {
   //都是负数  -3 => -5 = -2
   if (x1 < 0 && x2 < 0) {
@@ -475,20 +451,68 @@ export function move(
 }
 
 /**
+ * 战役动画播放器
+ */
+function AnimationPlayer() {
+  let timer = 0;
+  /**
+   * 停止动画
+   */
+  const stop = () => {
+    cancelAnimationFrame(timer);
+  };
+  /**
+   * 开启动画
+   */
+  function start(gltf: GLTF) {
+    stop();
+    const clock = new THREE.Clock();
+    const mixer = new THREE.AnimationMixer(gltf.scene);
+    let maxDuration = 0;
+
+    gltf.animations.forEach((animate: THREE.AnimationClip) => {
+      const duration = mixer
+        .clipAction(animate)
+        .setLoop(THREE.LoopOnce, 1)
+        .play()
+        .getClip().duration;
+      if (duration > maxDuration) maxDuration = duration;
+    });
+
+    // console.log("max duration:", maxDuration);
+
+    let sum = 0;
+    const animate = () => {
+      if (sum > maxDuration) return;
+      timer = requestAnimationFrame(animate);
+      const t = clock.getDelta();
+      sum += t;
+      mixer.update(t);
+    };
+    animate();
+  }
+
+  return { start, stop };
+}
+
+const animationPlayer = AnimationPlayer();
+
+/**
  * @description 添加模型的动画
  * @param {GLTF} gltf 带动画的glb模型
  * */
 function play(gltf: GLTF) {
-  gltf.animations.forEach((animate: any) => {
-    const { name } = animate; //不算后面的 Action
-    const mash = gltf.scene.getObjectByProperty(
-      "name",
-      name.substring(0, name.length - 6)
-    );
-    if (mash) {
-      onesAnimate(mash as Object3D<Event>, animate);
-    }
-  });
+  // gltf.animations.forEach((animate: any) => {
+  //   const { name } = animate; //不算后面的 Action
+  //   const mash = gltf.scene.getObjectByProperty(
+  //     "name",
+  //     name.substring(0, name.length - 6)
+  //   );
+  //   if (mash) {
+  //     onesAnimate(mash as Object3D<Event>, animate);
+  //   }
+  // });
+  animationPlayer.start(gltf);
 }
 
 /**
