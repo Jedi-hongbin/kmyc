@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-09 23:39:31
+ * @LastEditTime: 2022-03-13 14:59:15
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -144,6 +144,7 @@ const Map: FC<IProps> = ({
             item.material.dispose(); //删除材质
           }
         });
+        scene.remove(...gltf.scene.children);
         scene.remove(gltf.scene);
       }
       clearAnimateTimer();

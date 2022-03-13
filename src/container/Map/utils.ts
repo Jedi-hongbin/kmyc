@@ -2,13 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-13 00:01:16
+ * @LastEditTime: 2022-03-13 17:01:46
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
 import * as THREE from "three";
-import { AnimationClip, Object3D } from "three";
+import { AnimationMixer, Object3D } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import Stats from "three/examples/jsm/libs/stats.module";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { subtitleRef } from "../../components/Subtitles";
 import { detrusionChart, showCombatInfo } from "../../utils";
@@ -25,6 +26,20 @@ import positionIcon from "../../assets/map/positionIcon.glb";
 let t: number;
 //动画计时器数组 用于清除未执行的动画和定时任务
 let timers: NodeJS.Timeout[] = [];
+
+addStats();
+function addStats() {
+  //@ts-ignore
+  const stats = new Stats();
+  document.documentElement.appendChild(stats.dom);
+  stats.dom.style.top = "auto";
+  stats.dom.style.bottom = 0;
+  const animate = () => {
+    window.requestAnimationFrame(animate);
+    stats && stats.update();
+  };
+  animate();
+}
 
 const sizes = {
   width: window.innerWidth,
@@ -455,11 +470,17 @@ export function move(
  */
 function AnimationPlayer() {
   let timer = 0;
+  let mixer: AnimationMixer;
   /**
    * 停止动画
    */
   const stop = () => {
     cancelAnimationFrame(timer);
+    // mixer &&
+    //   //@ts-ignore
+    //   mixer._actions.forEach(element => {
+    //     element.stop();
+    //   });
   };
   /**
    * 开启动画
@@ -467,7 +488,7 @@ function AnimationPlayer() {
   function start(gltf: GLTF) {
     stop();
     const clock = new THREE.Clock();
-    const mixer = new THREE.AnimationMixer(gltf.scene);
+    mixer = new THREE.AnimationMixer(gltf.scene);
     let maxDuration = 0;
 
     gltf.animations.forEach((animate: THREE.AnimationClip) => {
@@ -1194,3 +1215,63 @@ export class Explain {
     this.audio.pause();
   }
 }
+
+// const explain = new Explain();
+
+/**
+ * 战役模型加载器
+ */
+// export class CampaignModelLoader {
+//   /**
+//    * 当前加载的战役模型
+//    */
+//   loadAnimateIndex: number;
+//   /**
+//    * 缓存模型
+//    */
+//   cache: { [key: number]: GLTF };
+
+//   constructor() {
+//     this.loadAnimateIndex = -1;
+//     this.cache = {};
+//   }
+//   /**
+//    * 清除上一个动画模型
+//    */
+//   clearPrev() {
+//     const GLTF = this.cache[this.loadAnimateIndex];
+//     if (this.loadAnimateIndex === -1 || !GLTF) return;
+//     animationPlayer.stop();
+//     GLTF.scene.scale.set(0, 0, 0);
+//   }
+
+//   handleLoad = async (gltf: GLTF, callback: () => void) => {
+//     gltf.scene.scale.set(1, 1, 1);
+//     await explain.asyncLoadVoice(this.loadAnimateIndex);
+//     animationPlayer.start(gltf);
+//     callback();
+//     scene.add(gltf.scene);
+//   };
+
+//   load(loadAnimateIndex: number, callback: () => void) {
+//     this.clearPrev();
+//     this.loadAnimateIndex = loadAnimateIndex;
+//     if (this.cache[loadAnimateIndex]) {
+//       this.handleLoad(this.cache[loadAnimateIndex], callback);
+//     } else
+//       window.gltfLoader.load(
+//         `${process.env.REACT_APP_URL}map/${loadAnimateIndex}-animate.glb`,
+//         async gltf => {
+//           if (this.loadAnimateIndex === loadAnimateIndex) {
+//             this.cache[loadAnimateIndex] = gltf;
+//             await this.handleLoad(gltf, callback);
+//           }
+//         },
+//         undefined,
+//         e => {
+//           alert("战役模型加载出错");
+//           console.error("战役模型加载出错", e);
+//         }
+//       );
+//   }
+// }
