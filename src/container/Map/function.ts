@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-01 10:22:42
+ * @LastEditTime: 2022-03-14 21:54:14
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -15,7 +15,7 @@ import textModel from "../../assets/map/text.glb";
 //@ts-ignore
 import xcModel from "../../assets/map/xc.glb";
 
-import { IAnimationConfigure } from "./types";
+import { IAnimationConfigure, ModelType } from "./types";
 // import { Scene } from "three/src/scenes/Scene";
 import { Scene } from "three/src/Three";
 //@ts-ignore
@@ -54,7 +54,7 @@ export function loadMXNGModel(
 
     window.gltfLoader.load(nameModel, name => {
       const nameModel = name.scene;
-      nameModel.children[0].userData.type = 1;
+      nameModel.children[0].userData.type = ModelType["MXNG"];
       nameModel.userData.text = true;
       window.gltfLoader.load(textModel, text => {
         for (let index = 0; index < 5; index++) {
@@ -66,7 +66,7 @@ export function loadMXNGModel(
             mash => mash.name === String(index + 1)
           )!;
           char.position.z = 0;
-          char.userData.type = 1;
+          char.userData.type = ModelType["MXNG"];
           nameItem.add(char);
           Qiang.add(iconItem, nameItem);
           Qiang.position.set(...animationConfigure[index].icon);
@@ -237,6 +237,34 @@ export interface XCBack {
   toggle: (nextIndex: number) => void;
 }
 
+const XCDesc = [
+  [],
+  [
+    "11月2日，志愿军第39军一部攻克云山，重创美骑兵第一师，给恃强冒进的美军和南朝鲜军以迎头打击。图为战士们向敌阵地冲锋。",
+    "1950年10月25日，志愿军先头部队在利洞、两水洞、黄草岭地区与敌遭遇，从此揭开抗美援朝战争的序幕。这是第42军指挥员在东线黄草岭阵地指挥战斗。",
+    "第42军的战士们在黄草岭地区构筑工事。",
+    "志愿军第38军一部向熙川方向开进。",
+  ],
+  [
+    "1950年12月6日，中国人民志愿军收复平壤，第39军第116师战士冲入平壤市区。",
+    "被志愿军俘虏的南朝鲜军的美军顾问。",
+    "第38军主力穿插至敌后三所里，并迅速抢占了三所里以西的龙源里，切断了美第9军的退路。",
+    "围歼新兴洞之敌战斗中，志愿军抢占制高点",
+  ],
+  [
+    "1月3日，第50军第149师在高阳地区全歼掩护美军从汉城撤退的英第29旅皇家坦克营。图为被击毁的坦克。",
+    "第66军先头部队的战士们抢占华岳山。",
+    "志愿军第50军和人民军第1军团并肩作战，于1951年1月4日攻克汉城。",
+    "中朝部队突破三八线向南挺进。",
+  ],
+  [
+    "第42 军第375团1连副班长关崇贵在战斗中打退敌人多次进攻，并用轻机枪击落敌机一架，荣立特等功，获二级战斗英雄称号。",
+    "在横城地区黄巨山阻击战中，志愿军某部9连坚守阵地两昼夜，打退”联合国军”十余次冲锋，荣获“黄巨山英雄连”称号。",
+    "志愿军第50军第447团经过五次反冲击，夺回了白云山阵地。",
+    "志愿军战士们在冰天雪地宿营。",
+  ],
+];
+
 /**
  * @description: 加载相册模型 返回相关操作回调
  * @param {number} animationIndex 战役索引
@@ -264,13 +292,16 @@ export async function loadXCModel(
     mash.scale.z = 0;
   };
   setZero(model);
-
+  /**
+   * 设置不同的纹理 -- 切换图片
+   */
   const setMaterial = (mash: Object3D, url: string) => {
     const texture = textureLoader.load(url);
     texture.flipY = false;
     texture.encoding = 3001;
     //@ts-ignore
     const mater = mash.material.clone(); //不能共用一个material 以为 instance.material 指向的都是同一个对象
+
     mater.map = texture;
     //@ts-ignore
     mash.material = mater;
@@ -280,6 +311,10 @@ export async function loadXCModel(
 
   for (let i = 0; i < 4; i++) {
     const instance = model.clone();
+    //hover tip
+    instance.userData.type = ModelType["Picture"];
+    instance.userData.desc = XCDesc[animationIndex][i];
+
     setMaterial(
       instance,
       `${process.env.REACT_APP_URL}xc/${animationIndex}-${i}-y.jpg`
@@ -325,6 +360,12 @@ export async function loadXCModel(
 
   const toggle: XCBack["toggle"] = nextIndex => {
     pictures.forEach((item, index) => {
+      /**
+       * hover 显示图片介绍
+       */
+      item.userData.type = ModelType["Picture"];
+      item.userData.desc = XCDesc[nextIndex][index];
+
       setMaterial(
         item,
         `${process.env.REACT_APP_URL}xc/${nextIndex}-${index}-y.jpg`

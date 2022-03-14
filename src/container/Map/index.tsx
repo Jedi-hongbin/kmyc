@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-13 14:59:15
+ * @LastEditTime: 2022-03-14 22:01:06
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -62,6 +62,7 @@ const Map: FC<IProps> = ({
   isLoading,
   setLoadingIndex,
 }): ReactElement => {
+  console.log("map render");
   const cacheModel = useRef<GLTF>(null); //保存上一个战役模型
   const MXNGArr = useRef<Object3D[]>([]); //保存战役图标 莫辛纳甘枪
   const XCRef = useRef<XCBack>(null); //保存四个相册模型和调度方法 之后切换只需要切换纹理贴图
@@ -229,7 +230,8 @@ const Map: FC<IProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);
 
-  return <div id='kmyc_canvas'></div>;
+  // return <div id='kmyc_canvas'></div>;
+  return <></>;
 };
 
 export default memo(Map);

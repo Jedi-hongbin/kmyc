@@ -26,3 +26,25 @@ export interface IAnimationConfigure extends IPosition {
   end: Omit<IJump, "time"> & { duration: number };
   icon: IPosition["camera"];
 }
+
+/**
+ * 需要特殊处理的各类模型类型
+ */
+export enum ModelType {
+  /**
+   * hover不需要变换的模型 地图模块 或 基面(纵横相交的线)
+   */
+  NOTReact = 0,
+  /**
+   * 战役图标 莫辛纳甘卡宾枪模型
+   */
+  MXNG = 1,
+  /**
+   * 大战役下的小战斗图标
+   */
+  PositionIcon = 3,
+  /**
+   * 介绍战役的图片
+   */
+  Picture = 7,
+}

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-13 17:01:46
+ * @LastEditTime: 2022-03-14 21:53:16
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -18,7 +18,7 @@ import {
   smallPositionAnimation,
   smallScaleAnimation,
 } from "./function";
-import { IAnimationConfigure } from "./types";
+import { IAnimationConfigure, ModelType } from "./types";
 //@ts-ignore
 import positionIcon from "../../assets/map/positionIcon.glb";
 
@@ -667,7 +667,7 @@ export const drawLine = () => {
 
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const line = new THREE.Line(geometry, material);
-    line.userData.type = 0;
+    line.userData.type = ModelType["NOTReact"];
     scene.add(line);
   }
   for (let i = 0; i <= 100; i++) {
@@ -677,7 +677,7 @@ export const drawLine = () => {
 
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const line = new THREE.Line(geometry, material);
-    line.userData.type = 0;
+    line.userData.type = ModelType["NOTReact"];
     scene.add(line);
   }
 };
@@ -703,19 +703,27 @@ export const eventListener = (selectAnimation: any) => {
     if (intersects.length) {
       const selectObject = intersects[0].object;
       //地图模块不处理
-      if (selectObject.userData.type === 0) return;
+      if (selectObject.userData.type === ModelType["NOTReact"]) return;
       //38线 两个mash hover效果怪异
       if (selectObject!.parent!.name.match(/38line/)) {
         if (!selectObject!.parent?.userData.animation)
           smallPositionAnimation(selectObject!.parent!);
       }
       //莫辛纳甘枪模型
-      else if (selectObject.userData.type === 1) {
+      else if (selectObject.userData.type === ModelType["MXNG"]) {
         hoverIcon(selectObject);
-      } else if (selectObject.userData.type === 3) {
+      } else if (selectObject.userData.type === ModelType["PositionIcon"]) {
+        smallScaleAnimation(selectObject);
         //位置图标 hover name
         handleArrowDescriptor(
-          { name: selectObject.userData.name, positionIcon: true },
+          { name: selectObject.userData.name, customNameTip: true },
+          event.pageY,
+          event.pageX
+        );
+      } else if (selectObject.userData.type === ModelType["Picture"]) {
+        //战役图片 hover name
+        handleArrowDescriptor(
+          { name: selectObject.userData.desc, customNameTip: true },
           event.pageY,
           event.pageX
         );
@@ -768,7 +776,7 @@ export const eventListener = (selectAnimation: any) => {
     if (intersects.length) {
       const selectObject = intersects[0].object;
       //莫辛纳甘枪图标
-      if (selectObject.userData.type === 1) {
+      if (selectObject.userData.type === ModelType["MXNG"]) {
         // 默认点击的是枪 mode指向两把枪的容器scene
         let { parent: model } = selectObject;
         //如果点击的是文字 则指到枪scene
@@ -781,7 +789,7 @@ export const eventListener = (selectAnimation: any) => {
             else alert("未获取到战役索引");
           });
         }
-      } else if (selectObject.userData.type === 3) {
+      } else if (selectObject.userData.type === ModelType["PositionIcon"]) {
         showCombatInfo(selectObject.userData);
         controls.autoRotate = false;
       }
@@ -1052,7 +1060,7 @@ export const loadPositionIcon = async (animateIndex: number) => {
   if (!gltf) return console.error("加载出错 - 位置图标");
 
   const model = gltf.scene.children[0];
-  model.userData.type = 3;
+  model.userData.type = ModelType["PositionIcon"];
   model.scale.x -= 0.75;
   model.scale.y -= 0.75;
   model.scale.z -= 0.75;
@@ -1132,17 +1140,17 @@ const labelConfig: {
 const hideTime = 700;
 
 function handleArrowDescriptor(
-  model: { name: string; positionIcon?: boolean },
+  model: { name: string; customNameTip?: boolean },
   pageY: number,
   pageX: number
 ) {
-  const { name: modelName, positionIcon } = model;
-  if (!descArrowKey.includes(modelName) && !positionIcon) return;
+  const { name: modelName, customNameTip } = model;
+  if (!descArrowKey.includes(modelName) && !customNameTip) return;
 
   const config = currentArrowConfig[modelName];
-  if (!positionIcon && !config) throw new Error(modelName + " no config");
+  if (!customNameTip && !config) throw new Error(modelName + " no config");
   let configID: string | number;
-  if (positionIcon) {
+  if (customNameTip) {
     configID = modelName;
   } else configID = config.id;
 
@@ -1160,7 +1168,7 @@ function handleArrowDescriptor(
     labelConfig[configID] = {};
     prevDescId = configID;
     labelConfig[configID].dom = generateDesc(
-      positionIcon ? modelName : config.desc,
+      customNameTip ? modelName : config.desc,
       pageY,
       pageX
     );
