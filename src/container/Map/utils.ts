@@ -61,7 +61,7 @@ const scene2 = new THREE.Scene();
 // const bgColor = window.MACOS ? 0x345438 : 0x1f571f;
 const bgColor = window.MACOS ? 0x345438 : 0x025503;
 scene.background = new THREE.Color(bgColor);
-scene.fog = new THREE.FogExp2(bgColor, 0.008);
+scene.fog = new THREE.FogExp2(bgColor,  window.MACOS ? 0.008: 0.01);
 
 export const textureLoader = new THREE.TextureLoader();
 
@@ -656,8 +656,9 @@ export function clearAnimateTimer() {
  * @description: 画底部纵横相交的网格线
  */
 export const drawLine = () => {
+  // return;
   const material = new THREE.LineBasicMaterial({
-    color: 0x172619,
+    color: window.MACOS ?  0x172619 : 0x032b08,
   });
 
   for (let i = 0; i <= 100; i++) {

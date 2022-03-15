@@ -112,7 +112,7 @@ const Container = styled.div<{ isHide: boolean }>`
   z-index: 2;
   top: 0.4rem;
   left: 0.4rem;
-  background: ${window.MACOS ? "#263c26" : "rgb(18 56 23)"};
+  background: ${window.MACOS ? "#263c26" : "rgb(7 61 14)"};
   border-radius: 1rem;
   ${flexCenter};
   flex-direction: column;

@@ -83,6 +83,6 @@ export default GlobalStyle;
 export const chartBG = css`
   background: ${window.MACOS
     ? "radial-gradient(#355235d1, #437143 90%)"
-    : "radial-gradient(rgb(20 90 20 / 82%), rgb(25 116 25) 90%)"};
+    : "radial-gradient(rgb(29 84 29 / 82%), rgb(25, 116, 25) 90%)"};
 `;
 // "radial-gradient(rgb(3 71 3 / 82%), rgb(8 127 8) 90%)"};
