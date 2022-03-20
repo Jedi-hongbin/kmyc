@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-19 21:53:41
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 21:09:43
+ * @LastEditTime: 2022-03-20 21:51:24
  * @Description:自定义鼠标右键菜单
  */
 import {
@@ -10,6 +10,7 @@ import {
   FC,
   memo,
   ReactElement,
+  useCallback,
   useImperativeHandle,
   useRef,
   useState,
@@ -66,6 +67,30 @@ const CustomMenu: FC<IProps> = (): ReactElement => {
     []
   );
 
+  /**
+   * 根据菜单当前的位置和即将出现的option宽高判断能否完成显示option
+   */
+  const check = useCallback((itemRef: React.RefObject<HTMLDivElement>) => {
+    const item = itemRef.current;
+    if (item && wrap.current) {
+      const { bottom, right } = wrap.current.getBoundingClientRect();
+      if (document.body.offsetHeight < bottom + item.offsetHeight) {
+        item.style["top"] = "auto";
+        item.style["bottom"] = "0";
+      } else {
+        item.style["top"] = "0";
+        item.style["bottom"] = "auto";
+      }
+      if (document.body.offsetWidth < right + item.offsetWidth) {
+        item.style["left"] = "auto";
+        item.style["right"] = "100%";
+      } else {
+        item.style["left"] = "100%";
+        item.style["right"] = "auto";
+      }
+    }
+  }, []);
+
   return (
     <Container
       style={{ visibility: isShowMenu ? "visible" : "hidden" }}
@@ -106,6 +131,7 @@ const CustomMenu: FC<IProps> = (): ReactElement => {
             },
           }))}
           renderCheck={menuLayout}
+          check={check}
         />
       </Menu>
     </Container>
@@ -122,7 +148,6 @@ const Container = styled.section`
   */
   width: 130vw;
   height: 130vh;
-
   animation: ${fadeIn} 0.1s linear;
 `;
 
@@ -141,4 +166,5 @@ const Menu = styled.div<{ layout: MenuLayout }>`
 const SubTitle = styled.span`
   color: #023802;
   font-size: 0.9em;
+  font-weight: bold;
 `;

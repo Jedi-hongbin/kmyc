@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 15:05:21
+ * @LastEditTime: 2022-03-20 22:28:37
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -78,6 +78,7 @@ const Map: FC<IProps> = ({
     window.gltfLoader.load(
       `${process.env.REACT_APP_URL}map/${loadAnimateIndex}-animate.glb`,
       async (gltf: any) => {
+        //避免快速切换 上一个请求未结束同时 播放多个动画
         if (currentIndex !== loadAnimateIndex) return;
         await explain.asyncLoadVoice(loadAnimateIndex);
         clearTimeout(loadingTimer);
@@ -175,18 +176,23 @@ const Map: FC<IProps> = ({
         40,
         undefined,
         async () => {
+          /**
+           * 动画执行完毕禁止视线最远距离
+           */
+          controls.maxDistance = 140;
           controls.saveState();
+          eventListener(selectAnimation);
         }
       );
+      drawLine();
     }
-  }, [isLoading]);
+  }, [isLoading, selectAnimation]);
 
   useEffect(() => {
     const container = document.querySelector("#kmyc_canvas") as HTMLDivElement;
     if (!container.children.length) {
       container.appendChild(renderer.domElement);
       renderer.domElement.setAttribute("canvas", "1");
-      drawLine();
     }
     if (gltf) {
       if (textures[20]) return;
@@ -224,8 +230,6 @@ const Map: FC<IProps> = ({
         scene,
         MXNGArr.current
       );
-
-      eventListener(selectAnimation);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gltf]);

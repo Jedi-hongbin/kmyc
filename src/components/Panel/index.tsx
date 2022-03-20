@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 18:29:16
+ * @LastEditTime: 2022-03-20 22:53:46
  * @Description:控制面板
  */
 import {
@@ -94,7 +94,7 @@ const Panel: FC<IProps> = ({
         回到主页
       </Button>
       <MouseExplain show={isOpenExplain} />
-      {window.isPhone ? null : (
+      {window.isPhone || isHide ? null : (
         <FlexDiv width='100%' justify='space-between'>
           <IconButton
             onMouseEnter={() => setIsOpenExplain(true)}
@@ -118,7 +118,10 @@ const Panel: FC<IProps> = ({
           <IconButton
             onMouseEnter={e => {
               setFocusUpdate(true);
-              CustomMenuRef.current?.show(e);
+              CustomMenuRef.current?.show({
+                pageX: e.pageX + 2,
+                pageY: e.pageY + 2,
+              });
             }}
           >
             <svg

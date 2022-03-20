@@ -74,7 +74,7 @@ function App() {
           handleLoad={handleLoad}
         />
       )}
-      {/* 
+
       <Map
         animateIndex={animateIndex}
         gltf={map}
@@ -82,7 +82,7 @@ function App() {
         selectAnimation={selectAnimation}
         isLoading={loading}
         setLoadingIndex={setLoadingIndex}
-      /> */}
+      />
       <Panel
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
