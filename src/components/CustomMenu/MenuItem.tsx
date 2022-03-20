@@ -2,20 +2,26 @@
  * @Author: hongbin
  * @Date: 2022-03-19 22:04:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 18:24:36
+ * @LastEditTime: 2022-03-20 21:07:24
  * @Description:MenuItem 菜单项
  */
 import { FC, ReactElement, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { fadeIn } from "../../styled";
 
 interface IProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
   option?: { title: string; onClick: () => void }[];
+  renderCheck?: any;
 }
 
-const MenuItem: FC<IProps> = ({ text, onClick, option }): ReactElement => {
+const MenuItem: FC<IProps> = ({
+  text,
+  onClick,
+  option,
+  renderCheck,
+}): ReactElement => {
   const [showOption, setShowOption] = useState(false);
   const optionRef = useRef<HTMLDivElement>(null);
 
@@ -48,12 +54,14 @@ const MenuItem: FC<IProps> = ({ text, onClick, option }): ReactElement => {
     }
   };
 
+  /**
+   * 布局发生变化时就获取option应该出现的位置 现获取位置会产生闪烁 因为和上次的css可能不同
+   */
   useEffect(() => {
-    if (showOption) {
+    if (renderCheck) {
       check();
-      requestAnimationFrame(check);
     }
-  }, [showOption]);
+  }, [renderCheck]);
 
   return (
     <Container
@@ -63,9 +71,10 @@ const MenuItem: FC<IProps> = ({ text, onClick, option }): ReactElement => {
             onMouseEnter: () => setShowOption(true),
           }
         : {})}
+      hoverActive={!!onClick}
       onClick={e => {
         option?.length && e.stopPropagation();
-        onClick();
+        onClick && onClick();
       }}
     >
       {/* @ts-ignore */}
@@ -89,7 +98,7 @@ const MenuItem: FC<IProps> = ({ text, onClick, option }): ReactElement => {
 
 export default MenuItem;
 
-const Container = styled.div.attrs({ name: "1" })`
+const Container = styled.div.attrs({ name: "1" })<{ hoverActive?: boolean }>`
   padding: 0.8vh 1vw;
   background-color: #83c984c9;
   border-radius: inherit;
@@ -109,6 +118,11 @@ const Container = styled.div.attrs({ name: "1" })`
     path {
       fill: #112e11;
     }
+    ${({ hoverActive }) =>
+      !hoverActive &&
+      css`
+        background-color: #4da14d;
+      `}
   }
 `;
 
@@ -126,7 +140,14 @@ const OptionBox = styled.div`
     display: block;
     white-space: nowrap;
     padding: 0.5vh 0.5vw;
+    font-weight: normal;
+    :hover {
+      font-weight: bold;
+    }
   }
+  /* :hover {
+    background: inherit;
+  } */
 `;
 
 const ArrowIcon = (
