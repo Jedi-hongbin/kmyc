@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-19 22:04:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 21:07:24
+ * @LastEditTime: 2022-03-20 21:15:32
  * @Description:MenuItem 菜单项
  */
 import { FC, ReactElement, useEffect, useRef, useState } from "react";
@@ -110,11 +110,13 @@ const Container = styled.div.attrs({ name: "1" })<{ hoverActive?: boolean }>`
   align-items: center;
   justify-content: space-between;
   position: relative;
-
   :hover {
+    p {
+      transition: 0.2s ease;
+      font-weight: bold;
+      color: #073f08;
+    }
     background-color: #3e843e;
-    color: #073f08;
-    font-weight: bold;
     path {
       fill: #112e11;
     }

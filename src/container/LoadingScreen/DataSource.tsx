@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-10 10:13:34
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 00:18:03
+ * @LastEditTime: 2022-03-20 21:14:06
  * @Description:数据来源
  */
 
@@ -14,7 +14,10 @@ interface IProps {}
 
 export const source = [
   { name: "抗美援朝纪念馆", href: "http://www.kmycjng.com/list?cid=123" },
-  { name: "百度百科-抗美援朝", href: "https://baike.baidu.com/item/抗美援朝/" },
+  {
+    name: "百度百科-抗美援朝",
+    href: "https://baike.baidu.com/item/%E6%8A%97%E7%BE%8E%E6%8F%B4%E6%9C%9D/383",
+  },
   { name: "国防时报TV", href: "https://www.bilibili.com/video/BV1UK4y177RY" },
 ];
 

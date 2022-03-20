@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-19 21:53:41
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 21:03:44
+ * @LastEditTime: 2022-03-20 21:09:43
  * @Description:自定义鼠标右键菜单
  */
 import {
@@ -10,7 +10,6 @@ import {
   FC,
   memo,
   ReactElement,
-  useEffect,
   useImperativeHandle,
   useRef,
   useState,
