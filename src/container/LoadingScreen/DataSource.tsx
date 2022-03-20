@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-10 10:13:34
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-10 10:57:00
+ * @LastEditTime: 2022-03-20 00:18:03
  * @Description:数据来源
  */
 
@@ -12,7 +12,7 @@ import { fadeIn } from "../../styled";
 
 interface IProps {}
 
-const source = [
+export const source = [
   { name: "抗美援朝纪念馆", href: "http://www.kmycjng.com/list?cid=123" },
   { name: "百度百科-抗美援朝", href: "https://baike.baidu.com/item/抗美援朝/" },
   { name: "国防时报TV", href: "https://www.bilibili.com/video/BV1UK4y177RY" },

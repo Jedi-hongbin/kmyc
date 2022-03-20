@@ -10,6 +10,7 @@ import { detrusionChart } from "./utils";
 import ThemeProvider from "./styled/ThemeProvide";
 import BackGroundMusic from "./components/BackGroundMusic";
 import CampaignDetail from "./components/CampaignDetail";
+import CustomMenu from "./components/CustomMenu";
 
 const needUpdateCharts = ["us"];
 
@@ -62,7 +63,10 @@ function App() {
   return (
     <ThemeProvider>
       {isHideLoadScene ? (
-        <CampaignDetail />
+        <>
+          <CampaignDetail />
+          <CustomMenu />
+        </>
       ) : (
         <LoadingScreen
           setMap={setMap}

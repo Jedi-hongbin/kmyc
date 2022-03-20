@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-14 21:53:16
+ * @LastEditTime: 2022-03-20 14:31:09
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -57,11 +57,10 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 export const scene = new THREE.Scene();
-const scene2 = new THREE.Scene();
 // const bgColor = window.MACOS ? 0x345438 : 0x1f571f;
 const bgColor = window.MACOS ? 0x345438 : 0x025503;
 scene.background = new THREE.Color(bgColor);
-scene.fog = new THREE.FogExp2(bgColor,  window.MACOS ? 0.008: 0.01);
+scene.fog = new THREE.FogExp2(bgColor, window.MACOS ? 0.008 : 0.01);
 
 export const textureLoader = new THREE.TextureLoader();
 
@@ -78,18 +77,10 @@ export const camera = new THREE.PerspectiveCamera(
   sizes.width / sizes.height,
   1,
   1000
-); //视野能看 多近 1 多远 设置1000
-const camera2 = new THREE.PerspectiveCamera(
-  75,
-  sizes.width / sizes.height,
-  1,
-  1000
-); //视野能看 多近 1 多远 设置1000
+);
 scene.add(camera);
-scene2.add(camera2);
 
 export const render = () => {
-  renderer.render(scene2, camera2);
   renderer.render(scene, camera);
 };
 
@@ -654,11 +645,12 @@ export function clearAnimateTimer() {
 
 /**
  * @description: 画底部纵横相交的网格线
+ * @todo: 动态绘制 每一帧画一条
  */
 export const drawLine = () => {
   // return;
   const material = new THREE.LineBasicMaterial({
-    color: window.MACOS ?  0x172619 : 0x032b08,
+    color: window.MACOS ? 0x172619 : 0x032b08,
   });
 
   for (let i = 0; i <= 100; i++) {
