@@ -11,6 +11,7 @@ import ThemeProvider from "./styled/ThemeProvide";
 import BackGroundMusic from "./components/BackGroundMusic";
 import CampaignDetail from "./components/CampaignDetail";
 import CustomMenu from "./components/CustomMenu";
+import AnimateProgressConfig from "./container/Map/AnimateProgressConfig";
 
 const needUpdateCharts = ["us"];
 
@@ -93,6 +94,7 @@ function App() {
       <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
       <CombatGains />
       <BackGroundMusic />
+      <AnimateProgressConfig />
     </ThemeProvider>
   );
 }

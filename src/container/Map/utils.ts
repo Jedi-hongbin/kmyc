@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-21 11:09:42
+ * @LastEditTime: 2022-03-21 21:52:04
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -462,6 +462,8 @@ export function move(
 function AnimationPlayer() {
   let timer = 0;
   let mixer: AnimationMixer;
+  let maxDuration = 0;
+
   /**
    * 停止动画
    */
@@ -473,6 +475,7 @@ function AnimationPlayer() {
     //     element.stop();
     //   });
   };
+
   /**
    * 开启动画
    */
@@ -480,7 +483,6 @@ function AnimationPlayer() {
     stop();
     const clock = new THREE.Clock();
     mixer = new THREE.AnimationMixer(gltf.scene);
-    let maxDuration = 0;
 
     gltf.animations.forEach((animate: THREE.AnimationClip) => {
       const duration = mixer
@@ -490,8 +492,6 @@ function AnimationPlayer() {
         .getClip().duration;
       if (duration > maxDuration) maxDuration = duration;
     });
-
-    // console.log("max duration:", maxDuration);
 
     let sum = 0;
     const animate = () => {
@@ -504,10 +504,29 @@ function AnimationPlayer() {
     animate();
   }
 
-  return { start, stop };
+  /**
+   * 将百分比传入 内部转换成具体时间
+   * @param {number} percent 进度百分比
+   */
+  const setProgress = (percent: number) => {
+    const t = (maxDuration / 100) * percent;
+    //@ts-ignore
+    for (var i = 0; i < mixer._actions.length; i++) {
+      //@ts-ignore
+      const animate = mixer._actions[i] as THREE.AnimationAction;
+      const { duration } = animate.getClip();
+
+      if (duration > t) {
+        animate.play();
+      } else animate.stop();
+    }
+    mixer.setTime(t);
+  };
+
+  return { start, stop, setProgress };
 }
 
-const animationPlayer = AnimationPlayer();
+export const animationPlayer = AnimationPlayer();
 
 /**
  * @description 添加模型的动画
