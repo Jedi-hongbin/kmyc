@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-14 21:54:14
+ * @LastEditTime: 2022-03-21 10:41:23
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -91,7 +91,7 @@ export function loadMXNGModel(
  */
 export function smallScaleAnimation(mash: THREE.Object3D) {
   mash.userData.animation = true;
-  const f = 0.02;
+  const f = 0.002;
   let count = 0;
   const speed = 20;
   const half = speed / 2;

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-21 10:36:42
+ * @LastEditTime: 2022-03-21 11:09:42
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -652,22 +652,25 @@ export const drawLine = () => {
     color: window.MACOS ? 0x172619 : 0x032b08,
   });
 
+  const line = (points: any[]) => {
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    line.userData.type = ModelType["NOTReact"];
+    scene.add(line);
+  };
+
   const horizontalLine = (count: number) => {
     const points = [];
     points.push(new THREE.Vector3(-150, 0, count * 3));
     points.push(new THREE.Vector3(150, 0, count * 3));
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const line = new THREE.Line(geometry, material);
-    scene.add(line);
+    line(points);
   };
 
   const verticalLine = (count: number) => {
     const points = [];
     points.push(new THREE.Vector3(count * 3, 0, -150));
     points.push(new THREE.Vector3(count * 3, 0, 150));
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const line = new THREE.Line(geometry, material);
-    scene.add(line);
+    line(points);
   };
 
   let count = 1;
