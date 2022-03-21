@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 22:50:30
+ * @LastEditTime: 2022-03-21 10:36:42
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -645,57 +645,45 @@ export function clearAnimateTimer() {
 
 /**
  * @description: 画底部纵横相交的网格线
- * @todo: 动态绘制 每一帧画一条 从地图中心向两侧绘制
+ * 动态绘制 每一帧画一条 从地图中心向两侧绘制
  */
 export const drawLine = () => {
-  // return;
   const material = new THREE.LineBasicMaterial({
     color: window.MACOS ? 0x172619 : 0x032b08,
   });
 
-  let count = 0;
+  const horizontalLine = (count: number) => {
+    const points = [];
+    points.push(new THREE.Vector3(-150, 0, count * 3));
+    points.push(new THREE.Vector3(150, 0, count * 3));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+  };
+
+  const verticalLine = (count: number) => {
+    const points = [];
+    points.push(new THREE.Vector3(count * 3, 0, -150));
+    points.push(new THREE.Vector3(count * 3, 0, 150));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+  };
+
+  let count = 1;
+  horizontalLine(0);
+  verticalLine(0);
   const draw = () => {
-    if (count < 200) {
+    if (count < 51) {
       requestAnimationFrame(draw);
-
-      const points = [];
-      if (count < 100) {
-        points.push(new THREE.Vector3(-150, 0, (count - 50) * 3));
-        points.push(new THREE.Vector3(150, 0, (count - 50) * 3));
-      } else {
-        points.push(new THREE.Vector3((200 - count - 50) * 3, 0, -150));
-        points.push(new THREE.Vector3((200 - count - 50) * 3, 0, 150));
-      }
-
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(geometry, material);
-      line.userData.type = ModelType["NOTReact"];
-      scene.add(line);
+      horizontalLine(count);
+      horizontalLine(-count);
+      verticalLine(count);
+      verticalLine(-count);
       count++;
     }
   };
   draw();
-
-  // for (let i = 0; i <= 100; i++) {
-  //   const points = [];
-  //   points.push(new THREE.Vector3(-150, 0, (i - 50) * 3));
-  //   points.push(new THREE.Vector3(150, 0, (i - 50) * 3));
-
-  //   const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  //   const line = new THREE.Line(geometry, material);
-  //   line.userData.type = ModelType["NOTReact"];
-  //   scene.add(line);
-  // }
-  // for (let i = 0; i <= 100; i++) {
-  //   const points = [];
-  //   points.push(new THREE.Vector3((i - 50) * 3, 0, -150));
-  //   points.push(new THREE.Vector3((i - 50) * 3, 0, 150));
-
-  //   const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  //   const line = new THREE.Line(geometry, material);
-  //   line.userData.type = ModelType["NOTReact"];
-  //   scene.add(line);
-  // }
 };
 
 // 声明 raycaster 和 mouse 变量

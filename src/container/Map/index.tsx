@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 22:28:37
+ * @LastEditTime: 2022-03-21 10:37:28
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -182,9 +182,9 @@ const Map: FC<IProps> = ({
           controls.maxDistance = 140;
           controls.saveState();
           eventListener(selectAnimation);
+          drawLine();
         }
       );
-      drawLine();
     }
   }, [isLoading, selectAnimation]);
 
