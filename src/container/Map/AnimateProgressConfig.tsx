@@ -2,12 +2,13 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-22 17:24:37
+ * @LastEditTime: 2022-03-22 22:24:07
  * @Description: 动画进度控制器
  */
 import {
   createRef,
   FC,
+  memo,
   ReactElement,
   useEffect,
   useImperativeHandle,
@@ -18,7 +19,7 @@ import styled from "styled-components";
 import { Pause, Play } from "../../components/icon";
 import { fadeIn, flexCenter } from "../../styled";
 import { chartBG } from "../../styled/GlobalStyle";
-import { animationPlayer } from "./utils";
+import { animationPlayer, explain } from "./utils";
 
 export const AnimationConfigRef = createRef<{
   /**
@@ -55,6 +56,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
       });
     } else {
       animationPlayer.stop();
+      explain.stop();
     }
   }, [isPlay]);
 
@@ -69,10 +71,10 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
         setPercent(100);
       },
       play: () => {
-        setIsShow(true);
+        setIsPlay(true);
       },
       stop: () => {
-        setIsShow(false);
+        setIsPlay(false);
       },
     }),
     []
@@ -95,6 +97,8 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
             if (!bgRef.current) return;
             const bg = bgRef.current;
             const prev = percent;
+
+            //根据移动距离 和 进度条宽度 计算位置百分比
             const move = (et: MouseEvent) => {
               const dis = et.pageX - start;
               // 指针位置
@@ -102,17 +106,26 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
               const percent = prev + progress;
               if (percent < 0 || percent > 100) return;
               setPercent(percent);
-              animationPlayer.setProgress(percent + 0.05);
+              animationPlayer.setProgress(percent + 0.05, true);
             };
 
-            //根据移动距离 和 进度条宽度 计算位置百分比
+            //移除事件监听 避免多次触发回调产生bug
+            const clearEventListen = () => {
+              //拖拽结束时 如果之前正在播放 则恢复播放
+              if (isPlay) {
+                animationPlayer.play(percent => {
+                  setPercent(percent);
+                  if (percent > 100) setIsPlay(false);
+                });
+              }
+              document.removeEventListener("mousemove", move);
+              document.removeEventListener("mouseup", clearEventListen);
+              document.removeEventListener("mouseleave", clearEventListen);
+            };
+
             document.addEventListener("mousemove", move);
-            document.addEventListener("mouseup", () => {
-              document.removeEventListener("mousemove", move);
-            });
-            document.addEventListener("mouseleave", () => {
-              document.removeEventListener("mousemove", move);
-            });
+            document.addEventListener("mouseup", clearEventListen);
+            document.addEventListener("mouseleave", clearEventListen);
           }}
         >
           {Math.round(percent)}
@@ -122,7 +135,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
   );
 };
 
-export default AnimateProgressConfig;
+export default memo(AnimateProgressConfig);
 
 const Progress = styled.div`
   /* background-color: #8fd08dc2; */

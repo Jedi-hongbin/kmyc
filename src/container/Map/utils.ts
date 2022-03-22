@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-22 18:01:51
+ * @LastEditTime: 2022-03-22 21:48:26
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -469,6 +469,7 @@ function AnimationPlayer() {
    */
   const stop = () => {
     cancelAnimationFrame(timer);
+    // explain.stop();
     // mixer &&
     //   //@ts-ignore
     //   mixer._actions.forEach(element => {
@@ -508,7 +509,12 @@ function AnimationPlayer() {
    * 将百分比传入 内部转换成具体时间
    * @param {number} percent 进度百分比
    */
-  const setProgress = (percent: number) => {
+  const setProgress = (percent: number, clear?: boolean) => {
+    //拖动时 暂停动画播放 和音乐播放
+    if (clear) {
+      stop();
+      explain.stop();
+    }
     // if (percent > 100) return console.warn("进度大于100--" + percent);
     const t = ((maxDuration + 1) / 100) * percent;
     //@ts-ignore
@@ -542,6 +548,7 @@ function AnimationPlayer() {
       callback(percent);
     };
     animate();
+    explain.playByPercent((sum / maxDuration) * 100);
   };
 
   return { start, stop, setProgress, play };
@@ -1276,9 +1283,18 @@ export class Explain {
   stop() {
     this.audio.pause();
   }
-}
 
-// const explain = new Explain();
+  /**
+   * 设置百分比开始播放
+   */
+  playByPercent(percent: number) {
+    console.log(this.audio.currentTime, this.audio.duration);
+    const s = (this.audio.duration / 100) * percent;
+    this.audio.currentTime = s;
+    this.audio.play();
+  }
+}
+export const explain = new Explain();
 
 /**
  * 战役模型加载器

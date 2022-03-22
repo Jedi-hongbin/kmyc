@@ -3,7 +3,7 @@ import { Object3D } from "three";
  * @Author: hongbin
  * @Date: 2022-02-09 18:02:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-21 10:41:23
+ * @LastEditTime: 2022-03-22 22:30:40
  * @Description:Map中用到的函数 方法移这里来 减少index的代码量
  */
 //@ts-ignore
@@ -263,6 +263,12 @@ const XCDesc = [
     "志愿军第50军第447团经过五次反冲击，夺回了白云山阵地。",
     "志愿军战士们在冰天雪地宿营。",
   ],
+  [
+    "4月22日，志愿军在炮火掩护下抢占临津江滩头阵地。",
+    "担任穿插任务的部队，正在追击敌人。",
+    "第19兵团司令员杨得志(右)和政委李志民(左)在研究部队抢渡临津江的方案.",
+    "志愿军第63军先头部队渡过临津江后，抢占制高点绀岳山。",
+  ],
 ];
 
 /**
@@ -313,7 +319,9 @@ export async function loadXCModel(
     const instance = model.clone();
     //hover tip
     instance.userData.type = ModelType["Picture"];
-    instance.userData.desc = XCDesc[animationIndex][i];
+    instance.userData.desc = XCDesc[animationIndex]
+      ? XCDesc[animationIndex][i]
+      : "";
 
     setMaterial(
       instance,
