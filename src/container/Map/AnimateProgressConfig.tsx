@@ -2,18 +2,20 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-21 22:36:48
+ * @LastEditTime: 2022-03-22 17:24:37
  * @Description: 动画进度控制器
  */
 import {
   createRef,
   FC,
   ReactElement,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import styled from "styled-components";
+import { Pause, Play } from "../../components/icon";
 import { fadeIn, flexCenter } from "../../styled";
 import { chartBG } from "../../styled/GlobalStyle";
 import { animationPlayer } from "./utils";
@@ -27,14 +29,34 @@ export const AnimationConfigRef = createRef<{
    * 隐藏控制面板
    */
   hide: () => void;
+  /**
+   * 开始播放动画和音频
+   */
+  play: () => void;
+  /**
+   * 停止播放动画和音频
+   */
+  stop: () => void;
 }>();
 
 interface IProps {}
 
 const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
   const [isShow, setIsShow] = useState(false);
+  const [isPlay, setIsPlay] = useState(false);
   const bgRef = useRef<HTMLDivElement>(null);
   const [percent, setPercent] = useState(100);
+
+  useEffect(() => {
+    if (isPlay) {
+      animationPlayer.play(percent => {
+        setPercent(percent);
+        if (percent > 100) setIsPlay(false);
+      });
+    } else {
+      animationPlayer.stop();
+    }
+  }, [isPlay]);
 
   useImperativeHandle(
     AnimationConfigRef,
@@ -43,6 +65,13 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
         setIsShow(true);
       },
       hide: () => {
+        setIsShow(false);
+        setPercent(100);
+      },
+      play: () => {
+        setIsShow(true);
+      },
+      stop: () => {
         setIsShow(false);
       },
     }),
@@ -53,8 +82,12 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
 
   return (
     <Container>
+      <IconButton onClick={() => percent < 100 && setIsPlay(state => !state)}>
+        {isPlay ? Pause : Play}
+      </IconButton>
       <BackgroundBar ref={bgRef}>
-        <Progress percent={percent} />
+        {/* @ts-ignore */}
+        <Progress style={{ "--percent": percent + "%" }} />
         <TimeNum
           style={{ left: percent + "%" }}
           onMouseDown={e => {
@@ -69,7 +102,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
               const percent = prev + progress;
               if (percent < 0 || percent > 100) return;
               setPercent(percent);
-              animationPlayer.setProgress(percent);
+              animationPlayer.setProgress(percent + 0.05);
             };
 
             //根据移动距离 和 进度条宽度 计算位置百分比
@@ -91,13 +124,25 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
 
 export default AnimateProgressConfig;
 
-const Progress = styled.div<{ percent: number }>`
-  background-color: #8fd08d8f;
-  width: ${props => props.percent + "%"};
+const Progress = styled.div`
+  /* background-color: #8fd08dc2; */
+  background: linear-gradient(183deg, #6bf567e6, #56ba5491);
+  width: var(--percent);
   height: inherit;
   border-radius: inherit;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  ::before {
+    content: "";
+    width: 3px;
+    height: 130%;
+    background-color: #183017;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: -15%;
+    border-radius: 1vh;
+  }
   ::after {
     content: "";
     width: 3px;
@@ -105,7 +150,7 @@ const Progress = styled.div<{ percent: number }>`
     background-color: #183017;
     display: block;
     position: absolute;
-    left: ${props => props.percent + "%"};
+    left: var(--percent);
     top: -15%;
     border-radius: 1vh;
   }
@@ -129,13 +174,26 @@ const TimeNum = styled.div`
 `;
 
 const BackgroundBar = styled.div`
-  width: 90%;
-  margin-left: 5%;
+  flex: 1;
+  margin: 0 7% 0 2%;
   height: 1.5vh;
   background-color: #fafafa;
   border-radius: 0.4vh;
-  margin-top: 2vh;
+  margin-top: -1vh;
   position: relative;
+  ::before {
+    content: "";
+    position: absolute;
+    left: 0.4vh;
+    transform: translateX(-100%);
+    width: 10px;
+    height: inherit;
+    top: 0;
+    background-color: #345438;
+    border-top-left-radius: 0.2vh;
+    border-bottom-left-radius: 0.2vh;
+    border-right: 2px solid #183017;
+  }
 `;
 
 const Container = styled.div`
@@ -148,4 +206,24 @@ const Container = styled.div`
   right: 4vw;
   z-index: 9;
   animation: ${fadeIn} 0.3s linear;
+  display: flex;
+  align-items: center;
+  padding: 0 1%;
+  max-width: 600px;
+`;
+
+const IconButton = styled.div`
+  cursor: pointer;
+  width: 3vw;
+  height: 3vw;
+  transform: translateX(-0.5vw);
+  ${flexCenter};
+  svg {
+    transform: scale(1, 1.4);
+    width: 1.5vw;
+    height: 1.5vw;
+    path {
+      fill: #fffae5;
+    }
+  }
 `;

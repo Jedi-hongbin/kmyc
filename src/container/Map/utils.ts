@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-21 21:52:04
+ * @LastEditTime: 2022-03-22 18:01:51
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -477,22 +477,22 @@ function AnimationPlayer() {
   };
 
   /**
-   * 开启动画
+   * 载入并开启动画
+   * @param {GLTF} gltf 载入并开启动画
    */
   function start(gltf: GLTF) {
     stop();
-    const clock = new THREE.Clock();
     mixer = new THREE.AnimationMixer(gltf.scene);
-
+    const clock = new THREE.Clock();
     gltf.animations.forEach((animate: THREE.AnimationClip) => {
       const duration = mixer
         .clipAction(animate)
-        .setLoop(THREE.LoopOnce, 1)
+        //@ts-ignore
+        .setLoop(THREE.LoopOnce)
         .play()
         .getClip().duration;
       if (duration > maxDuration) maxDuration = duration;
     });
-
     let sum = 0;
     const animate = () => {
       if (sum > maxDuration) return;
@@ -509,13 +509,14 @@ function AnimationPlayer() {
    * @param {number} percent 进度百分比
    */
   const setProgress = (percent: number) => {
-    const t = (maxDuration / 100) * percent;
+    // if (percent > 100) return console.warn("进度大于100--" + percent);
+    const t = ((maxDuration + 1) / 100) * percent;
     //@ts-ignore
     for (var i = 0; i < mixer._actions.length; i++) {
       //@ts-ignore
       const animate = mixer._actions[i] as THREE.AnimationAction;
       const { duration } = animate.getClip();
-
+      //多次计算存在误差 +0.5是防止最后一帧动画元素 可以出发play方法 弊端就是有的动画时长不足0.5s会‘闪现’
       if (duration > t) {
         animate.play();
       } else animate.stop();
@@ -523,7 +524,27 @@ function AnimationPlayer() {
     mixer.setTime(t);
   };
 
-  return { start, stop, setProgress };
+  /**
+   * 适用于手动设置动画进度后 从当前进度开始播放 只要循环调用 setProgress即可
+   */
+  const play = (callback: (percent: number) => void) => {
+    if (!mixer) return;
+    stop();
+    let sum = mixer.time || 0;
+    const clock = new THREE.Clock();
+    const animate = () => {
+      if (sum > maxDuration) return;
+      timer = requestAnimationFrame(animate);
+      const t = clock.getDelta();
+      sum += t;
+      const percent = (sum / maxDuration) * 100;
+      setProgress(percent);
+      callback(percent);
+    };
+    animate();
+  };
+
+  return { start, stop, setProgress, play };
 }
 
 export const animationPlayer = AnimationPlayer();
@@ -652,6 +673,13 @@ export function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   controls.autoRotate = false;
   detrusionChart(true);
   setDescArrowConfig(animateIndex);
+  // model.scene.children.forEach(mash => {
+  //   //@ts-ignore
+  //   if (mash.material) {
+  //     //@ts-ignore
+  //     mash.material = new THREE.MeshLambertMaterial();
+  //   }
+  // });
 }
 
 export function clearAnimateTimer() {
