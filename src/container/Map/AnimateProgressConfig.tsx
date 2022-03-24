@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-23 15:50:50
+ * @LastEditTime: 2022-03-24 21:58:37
  * @Description: 动画进度控制器
  */
 import {
@@ -43,7 +43,7 @@ export const AnimationConfigRef = createRef<{
 interface IProps {}
 
 const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
   const [isPlay, setIsPlay] = useState(false);
   const bgRef = useRef<HTMLDivElement>(null);
   const [percent, setPercent] = useState(100);
@@ -81,6 +81,50 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
   );
 
   if (!isShow) return <></>;
+
+  /**
+   * 添加手机支持拖拽
+   */
+  const mobileProps = window.isPhone
+    ? {
+        onTouchStart: (e: React.TouchEvent<HTMLDivElement>) => {
+          console.group(e);
+          const start = e.targetTouches[0].pageY;
+          if (!bgRef.current) return;
+          const bg = bgRef.current;
+          const prev = percent;
+
+          //根据移动距离 和 进度条宽度 计算位置百分比
+          const move = (et: any) => {
+            const dis = et.targetTouches[0].pageY - start;
+            // 指针位置
+            const progress = (dis / bg.offsetWidth) * 100;
+            const percent = prev + progress;
+            if (percent < 0 || percent > 100) return;
+            setPercent(percent);
+            animationPlayer.setProgress(percent + 0.05, true);
+          };
+
+          //移除事件监听 避免多次触发回调产生bug
+          const clearEventListen = () => {
+            //拖拽结束时 如果之前正在播放 则恢复播放
+            if (isPlay) {
+              animationPlayer.play(percent => {
+                setPercent(percent);
+                if (percent > 100) setIsPlay(false);
+              });
+            }
+            document.removeEventListener("touchmove", move);
+            document.removeEventListener("touchend", clearEventListen);
+            document.removeEventListener("touchcancel", clearEventListen);
+          };
+
+          document.addEventListener("touchmove", move);
+          document.addEventListener("touchend", clearEventListen);
+          document.addEventListener("touchcancel", clearEventListen);
+        },
+      }
+    : {};
 
   return (
     <Container>
@@ -127,6 +171,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
             document.addEventListener("mouseup", clearEventListen);
             document.addEventListener("mouseleave", clearEventListen);
           }}
+          {...mobileProps}
         >
           {Math.round(percent)}
         </TimeNum>
@@ -212,7 +257,7 @@ const BackgroundBar = styled.div`
 const Container = styled.div`
   position: fixed;
   width: 30vmax;
-  height: 7vmin;
+  height: 7vh;
   ${chartBG};
   border-radius: 1vh;
   top: 5vh;
@@ -223,18 +268,28 @@ const Container = styled.div`
   align-items: center;
   padding: 0 1%;
   max-width: 600px;
+
+  @media screen and (max-width: 750px) {
+    transform: rotate(90deg);
+    transform-origin: right top;
+    top: 94vh;
+    svg {
+      width: 2vmax !important;
+      height: 2vmax !important;
+    }
+  }
 `;
 
 const IconButton = styled.div`
   cursor: pointer;
-  width: 3vw;
-  height: 3vw;
-  transform: translateX(-0.5vw);
+  width: 3vmax;
+  height: 3vmax;
+  transform: translateX(-0.5vmax);
   ${flexCenter};
   svg {
     transform: scale(1, 1.4);
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 1.5vmax;
+    height: 1.5vmax;
     path {
       fill: #fffae5;
     }
