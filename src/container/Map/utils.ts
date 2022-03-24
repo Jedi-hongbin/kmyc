@@ -2,14 +2,14 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-24 19:49:43
+ * @LastEditTime: 2022-03-24 22:04:09
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
 import * as THREE from "three";
 import { AnimationMixer, Object3D } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Stats from "three/examples/jsm/libs/stats.module";
+// import Stats from "three/examples/jsm/libs/stats.module";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { subtitleRef } from "../../components/Subtitles";
 import { detrusionChart, showCombatInfo } from "../../utils";
@@ -28,18 +28,18 @@ let t: number;
 let timers: NodeJS.Timeout[] = [];
 
 // addStats();
-function addStats() {
-  //@ts-ignore
-  const stats = new Stats();
-  document.documentElement.appendChild(stats.dom);
-  stats.dom.style.top = "auto";
-  stats.dom.style.bottom = 0;
-  const animate = () => {
-    window.requestAnimationFrame(animate);
-    stats && stats.update();
-  };
-  animate();
-}
+// function addStats() {
+//   //@ts-ignore
+//   const stats = new Stats();
+//   document.documentElement.appendChild(stats.dom);
+//   stats.dom.style.top = "auto";
+//   stats.dom.style.bottom = 0;
+//   const animate = () => {
+//     window.requestAnimationFrame(animate);
+//     stats && stats.update();
+//   };
+//   animate();
+// }
 
 const sizes = {
   width: window.innerWidth,

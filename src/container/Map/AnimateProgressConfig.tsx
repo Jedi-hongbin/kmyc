@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-24 21:58:37
+ * @LastEditTime: 2022-03-24 22:05:35
  * @Description: 动画进度控制器
  */
 import {
@@ -43,7 +43,7 @@ export const AnimationConfigRef = createRef<{
 interface IProps {}
 
 const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   const [isPlay, setIsPlay] = useState(false);
   const bgRef = useRef<HTMLDivElement>(null);
   const [percent, setPercent] = useState(100);
