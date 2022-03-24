@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-22 21:48:26
+ * @LastEditTime: 2022-03-24 19:49:43
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -27,7 +27,7 @@ let t: number;
 //动画计时器数组 用于清除未执行的动画和定时任务
 let timers: NodeJS.Timeout[] = [];
 
-addStats();
+// addStats();
 function addStats() {
   //@ts-ignore
   const stats = new Stats();
@@ -206,15 +206,15 @@ export const animationConfigure: IAnimationConfigure[] = [
     axis: [-2.5, 15, 17],
     jump: [
       {
-        camera: [2.5, 18, 37],
-        axis: [1, 15, 31.5],
         time: 2000,
+        camera: [2.5, 18, 32],
+        axis: [1, 15, 27],
         speed: 40,
       },
       {
         time: 33000,
-        camera: [0.8, 20, 31],
-        axis: [-0.6, 15, 27],
+        camera: [0.8, 20, 33],
+        axis: [-0.6, 15, 26],
         speed: 50,
       },
     ],
@@ -284,11 +284,11 @@ const descArrowConfig: Array<IDescArrowConfig> = [
     },
   },
   {
-    贝塞尔曲线110: {
+    贝塞尔曲线116: {
       desc: "战役胜利志愿军向三八线推进",
       id: 5,
     },
-    贝塞尔曲线111: {
+    贝塞尔曲线117: {
       desc: "战役胜利志愿军向三八线推进",
       id: 5,
     },
@@ -381,11 +381,11 @@ const descArrowConfig: Array<IDescArrowConfig> = [
       desc: "20军进击县里",
       id: 15,
     },
-    贝塞尔曲线022: {
+    贝塞尔曲线151: {
       desc: "沿途战斗13次攻占预定地区五马峙",
       id: 16,
     },
-    tm005: {
+    贝塞尔曲线148: {
       desc: "40军完成战役割裂任务",
       id: 17,
     },
@@ -836,6 +836,7 @@ export const eventListener = (selectAnimation: any) => {
     // 获取选中最近的 Mesh 对象
     if (intersects.length) {
       const selectObject = intersects[0].object;
+      console.log(selectObject);
       //莫辛纳甘枪图标
       if (selectObject.userData.type === ModelType["MXNG"]) {
         // 默认点击的是枪 mode指向两把枪的容器scene
@@ -1260,6 +1261,9 @@ export class Explain {
     document.body.appendChild(audio);
     this.audio = audio;
     this.cache = {};
+    audio.addEventListener("play", e => {
+      console.log(e);
+    });
   }
   /**
    * 异步加载讲解音频

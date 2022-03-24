@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 15:21:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 13:38:50
+ * @LastEditTime: 2022-03-24 20:55:46
  * @Description:歼敌
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -14,7 +14,7 @@ import { chartBG } from "../../styled/GlobalStyle";
 
 interface IProps {}
 
-const { isPhone, pageWidth } = window;
+const { isPhone, pageWidth, vmax } = window;
 
 const option = {
   title: {
@@ -73,7 +73,7 @@ const option = {
     data: ["毙伤敌", "俘敌", "敌投降"],
     axisLabel: {
       interval: 0,
-      fontSize: isPhone ? 9 : 12,
+      fontSize: isPhone ? 9 : vmax(0.7),
     },
     axisLine: {
       lineStyle: {
@@ -83,6 +83,9 @@ const option = {
   },
   yAxis: {
     type: "value",
+    axisLabel: {
+      fontSize: isPhone ? 12 : vmax(0.7),
+    },
     axisLine: {
       lineStyle: {
         color: "#fffae5",

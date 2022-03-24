@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-19 22:04:32
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 21:52:01
+ * @LastEditTime: 2022-03-24 21:22:48
  * @Description:MenuItem 菜单项
  */
 import { FC, ReactElement, useEffect, useRef, useState } from "react";
@@ -89,7 +89,7 @@ const Container = styled.div.attrs({ name: "1" })<{ hoverActive?: boolean }>`
   }
   :hover {
     p {
-      transition: 0.2s ease;
+      transition: color 0.2s ease, font-weight 0.2s ease;
       font-weight: bold;
       color: #073f08;
     }

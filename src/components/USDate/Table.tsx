@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-16 22:00:29
  * @LastEditors: hongbin
- * @LastEditTime: 2022-02-20 13:29:13
+ * @LastEditTime: 2022-03-24 21:20:08
  * @Description: chart 表
  */
 import * as echarts from "echarts";
@@ -30,7 +30,7 @@ const option = {
     data: ["总数", "陆军", "海军", "海军陆战队", "空军"],
     textStyle: {
       color: "#fffae5",
-      fontSize: isPhone ? 10 : 12,
+      fontSize: isPhone ? 10 : window.vmax(0.7),
     },
   },
   grid: {
@@ -100,6 +100,7 @@ const option = {
     axisLine: {
       lineStyle: {
         color: "#fffae5",
+        fontSize: window.isPhone ? 12 : window.vmax(0.7),
       },
     },
   },
@@ -108,6 +109,7 @@ const option = {
     axisLine: {
       lineStyle: {
         color: "#fffae5",
+        fontSize: window.isPhone ? 12 : window.vmax(0.7),
       },
     },
     splitLine: {

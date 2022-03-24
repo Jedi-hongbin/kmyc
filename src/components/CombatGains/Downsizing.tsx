@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 21:22:20
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 13:39:08
+ * @LastEditTime: 2022-03-24 20:47:28
  * @Description:减员情况
  */
 import { FC, memo, ReactElement, useState } from "react";
@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { detrusionTransition, leftDetrusion } from "../../styled";
 import { chartBG } from "../../styled/GlobalStyle";
 
-const { isPhone, pageWidth } = window;
+const { isPhone, pageWidth, vmax } = window;
 
 const option = {
   title: {
@@ -38,7 +38,7 @@ const option = {
     data: ["阵亡", "战伤", "失踪,被俘"],
     axisLabel: {
       interval: 0,
-      fontSize: isPhone ? 10 : 12,
+      fontSize: isPhone ? 10 : vmax(0.7),
     },
     axisLine: {
       lineStyle: {
@@ -48,6 +48,9 @@ const option = {
   },
   yAxis: {
     type: "value",
+    axisLabel: {
+      fontSize: isPhone ? 12 : vmax(0.7),
+    },
     axisLine: {
       lineStyle: {
         color: "#fffae5",

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 18:07:10
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 13:39:03
+ * @LastEditTime: 2022-03-24 21:16:23
  * @Description:击毁武器
  */
 import { FC, ReactElement, memo, useState } from "react";
@@ -14,12 +14,12 @@ import { chartBG } from "../../styled/GlobalStyle";
 
 interface IProps {}
 
-const { isPhone } = window;
+const { isPhone, vmax } = window;
 
 const option = {
   title: {
     text: "击毁武器",
-    left: isPhone ? 0 : window.vmax(1),
+    left: isPhone ? 0 : vmax(1),
     textStyle: {
       color: "#fffae5",
       fontSize: isPhone ? 10 : 20,
@@ -41,7 +41,7 @@ const option = {
       selectedOffset: 10,
       clockwise: true,
       label: {
-        fontSize: isPhone ? 10 : 13,
+        fontSize: isPhone ? 10 : vmax(0.71),
         color: "#fffae5",
       },
       labelLine: {

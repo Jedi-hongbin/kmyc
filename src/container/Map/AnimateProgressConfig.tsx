@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-22 22:24:07
+ * @LastEditTime: 2022-03-23 15:50:50
  * @Description: 动画进度控制器
  */
 import {
@@ -178,7 +178,7 @@ const TimeNum = styled.div`
   border-radius: 0.1rem;
   position: absolute;
   display: inline;
-  top: 2.5vh;
+  top: 2vh;
   cursor: grab;
   transform: translateX(-50%);
   :active {
