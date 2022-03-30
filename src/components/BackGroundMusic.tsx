@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-24 21:42:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-19 23:51:46
+ * @LastEditTime: 2022-03-30 16:35:02
  * @Description:背景音乐
  */
 
@@ -16,7 +16,9 @@ import {
   useRef,
 } from "react";
 //@ts-ignore
-import music from "../assets/bgmusicshortvoume.mp3";
+import music from "../assets/bgmusicshortvoume0.mp3";
+//@ts-ignore
+import music1 from "../assets/bgmusicshortvoume1.mp3";
 import useMount from "../hook/useMount";
 
 interface IProps {}
@@ -42,14 +44,26 @@ const BackGroundMusic: FC<IProps> = (): ReactElement => {
   }, []);
 
   useMount(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
     const play = () => {
-      audioRef.current?.play();
+      audio.play();
       window.removeEventListener("click", play);
     };
     window.addEventListener("click", play);
     window.addEventListener("keyup", e => {
       if (e.code === "KeyS") toggle();
     });
+
+    const toggleMusicLoop = () => {
+      audio.src = music1;
+      audio.play();
+      audio.loop = true;
+      console.log("end");
+      audio.removeEventListener("ended", toggleMusicLoop);
+    };
+
+    audio.addEventListener("ended", toggleMusicLoop);
   });
 
   useImperativeHandle(
@@ -62,7 +76,7 @@ const BackGroundMusic: FC<IProps> = (): ReactElement => {
   );
 
   return (
-    <audio loop id='bg_music' preload='load' ref={audioRef} src={music}></audio>
+    <audio id='bg_music' preload='load' ref={audioRef} src={music}></audio>
   );
 };
 
