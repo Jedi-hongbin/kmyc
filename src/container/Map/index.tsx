@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-06 09:15:57
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-22 20:52:48
+ * @LastEditTime: 2022-03-30 21:27:14
  * @Description: three.js 和 glt模型 朝鲜地图模块
  */
 import { FC, memo, ReactElement, useCallback, useEffect, useRef } from "react";
@@ -95,7 +95,7 @@ const Map: FC<IProps> = ({
           //播放结束 展示 小战役图标
           //@ts-ignore
           PositionRef.current = await loadPositionIcon(loadAnimateIndex);
-          AnimationConfigRef.current?.show();
+          AnimationConfigRef.current?.show(loadAnimateIndex);
         });
         //@ts-ignore
         cacheModel.current = gltf;

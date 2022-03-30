@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-26 20:54:09
+ * @LastEditTime: 2022-03-30 23:35:20
  * @Description: 动画进度控制器
  */
 import {
@@ -25,7 +25,7 @@ export const AnimationConfigRef = createRef<{
   /**
    * 显示控制面板
    */
-  show: () => void;
+  show: (animationIndex: number) => void;
   /**
    * 隐藏控制面板
    */
@@ -42,6 +42,9 @@ export const AnimationConfigRef = createRef<{
 
 interface IProps {}
 
+let animateIndex = 0;
+let playEnd = false;
+
 const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
   const [isShow, setIsShow] = useState(false);
   const [isPlay, setIsPlay] = useState(false);
@@ -50,21 +53,26 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
 
   useEffect(() => {
     if (isPlay) {
-      animationPlayer.play(percent => {
+      animationPlayer.play(animateIndex, percent => {
         setPercent(percent);
-        if (percent > 100) setIsPlay(false);
+        if (percent > 100) {
+          setIsPlay(false);
+          playEnd = true;
+        }
       });
     } else {
       animationPlayer.stop();
-      explain.stop();
+      !playEnd && explain.stop();
+      playEnd = false;
     }
   }, [isPlay]);
 
   useImperativeHandle(
     AnimationConfigRef,
     () => ({
-      show: () => {
+      show: (animationIndex: number) => {
         setIsShow(true);
+        animateIndex = animationIndex;
       },
       hide: () => {
         setIsShow(false);
@@ -109,7 +117,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
           const clearEventListen = () => {
             //拖拽结束时 如果之前正在播放 则恢复播放
             if (isPlay) {
-              animationPlayer.play(percent => {
+              animationPlayer.play(animateIndex, percent => {
                 setPercent(percent);
                 if (percent > 100) setIsPlay(false);
               });
@@ -157,7 +165,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
             const clearEventListen = () => {
               //拖拽结束时 如果之前正在播放 则恢复播放
               if (isPlay) {
-                animationPlayer.play(percent => {
+                animationPlayer.play(animateIndex, percent => {
                   setPercent(percent);
                   if (percent > 100) setIsPlay(false);
                 });

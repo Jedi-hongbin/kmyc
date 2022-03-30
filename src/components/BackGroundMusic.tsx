@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-24 21:42:23
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-30 16:35:02
+ * @LastEditTime: 2022-03-30 16:39:14
  * @Description:背景音乐
  */
 
@@ -59,7 +59,6 @@ const BackGroundMusic: FC<IProps> = (): ReactElement => {
       audio.src = music1;
       audio.play();
       audio.loop = true;
-      console.log("end");
       audio.removeEventListener("ended", toggleMusicLoop);
     };
 

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-24 22:04:09
+ * @LastEditTime: 2022-03-30 23:47:29
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -413,7 +413,7 @@ function distance(x1: number, x2: number) {
  * @description: 视野切换动画
  * @param {number[]} targetCamera 目标位置的相机位置
  * @param {number[]} targetAxis 目标位置的坐标轴位置
- * @param {number} speed 速度
+ * @param {number} speed 速度 default value 16
  * @param {() => void} every 每一帧都执行的函数
  * @param {() => void} onEnd 结束动画执行
  * @return {void}
@@ -469,6 +469,7 @@ function AnimationPlayer() {
    */
   const stop = () => {
     cancelAnimationFrame(timer);
+    clearAnimateTimer();
     // explain.stop();
     // mixer &&
     //   //@ts-ignore
@@ -514,6 +515,7 @@ function AnimationPlayer() {
     if (clear) {
       stop();
       explain.stop();
+      clearAnimateTimer();
     }
     // if (percent > 100) return console.warn("进度大于100--" + percent);
     const t = ((maxDuration + 1) / 100) * percent;
@@ -532,12 +534,19 @@ function AnimationPlayer() {
 
   /**
    * 适用于手动设置动画进度后 从当前进度开始播放 只要循环调用 setProgress即可
+   * @param {number} animateIndex 战役id
+   * @param {callback} callback  进度回调
    */
-  const play = (callback: (percent: number) => void) => {
+  const play = (animateIndex: number, callback: (percent: number) => void) => {
     if (!mixer) return;
     stop();
     let sum = mixer.time || 0;
     const clock = new THREE.Clock();
+    explain.playCurrent(sum);
+    controls.autoRotate = false;
+    //检查当前时间视线应该在什么位置
+    sightMove(animateIndex, undefined, sum + 0.001);
+
     const animate = () => {
       if (sum > maxDuration) return;
       timer = requestAnimationFrame(animate);
@@ -548,7 +557,6 @@ function AnimationPlayer() {
       callback(percent);
     };
     animate();
-    explain.playByPercent((sum / maxDuration) * 100);
   };
 
   return { start, stop, setProgress, play };
@@ -561,16 +569,6 @@ export const animationPlayer = AnimationPlayer();
  * @param {GLTF} gltf 带动画的glb模型
  * */
 function play(gltf: GLTF) {
-  // gltf.animations.forEach((animate: any) => {
-  //   const { name } = animate; //不算后面的 Action
-  //   const mash = gltf.scene.getObjectByProperty(
-  //     "name",
-  //     name.substring(0, name.length - 6)
-  //   );
-  //   if (mash) {
-  //     onesAnimate(mash as Object3D<Event>, animate);
-  //   }
-  // });
   animationPlayer.start(gltf);
 }
 
@@ -632,31 +630,37 @@ function play(gltf: GLTF) {
 // const computeFrame = new ComputeFrame();
 
 /**视线移动*/
-function sightMove(animateIndex: number, onEnd?: () => void) {
+function sightMove(animateIndex: number, onEnd?: () => void, currentTime = 0) {
+  currentTime *= 1000;
   const configure = animationConfigure[animateIndex - 1];
   if (window.isPhone) {
     subtitleRef.current?.start(animateIndex);
   }
   //移动到摄像机位置
-  else
-    move(configure.camera, configure.axis, 40, undefined, () => {
-      //字幕慢点出来 和动画一起跟新dom引起卡顿
-      subtitleRef.current?.start(animateIndex);
-    });
+  else {
+    currentTime < configure.jump[0].time &&
+      move(configure.camera, configure.axis, 40, undefined, () => {
+        !currentTime &&
+          //字幕慢点出来 和动画一起跟新dom引起卡顿
+          subtitleRef.current?.start(animateIndex);
+      });
+  }
 
   // computeFrame.compute(animateIndex);
 
   //战役动画 pc端才播放
   if (configure.jump && !window.isPhone) {
     for (const { time, camera, axis, speed } of configure.jump) {
-      const timer = setTimeout(() => {
-        move(camera, axis, speed);
-      }, time);
-      timers.push(timer);
+      if (currentTime < time) {
+        const timer = setTimeout(() => {
+          move(camera, axis, speed);
+        }, time - currentTime);
+        timers.push(timer);
+      }
     }
   }
   //结束动画 开启自动旋转 执行回调
-  if (configure.end) {
+  if (configure.end && !currentTime) {
     const timer = setTimeout(() => {
       !window.isPhone &&
         move(configure.end.camera, configure.end.axis, configure.end.speed);
@@ -689,6 +693,9 @@ export function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   // });
 }
 
+/**
+ * 清除正在进行的视线移动动画帧
+ */
 export function clearAnimateTimer() {
   cancelAnimationFrame(t);
   for (const timer of timers) {
@@ -836,7 +843,7 @@ export const eventListener = (selectAnimation: any) => {
     // 获取选中最近的 Mesh 对象
     if (intersects.length) {
       const selectObject = intersects[0].object;
-      console.log(selectObject);
+      // console.log(selectObject);
       //莫辛纳甘枪图标
       if (selectObject.userData.type === ModelType["MXNG"]) {
         // 默认点击的是枪 mode指向两把枪的容器scene
@@ -1261,9 +1268,6 @@ export class Explain {
     document.body.appendChild(audio);
     this.audio = audio;
     this.cache = {};
-    audio.addEventListener("play", e => {
-      console.log(e);
-    });
   }
   /**
    * 异步加载讲解音频
@@ -1292,9 +1296,16 @@ export class Explain {
    * 设置百分比开始播放
    */
   playByPercent(percent: number) {
-    console.log(this.audio.currentTime, this.audio.duration);
     const s = (this.audio.duration / 100) * percent;
     this.audio.currentTime = s;
+    this.audio.play();
+  }
+
+  /**
+   * 设置时间开始播放
+   */
+  playCurrent(time: number) {
+    this.audio.currentTime = time;
     this.audio.play();
   }
 }
