@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-30 23:47:29
+ * @LastEditTime: 2022-03-31 00:00:41
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -656,6 +656,9 @@ function sightMove(animateIndex: number, onEnd?: () => void, currentTime = 0) {
           move(camera, axis, speed);
         }, time - currentTime);
         timers.push(timer);
+      } else {
+        clearAnimateTimer();
+        move(camera, axis, speed);
       }
     }
   }
