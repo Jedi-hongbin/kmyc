@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-24 22:05:35
+ * @LastEditTime: 2022-03-26 20:54:09
  * @Description: 动画进度控制器
  */
 import {
@@ -217,7 +217,7 @@ const Progress = styled.div`
 const TimeNum = styled.div`
   ${flexCenter};
   background-color: #274826;
-  font-size: 0.1rem;
+  font-size: 0.7vw;
   color: #fffae5;
   padding: 2px 10px;
   border-radius: 0.1rem;

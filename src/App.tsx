@@ -85,6 +85,7 @@ function App() {
         setLoadingIndex={setLoadingIndex}
       />
       <Panel
+        animateIndex={animateIndex}
         setAnimateIndex={setAnimateIndex}
         setIsShowUSDate={setIsShowUSDate}
         goHome={goHome}

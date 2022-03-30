@@ -7077,13 +7077,13 @@ react-dev-utils@^12.0.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-react-dom@^18.0.0-rc.2:
-  version "18.0.0-rc.2"
-  resolved "https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0-rc.2.tgz#b0a55afc2a2385e9e518071eaf7c89f0c214bba5"
-  integrity sha512-EvLlgtc/wAzAIXX5V1gnLgeK9B3wAdEGmmrXXKRoRzXM0RNNwGN+6OxQPBlACiGDUYYEOk+GT8f6u+gNWDnTtg==
+react-dom@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz#26b88534f8f1dbb80853e1eabe752f24100d8023"
+  integrity sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==
   dependencies:
     loose-envify "^1.1.0"
-    scheduler "^0.21.0-rc.2"
+    scheduler "^0.21.0"
 
 react-error-overlay@^6.0.10:
   version "6.0.10"
@@ -7160,10 +7160,10 @@ react-scripts@5.0.0:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react@^18.0.0-rc.2:
-  version "18.0.0-rc.2"
-  resolved "https://registry.npmmirror.com/react/-/react-18.0.0-rc.2.tgz#f54de68a912454331f7f718794fbf5e6c01eb855"
-  integrity sha512-q32FWyA5HvqfRCN0ZOk0gUOpzJGPPh8fqbk8DYQuh4DyiGWiNgN/BxMq3/ScY0SlwDB1HOAMU1lUgtaOr5p2Ng==
+react@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.npmmirror.com/react/-/react-18.0.0.tgz#b468736d1f4a5891f38585ba8e8fb29f91c3cb96"
+  integrity sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A==
   dependencies:
     loose-envify "^1.1.0"
 
@@ -7439,10 +7439,10 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.21.0-rc.2:
-  version "0.21.0-rc.2-next-b9de50d2f-20220308"
-  resolved "https://registry.npmmirror.com/scheduler/-/scheduler-0.21.0-rc.2-next-b9de50d2f-20220308.tgz#f3e89d3670b99adf1e1091644793bd73db03cbb0"
-  integrity sha512-aBVNOtcCn7k8FUi0lsIY34DZN1SUeuAjAQB6Y55Cxrhtrx9mggUepmF5gTWn7Z2RkEhQtrp7fzmRA/24bxxNJQ==
+scheduler@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.npmmirror.com/scheduler/-/scheduler-0.21.0.tgz#6fd2532ff5a6d877b6edb12f00d8ab7e8f308820"
+  integrity sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==
   dependencies:
     loose-envify "^1.1.0"
 

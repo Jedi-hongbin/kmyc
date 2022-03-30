@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-17 13:40:14
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-20 22:53:46
+ * @LastEditTime: 2022-03-30 09:57:39
  * @Description:控制面板
  */
 import {
@@ -15,7 +15,7 @@ import {
   useImperativeHandle,
 } from "react";
 import styled, { css } from "styled-components";
-import { flexCenter, FlexDiv } from "../../styled";
+import { fadeIn, flexCenter, FlexDiv } from "../../styled";
 import { Button } from "../../styled/Button";
 import { adjustColor } from "../../utils/color";
 import { CustomMenuRef } from "../CustomMenu";
@@ -31,6 +31,7 @@ export const panelRef = createRef<{
 }>();
 
 interface IProps {
+  animateIndex: number;
   setAnimateIndex: Dispatch<React.SetStateAction<number>>;
   setIsShowUSDate: Dispatch<React.SetStateAction<boolean>>;
   goHome: () => void;
@@ -46,6 +47,7 @@ const campaignNames = [
 ];
 
 const Panel: FC<IProps> = ({
+  animateIndex,
   setAnimateIndex,
   setIsShowUSDate,
   goHome,
@@ -90,9 +92,11 @@ const Panel: FC<IProps> = ({
       >
         美军伤亡
       </Button>
-      <Button size='medium' primary='#00faff' onClick={goHome}>
-        回到主页
-      </Button>
+      {animateIndex > 0 ? (
+        <Button data-fade size='medium' primary='#00faff' onClick={goHome}>
+          回到主页
+        </Button>
+      ) : null}
       <MouseExplain show={isOpenExplain} />
       {window.isPhone || isHide ? null : (
         <FlexDiv width='100%' justify='space-between'>
@@ -159,6 +163,10 @@ const Container = styled.div<{ isHide: boolean }>`
   padding: 0.4rem;
   transition: transform 0.3s ease;
   ${props => props.theme.replaceBg};
+
+  ${Button}[data-fade] {
+    animation: ${fadeIn} 0.3s linear;
+  }
 
   ${({ isHide }) =>
     isHide &&
