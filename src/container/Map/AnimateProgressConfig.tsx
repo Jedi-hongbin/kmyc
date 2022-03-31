@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-30 23:35:20
+ * @LastEditTime: 2022-03-31 09:45:16
  * @Description: 动画进度控制器
  */
 import {
@@ -67,6 +67,10 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
     }
   }, [isPlay]);
 
+  useEffect(() => {
+    setPercent(100);
+  }, [isShow]);
+
   useImperativeHandle(
     AnimationConfigRef,
     () => ({
@@ -76,7 +80,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
       },
       hide: () => {
         setIsShow(false);
-        setPercent(100);
+        setIsPlay(false);
       },
       play: () => {
         setIsPlay(true);
