@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-31 00:00:41
+ * @LastEditTime: 2022-04-01 23:18:31
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -456,26 +456,28 @@ export function move(
   r();
 }
 
+//加入 隐藏属性类型
+interface MyAnimationMixer extends AnimationMixer {
+  _actions: THREE.AnimationAction[];
+}
+
 /**
  * 战役动画播放器
  */
 function AnimationPlayer() {
   let timer = 0;
-  let mixer: AnimationMixer;
+  let mixer: MyAnimationMixer;
   let maxDuration = 0;
-
+  /**
+   * 保存最后帧动画，在进度拖拽时容易疏漏
+   */
+  let lastSecondAnimationClip: MyAnimationMixer["_actions"] = [];
   /**
    * 停止动画
    */
   const stop = () => {
     cancelAnimationFrame(timer);
     clearAnimateTimer();
-    // explain.stop();
-    // mixer &&
-    //   //@ts-ignore
-    //   mixer._actions.forEach(element => {
-    //     element.stop();
-    //   });
   };
 
   /**
@@ -484,17 +486,18 @@ function AnimationPlayer() {
    */
   function start(gltf: GLTF) {
     stop();
-    mixer = new THREE.AnimationMixer(gltf.scene);
+    mixer = new THREE.AnimationMixer(gltf.scene) as MyAnimationMixer;
     const clock = new THREE.Clock();
+
     gltf.animations.forEach((animate: THREE.AnimationClip) => {
-      const duration = mixer
+      mixer
         .clipAction(animate)
         //@ts-ignore
         .setLoop(THREE.LoopOnce)
-        .play()
-        .getClip().duration;
-      if (duration > maxDuration) maxDuration = duration;
+        .play();
+      if (animate.duration > maxDuration) maxDuration = animate.duration;
     });
+
     let sum = 0;
     const animate = () => {
       if (sum > maxDuration) return;
@@ -504,8 +507,11 @@ function AnimationPlayer() {
       mixer.update(t);
     };
     animate();
+    lastSecondAnimationClip = mixer._actions.filter(
+      clip => clip.getClip().duration > maxDuration - 0.5
+    );
   }
-
+  let iii = 0;
   /**
    * 将百分比传入 内部转换成具体时间
    * @param {number} percent 进度百分比
@@ -519,16 +525,14 @@ function AnimationPlayer() {
     }
     // if (percent > 100) return console.warn("进度大于100--" + percent);
     const t = ((maxDuration + 1) / 100) * percent;
-    //@ts-ignore
     for (var i = 0; i < mixer._actions.length; i++) {
-      //@ts-ignore
-      const animate = mixer._actions[i] as THREE.AnimationAction;
-      const { duration } = animate.getClip();
-      //多次计算存在误差 +0.5是防止最后一帧动画元素 可以出发play方法 弊端就是有的动画时长不足0.5s会‘闪现’
-      if (duration > t) {
-        animate.play();
-      } else animate.stop();
+      const animate = mixer._actions[i];
+      if (animate.getClip().duration > t) animate.play();
+      else animate.stop();
     }
+    //多次计算存在误差 保证最后一帧动画元素 可以触发play方法
+    t > maxDuration - 0.5 && lastSecondAnimationClip.forEach(clip => clip.play);
+
     mixer.setTime(t);
   };
 
