@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-31 09:45:16
+ * @LastEditTime: 2022-04-01 13:57:16
  * @Description: 动画进度控制器
  */
 import {
@@ -55,7 +55,7 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
     if (isPlay) {
       animationPlayer.play(animateIndex, percent => {
         setPercent(percent);
-        if (percent > 100) {
+        if (percent >= 100) {
           setIsPlay(false);
           playEnd = true;
         }

@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-18 08:52:51
  * @LastEditors: hongbin
- * @LastEditTime: 2022-03-08 21:47:12
+ * @LastEditTime: 2022-04-01 14:29:58
  * @Description: 介绍鼠标按键功能
  */
 import { FC, ReactElement } from "react";
@@ -52,6 +52,7 @@ const Title = styled.span`
 `;
 
 const Container = styled.div<{ show: boolean }>`
+  margin-top: 0.4rem;
   padding: 0.4rem 0.6rem;
   padding-right: 0.2rem;
   color: #fffae5;
