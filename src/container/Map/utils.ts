@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-02 12:17:04
+ * @LastEditTime: 2022-04-02 12:43:24
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -1288,10 +1288,7 @@ export class Explain {
    * 播放器
    */
   private audio: HTMLAudioElement;
-  /**
-   * 缓存的音频对象
-   */
-  private cache: { [key: number]: string };
+
   /**
    * 战役语音讲解类
    */
@@ -1299,22 +1296,16 @@ export class Explain {
     const audio = document.createElement("audio");
     document.body.appendChild(audio);
     this.audio = audio;
-    this.cache = {};
   }
   /**
    * 异步加载讲解音频
    */
   async asyncLoadVoice(animationIndex: number) {
-    let source = this.cache[animationIndex];
-    if (!source) {
-      const music = await fetch(
-        `${process.env.REACT_APP_URL}voice/${animationIndex}-voice.mp3`
-      );
-      const blob = await music.blob();
-      source = window.URL.createObjectURL(blob);
-      this.cache[animationIndex] = this.audio.src;
-    }
-    this.audio.src = source;
+    const music = await fetch(
+      `${process.env.REACT_APP_URL}voice/${animationIndex}-voice.mp3`
+    );
+    const blob = await music.blob();
+    this.audio.src = window.URL.createObjectURL(blob);
     this.audio.play();
   }
   /**
