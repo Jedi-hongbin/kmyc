@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-01 23:18:31
+ * @LastEditTime: 2022-04-02 11:20:35
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -112,6 +112,32 @@ if (window.isPhone) {
   camera.position.set(30, 180, 0);
   controls.target.set(30, 0, 0);
 }
+
+// class FrameHelper {
+//   timer: number;
+
+//   constructor() {
+//     this.timer = 0;
+//     controls.addEventListener("change", render);
+//   }
+
+//   play() {
+//     const tick = () => {
+//       render();
+//       controls.update();
+//       this.timer = window.requestAnimationFrame(tick);
+//     };
+//     tick();
+//     controls.removeEventListener("change", render);
+//   }
+
+//   stop() {
+//     window.cancelAnimationFrame(this.timer);
+//     controls.addEventListener("change", render);
+//   }
+// }
+
+// const frameHelper = new FrameHelper();
 
 export const tick = () => {
   render();
@@ -511,7 +537,6 @@ function AnimationPlayer() {
       clip => clip.getClip().duration > maxDuration - 0.5
     );
   }
-  let iii = 0;
   /**
    * 将百分比传入 内部转换成具体时间
    * @param {number} percent 进度百分比
