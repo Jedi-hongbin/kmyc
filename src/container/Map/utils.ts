@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-02 11:20:35
+ * @LastEditTime: 2022-04-02 12:17:04
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -58,7 +58,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // Scene
 export const scene = new THREE.Scene();
 // const bgColor = window.MACOS ? 0x345438 : 0x1f571f;
-const bgColor = window.MACOS ? 0x345438 : 0x025503;
+const bgColor = window.MACOS ? 0x345438 : 0x025528;
 scene.background = new THREE.Color(bgColor);
 scene.fog = new THREE.FogExp2(bgColor, window.MACOS ? 0.008 : 0.01);
 

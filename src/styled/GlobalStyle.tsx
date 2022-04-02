@@ -4,7 +4,7 @@ const GlobalStyle = createGlobalStyle`
   html,body {
     height: 100%;
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
-    background: ${window.MACOS ? "#345438" : "#025503"};
+    background: ${window.MACOS ? "#345438" : "#025528"};
     overflow: hidden;
   }
  
@@ -84,6 +84,6 @@ export default GlobalStyle;
 export const chartBG = css`
   background: ${window.MACOS
     ? "radial-gradient(#355235d1, #437143 90%)"
-    : "radial-gradient(rgb(29 84 29 / 82%), rgb(25, 116, 25) 90%)"};
+    : "radial-gradient(#02561cd1, #006e2d 90%)"};
 `;
 // "radial-gradient(rgb(3 71 3 / 82%), rgb(8 127 8) 90%)"};
