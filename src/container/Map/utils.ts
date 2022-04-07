@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-02 12:43:24
+ * @LastEditTime: 2022-04-07 21:57:34
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -494,10 +494,7 @@ function AnimationPlayer() {
   let timer = 0;
   let mixer: MyAnimationMixer;
   let maxDuration = 0;
-  /**
-   * 保存最后帧动画，在进度拖拽时容易疏漏
-   */
-  let lastSecondAnimationClip: MyAnimationMixer["_actions"] = [];
+
   /**
    * 停止动画
    */
@@ -516,11 +513,7 @@ function AnimationPlayer() {
     const clock = new THREE.Clock();
 
     gltf.animations.forEach((animate: THREE.AnimationClip) => {
-      mixer
-        .clipAction(animate)
-        //@ts-ignore
-        .setLoop(THREE.LoopOnce)
-        .play();
+      mixer.clipAction(animate).setLoop(THREE.LoopOnce, 1).play();
       if (animate.duration > maxDuration) maxDuration = animate.duration;
     });
 
@@ -533,9 +526,6 @@ function AnimationPlayer() {
       mixer.update(t);
     };
     animate();
-    lastSecondAnimationClip = mixer._actions.filter(
-      clip => clip.getClip().duration > maxDuration - 0.5
-    );
   }
   /**
    * 将百分比传入 内部转换成具体时间
@@ -548,15 +538,14 @@ function AnimationPlayer() {
       explain.stop();
       clearAnimateTimer();
     }
-    // if (percent > 100) return console.warn("进度大于100--" + percent);
+
     const t = ((maxDuration + 1) / 100) * percent;
+
     for (var i = 0; i < mixer._actions.length; i++) {
       const animate = mixer._actions[i];
-      if (animate.getClip().duration > t) animate.play();
-      else animate.stop();
+      animate.stop();
+      animate.play();
     }
-    //多次计算存在误差 保证最后一帧动画元素 可以触发play方法
-    t > maxDuration - 0.5 && lastSecondAnimationClip.forEach(clip => clip.play);
 
     mixer.setTime(t);
   };
@@ -716,13 +705,6 @@ export function start(model: GLTF, animateIndex: number, onEnd: () => void) {
   controls.autoRotate = false;
   detrusionChart(true);
   setDescArrowConfig(animateIndex);
-  // model.scene.children.forEach(mash => {
-  //   //@ts-ignore
-  //   if (mash.material) {
-  //     //@ts-ignore
-  //     mash.material = new THREE.MeshLambertMaterial();
-  //   }
-  // });
 }
 
 /**
@@ -734,6 +716,14 @@ export function clearAnimateTimer() {
     clearTimeout(timer);
   }
   timers = [];
+  // 我不放心 再来一遍
+  requestAnimationFrame(() => {
+    cancelAnimationFrame(t);
+    for (const timer of timers) {
+      clearTimeout(timer);
+    }
+    timers = [];
+  });
 }
 
 /**
