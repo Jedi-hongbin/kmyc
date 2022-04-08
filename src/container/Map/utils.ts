@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-07 21:57:34
+ * @LastEditTime: 2022-04-07 22:06:53
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -717,13 +717,13 @@ export function clearAnimateTimer() {
   }
   timers = [];
   // 我不放心 再来一遍
-  requestAnimationFrame(() => {
-    cancelAnimationFrame(t);
-    for (const timer of timers) {
-      clearTimeout(timer);
-    }
-    timers = [];
-  });
+  // requestAnimationFrame(() => {
+  //   cancelAnimationFrame(t);
+  //   for (const timer of timers) {
+  //     clearTimeout(timer);
+  //   }
+  //   timers = [];
+  // });
 }
 
 /**
