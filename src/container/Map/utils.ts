@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-02-25 12:41:30
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-07 22:06:53
+ * @LastEditTime: 2022-04-09 13:54:52
  * @Description:将大量的组件内的代码写在单独文件中 Map 组件结构更清晰
  */
 
@@ -539,7 +539,7 @@ function AnimationPlayer() {
       clearAnimateTimer();
     }
 
-    const t = ((maxDuration + 1) / 100) * percent;
+    const t = (maxDuration / 100) * percent;
 
     for (var i = 0; i < mixer._actions.length; i++) {
       const animate = mixer._actions[i];
