@@ -2,7 +2,7 @@
  * @Author: hongbin
  * @Date: 2022-03-21 11:37:09
  * @LastEditors: hongbin
- * @LastEditTime: 2022-04-01 13:57:16
+ * @LastEditTime: 2022-04-08 17:13:33
  * @Description: 动画进度控制器
  */
 import {
@@ -123,7 +123,10 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
             if (isPlay) {
               animationPlayer.play(animateIndex, percent => {
                 setPercent(percent);
-                if (percent > 100) setIsPlay(false);
+                if (percent > 100) {
+                  setIsPlay(false);
+                  playEnd = true;
+                }
               });
             }
             document.removeEventListener("touchmove", move);
@@ -171,7 +174,10 @@ const AnimateProgressConfig: FC<IProps> = (): ReactElement => {
               if (isPlay) {
                 animationPlayer.play(animateIndex, percent => {
                   setPercent(percent);
-                  if (percent > 100) setIsPlay(false);
+                  if (percent > 100) {
+                    setIsPlay(false);
+                    playEnd = true;
+                  }
                 });
               }
               document.removeEventListener("mousemove", move);
@@ -229,7 +235,7 @@ const Progress = styled.div`
 const TimeNum = styled.div`
   ${flexCenter};
   background-color: #274826;
-  font-size: 0.7vw;
+  font-size: 0.7vmax;
   color: #fffae5;
   padding: 2px 10px;
   border-radius: 0.1rem;

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import LoadingScreen from "./container/LoadingScreen";
 import Map from "./container/Map";
-import USDate from "./components/USDate";
+// import USDate from "./components/USDate";
 import Panel from "./components/Panel";
 import Subtitles from "./components/Subtitles";
 import CombatGains from "./components/CombatGains";
@@ -57,9 +57,9 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectAnimation = useCallback(setAnimateIndex, []);
 
-  const hideUSDate = useCallback(() => {
-    setIsShowUSDate(false);
-  }, []);
+  // const hideUSDate = useCallback(() => {
+  //   setIsShowUSDate(false);
+  // }, []);
 
   return (
     <ThemeProvider>
@@ -87,12 +87,12 @@ function App() {
       <Panel
         animateIndex={animateIndex}
         setAnimateIndex={setAnimateIndex}
-        setIsShowUSDate={setIsShowUSDate}
+        // setIsShowUSDate={setIsShowUSDate}
         goHome={goHome}
         loadingIndex={loadingIndex}
       />
       <Subtitles />
-      <USDate isShow={isShowUSDate} handleCancel={hideUSDate} />
+      {/* <USDate isShow={isShowUSDate} handleCancel={hideUSDate} /> */}
       <CombatGains />
       <BackGroundMusic />
       <AnimateProgressConfig />
