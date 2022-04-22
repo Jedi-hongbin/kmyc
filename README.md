@@ -1,3 +1,42 @@
+csdn描述 ： https://blog.csdn.net/printf_hello/article/details/124298090
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/ad3bd792893a4dbeb71e060dd4b318f1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASmVkaSBIb25nYmlu,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/8c68ba71fda84a3a8ef768154531e2e4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASmVkaSBIb25nYmlu,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+
+##### 体验地址
+[https://kmyc.hongbin.xyz/](https://kmyc.hongbin.xyz/)
+##### 操作说明 视频
+[video(video-Adb1HYXP-1650438180437)(type-bilibili)(url-https://player.bilibili.com/player.html?aid=637840631)(image-https://img-blog.csdnimg.cn/img_convert/2ad87adc9cf4debf237e52bd14b70446.png)(title-操作说明)]
+
+##### 我做了哪些（功能）
+-  draco解析glb模型 同时处理部分纹理请求 减轻一次加载纹理压力
+- 手动控制轨道控制器镜头动画 
+- 多音频拼接 控制
+- 封装动画播放器 控制进度切换 
+- 动画进度控制器 同步音频 模拟视频体验
+- useContext状态共享
+- 自定义多级右键菜单 模拟原生菜单体验
+- 空闲时间加载后续用到的模型
+- 模型纹理&位置动态切换
+- echart图表使用
+- 浏览器自适应单位vw vmax使用(大面积使用)
+- 兼容移动端手机浏览
+- 模型的销毁和动画加载
+- useRef暴露方法多方调用(大量使用)
+- css-in-js 方案实践 css引擎styled-component
+- 未完成请求避免产生影响
+- 未执行计数器清理 字幕播放中 镜头切换动画执行中切换 后续的功能等
+- 点击不同模型产生不同效果 点击的事件监听 鼠标hover的样式
+- ...
+
+##### 局限
+- 性能拉垮 考虑到诸多原因 未采用按需渲染在低配机上帧率大概只有30帧左右
+- 模型做的不精细-第一次建模
+- 在手机或者高刷设备上动画模型播放渲染速度与60帧设备不一致
+
+
 > TODO:
 >
 > - ~~战役动画时 面板贴边~~
